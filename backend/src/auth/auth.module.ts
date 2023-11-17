@@ -11,7 +11,6 @@ import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { AuthController } from './auth.controller';
 
-
 @Module({
   imports: [
     UsersModule,
