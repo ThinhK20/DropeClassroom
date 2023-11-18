@@ -1,3 +1,15 @@
+import Header from "./header/Header";
+import Sidebar from "./side3/Sidebar";
+
 export default function Home() {
-   return <div className="text-red-500">Homepage</div>;
+   return (
+      <div>
+         <Header />
+
+         <div>
+            <Sidebar />
+         </div>
+
+      </div>
+   );
 }
