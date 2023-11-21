@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ClassroomModule } from './classroom/classroom.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 
@@ -11,12 +12,12 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://thinhnguyent2002:JRM0g7fgPal8rUNk@maincluster.76iqyxy.mongodb.net/?retryWrites=true&w=majority',
-    ),
-    PassportModule,
+    MongooseModule.forRoot(process.env.DB_URL),
     UsersModule,
+    PassportModule,
+    ClassroomModule,
     AuthModule,
   ],
   controllers: [AppController],
