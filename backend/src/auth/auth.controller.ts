@@ -31,4 +31,10 @@ export class AuthController {
   sayHello(@Request() req) {
     return req.user || 'Hello';
   }
+
+  @UseGuards(SessionGuard)
+  @Get('role')
+  saySomethingWithRole(@Request() req) {
+    return req.user.role;
+  }
 }

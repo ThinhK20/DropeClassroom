@@ -1,5 +1,6 @@
 import mongoose, { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Role } from 'src/enums/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -11,10 +12,10 @@ export class User {
   @Prop()
   username: string;
 
-  @Prop()
+  @Prop({ required: true })
   email: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
   @Prop({ type: mongoose.Schema.Types.Date })
@@ -28,6 +29,9 @@ export class User {
 
   @Prop()
   gender: string;
+
+  @Prop()
+  role: Role;
 
   @Prop({ type: mongoose.Schema.Types.Date, default: new Date() })
   createdDate: Date;
