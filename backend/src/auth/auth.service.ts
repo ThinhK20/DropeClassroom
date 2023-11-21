@@ -1,39 +1,44 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private readonly usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = (await this.usersService.findOne(username)) as any;
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result;
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.usersService.getUser({ username });
+    if (!user) return null;
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!user) {
+      throw new NotAcceptableException('Could not find the user.');
+    }
+    if (user && passwordValid) {
+      return user;
     }
     return null;
   }
 
-  async signIn(username, pass) {
-    const user = (await this.usersService.findOne(username)) as any;
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
-    }
-    const payload = { sub: user.userId, username: user.username };
+  async login(user: any) {
+    const payload = { username: user.username, sub: user._id };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 
-  async generateJwtToken(user) {
-    const payload = { sub: user.userId, username: user.username };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+  async signup(createUserDto: User) {
+    const salfOrRounds = 10;
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      salfOrRounds,
+    );
+    createUserDto.password = hashedPassword;
+    const createdUser = await this.usersService.createNewUser(createUserDto);
+    return createdUser;
   }
 }

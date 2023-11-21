@@ -20,20 +20,7 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  private readonly usersTemp = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
-
-  async findOne(username: string): Promise<unknown> {
-    return this.usersTemp.find((user) => user.username === username);
+  async getUser(query: object): Promise<User> {
+    return this.userModel.findOne(query);
   }
 }
