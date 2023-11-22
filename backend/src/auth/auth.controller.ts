@@ -1,37 +1,78 @@
 import {
   Controller,
-  Post,
-  HttpCode,
-  HttpStatus,
   Request,
-  Get,
+  Post,
   UseGuards,
+  Get,
+  Body,
+  NotFoundException,
+  Query,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { Public } from './guards/public.guard';
+import { LocalAuthGuard } from './guards/localauth.guard';
+import { SessionGuard } from './guards/session.guard';
+import { User } from 'src/schemas/user.schema';
+import { UsersService } from 'src/users/users.service';
+import { SendgridService } from 'src/sendgrid/sendgrid.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UsersService,
+    private sendgridService: SendgridService,
+  ) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Public()
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async signIn(@Request() req) {
-    //return this.authService.signIn(signInDto.username, signInDto.password);
-    return await this.authService.generateJwtToken(req.user);
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Post('signup')
+  async signUp(@Body() signUpUser: User) {
+    return this.authService.signup(signUpUser);
   }
 
-  @Public()
-  @Get('public')
-  getPublicResource() {
-    return 'public';
+  @UseGuards(SessionGuard)
+  @Get('protected')
+  sayHello(@Request() req) {
+    return req.user || 'Hello';
+  }
+
+  @UseGuards(SessionGuard)
+  @Get('role')
+  saySomethingWithRole(@Request() req) {
+    return req.user.role;
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: { email: string; password: string }) {
+    const user = await this.userService.getUserByQuery({ email: body.email });
+    if (!user) throw new NotFoundException('User does not exists');
+    const token = await this.authService.initiatePasswordReset(user.email);
+    const renewPasswordLink = await this.authService.generateRenewPasswordLink(
+      user._id.toString(),
+      body.password,
+      token,
+    );
+    await this.sendgridService.sendRenewPasswordEmail(
+      user.email,
+      renewPasswordLink,
+    );
+  }
+
+  @Get('reset-password')
+  async resetPassword(
+    @Query('token') resetToken,
+    @Query('id') userId,
+    @Query('password') newPassword,
+  ) {
+    const isValid = this.authService.validateResetToken(userId, resetToken);
+    if (isValid) {
+      this.userService.updatePasswordById(userId, newPassword);
+      this.userService.resetRenewToken(userId);
+    }
+    return 'Reset password successfully. You can close this tab now';
   }
 }

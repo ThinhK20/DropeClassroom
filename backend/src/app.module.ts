@@ -5,6 +5,10 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ClassroomModule } from './classroom/classroom.module';
+import { PassportModule } from '@nestjs/passport';
+import { AuthModule } from './auth/auth.module';
+import { SendgridService } from './sendgrid/sendgrid.service';
+import { MailController } from './mail/mail.controller';
 
 @Module({
   imports: [
@@ -14,9 +18,11 @@ import { ClassroomModule } from './classroom/classroom.module';
     }),
     MongooseModule.forRoot(process.env.DB_URL),
     UsersModule,
+    PassportModule,
     ClassroomModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, MailController],
+  providers: [AppService, SendgridService],
 })
 export class AppModule {}

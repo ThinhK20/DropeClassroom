@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Date, Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -20,20 +21,40 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  private readonly usersTemp = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  async getUserByQuery(query: object): Promise<User> {
+    return this.userModel.findOne(query);
+  }
 
-  async findOne(username: string): Promise<unknown> {
-    return this.usersTemp.find((user) => user.username === username);
+  async updateUser(user: User): Promise<User> {
+    return this.userModel.findByIdAndUpdate(user._id, user);
+  }
+
+  async updatePasswordById(userId: string, newPassword: string): Promise<User> {
+    const saltOrRounds = 10;
+    const newHashedPassword = await bcrypt.hash(newPassword, saltOrRounds);
+    return this.userModel.findByIdAndUpdate(userId, {
+      password: newHashedPassword,
+    });
+  }
+
+  async saveResetToken(
+    userId: string,
+    resetToken: string,
+    expirationDate: Date,
+  ): Promise<void> {
+    const user = await this.userModel.findOne({ id: userId });
+    if (user) {
+      await this.userModel.findByIdAndUpdate(userId, {
+        resetToken,
+        resetTokenExpirationDate: expirationDate,
+      });
+    }
+  }
+
+  async resetRenewToken(userId: string) {
+    await this.userModel.findByIdAndUpdate(userId, {
+      resetToken: '',
+      resetTokenExpirationDate: null,
+    });
   }
 }
