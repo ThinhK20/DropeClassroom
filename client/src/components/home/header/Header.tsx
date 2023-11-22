@@ -1,18 +1,33 @@
-import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBars} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { WaterDropOutlined } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface Props {
   fullName: string;
   avatar?: string;
+  children?: React.ReactNode;
+  actionOpenSideBar: () => void;
 }
 
-function Header(props: Props) {
-  const [isCreateClick, setIsCreateClick] = useState(false);
+type Coords = {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+}
+
+function Header({fullName, avatar, children, actionOpenSideBar}: Props) {
+  const [isCreateClick, setIsCreateClick] = useState<boolean>(false);
   const [isButtonMenu, setIsButtonMenu] = useState(false);
-  
+  const [coords, setCoords] = useState<Coords>({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+  })
 
   function stringToColor(string: string) {
     let hash = 0;
@@ -43,27 +58,62 @@ function Header(props: Props) {
     };
   }
 
-  const handleClickCreate = () => {
+  const handleClickCreate = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const node = e.target as HTMLElement;
+
+    const clientRect = node.getBoundingClientRect() as DOMRect;
+
+    console.log('App ~~ client React ', clientRect);
+
+    setCoords({
+      x: clientRect.left,
+      y: clientRect.top + window?.scrollY,
+      width: clientRect.width,
+      height: clientRect.height,
+    });
+    
     setIsCreateClick(!isCreateClick);
   }
 
+  const nodeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function handleClickOutPopover (this: Document, ev: MouseEvent) {
+      if(nodeRef.current && !nodeRef.current.contains(ev.target as Node)) {
+        setIsCreateClick(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutPopover)
+
+    return () => {
+      document.removeEventListener("click", handleClickOutPopover);
+    }
+  })
+
   return (
-    <header className="relative md:sticky top-0 flex flex-row items-center justify-between z-4 h-16 w-full border-b py-3 px-4 border-theme-divider-tertiary">
+    <header className="relative md:sticky md:top-0 md:left-0 z-40 flex flex-row items-center justify-between h-16 md:w-full border-b border-btransition-all border-gray-200 bg-white py-3 px-4">
+
       {/* Half Left */}
-      <div className="w-1/2 flex items-center justify-start gap-4">
+      <div className="w-1/2 flex items-center gap-4">
         {/* button sidebar */}
-        <button className="bg-transparent border-none outline-none p-1 rounded-md group  hover:bg-gray-400/10 flex items-center justify-center">
-          <FontAwesomeIcon icon={faBars} className="text-black/50 w-5 h-5" />
-        </button>
+        <div className="relative hidden md:block">
+          <button className="bg-transparent border-none outline-none group  hover:bg-gray-400/10 flex items-center justify-center h-11 w-11 rounded-full"
+                  onClick={actionOpenSideBar}>
+            <FontAwesomeIcon icon={faBars} className="text-black/50 w-5 h-5" />
+          </button>
+        </div>
 
         {/* logo */}
-        <a className="hidden md:flex flex-1 items-center text-black/50 cursor-pointer group ">
-          <h1 className="medium-24 border-b-2 border-transparent duration-300 transform group-hover:border-blue-600 group-hover:text-blue-600">
+        <a className="flex items-center text-black/50 cursor-pointer group ">
+          <h1 className="medium-18 md:medium-24 border-b-2 border-transparent duration-300 transform group-hover:border-blue-600 group-hover:text-blue-600">
             DROPE
             <WaterDropOutlined />
             <span>CLASSROOM.</span>{" "}
           </h1>
         </a>
+
+        {children}
       </div>
 
       {/* Half Right */}
@@ -71,13 +121,14 @@ function Header(props: Props) {
         
         {/* create class */}
         <div className="relative">
-          <button className="regular-20 text-black/50 rounded-full px-4 py-2 hover:bg-gray-500/10 hover:text-black/70 cursor-pointer focus:bg-gray-500/20 focus:text-black/80"
-            onClick={handleClickCreate}
+          <button className=" text-black/50  hover:bg-gray-500/10 hover:text-black/70 cursor-pointer focus:bg-gray-500/20 focus:text-black/80 flex items-center justify-center w-11 h-11 rounded-full regular-40 pb-2"
+                  onClick={handleClickCreate}
+                  ref={nodeRef}
           >
-            <FontAwesomeIcon icon={faPlus}/>
+            +
           </button>
 
-          {isCreateClick && <Createfunction />}
+          {isCreateClick && <Createfunction coords={coords}/>}
         </div>
 
         {/* other funciton */}
@@ -98,13 +149,13 @@ function Header(props: Props) {
           }}
         >
           <div className="object-cover relative overflow-hidden">
-            {props.avatar === undefined ? (
+            {avatar === undefined ? (
               <Avatar
-                {...stringAvatar(props.fullName)}
-                alt={`${props.fullName} Profile`}
+                {...stringAvatar(fullName)}
+                alt={`${fullName} Profile`}
               />
             ) : (
-              <Avatar alt={`${props.fullName} Profile`} src={props.avatar} />
+              <Avatar alt={`${fullName} Profile`} src={avatar} />
             )}
           </div>
         </button>
@@ -115,9 +166,18 @@ function Header(props: Props) {
 
 export default Header;
 
-function Createfunction() {
-  return(
-    <div className="absolute top-9 bg-white shadow-lg rounded-sm z-10 w-48 right-4">
+function Createfunction({coords}:{coords: Coords}) {
+  
+  if(typeof document === "undefined") return null;
+  
+  return createPortal(
+
+    <div className="absolute bg-white shadow-xl rounded-sm z-10 w-48"
+         style={{
+          left: coords.x  - 169,
+          top: coords.y + coords.height - 9,
+         }}
+    >
       <ul className="flex flex-col gap-2 py-2">
         <li className="regular-20 inline-block hover:bg-gray-500/10 hover:text-black/70 px-4 py-2 cursor-pointer">
           <span> Create class </span>
@@ -127,6 +187,8 @@ function Createfunction() {
           <span> Join class</span>
         </li>
       </ul>
-    </div>
+    </div>,
+
+    document.getElementById('root') as HTMLElement
   );
 }
