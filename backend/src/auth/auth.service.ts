@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/schemas/user.schema';
+import { generateToken } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.getUser({ email });
+    const user = await this.usersService.getUserByQuery({ email });
     if (!user) return null;
     const passwordValid = await bcrypt.compare(password, user.password);
     if (!user) {
@@ -40,5 +41,45 @@ export class AuthService {
     createUserDto.password = hashedPassword;
     const createdUser = await this.usersService.createNewUser(createUserDto);
     return createdUser;
+  }
+
+  async initiatePasswordReset(email: string): Promise<string> {
+    const user = await this.usersService.getUserByQuery({ email });
+
+    if (user) {
+      const resetToken = generateToken();
+      const expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 1); // Set expiration time (e.g., 1 hour)
+      await this.usersService.saveResetToken(
+        user._id.toString(),
+        resetToken,
+        expirationDate as any,
+      );
+
+      return resetToken;
+    }
+
+    return null;
+  }
+
+  async validateResetToken(userId: string, token: string): Promise<boolean> {
+    const user = await this.usersService.getUserByQuery({ _id: userId });
+
+    if (
+      user &&
+      user.resetToken === token &&
+      (user.resetTokenExpirationDate as any) > new Date()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  async generateRenewPasswordLink(
+    userId: string,
+    newPassword: string,
+    token: string,
+  ) {
+    return `http://localhost:3000/auth/reset-password?token=${token}&id=${userId}&password=${newPassword}`;
   }
 }

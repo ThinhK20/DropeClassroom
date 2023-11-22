@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './local.auth';
 import { UsersModule } from 'src/users/users.module';
 import { SessionSerializer } from './session.serializer';
+import { SendgridService } from 'src/sendgrid/sendgrid.service';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { SessionSerializer } from './session.serializer';
       signOptions: { expiresIn: 36000 },
     }),
   ],
-  providers: [AuthService, LocalStrategy, SessionSerializer],
+  providers: [AuthService, LocalStrategy, SessionSerializer, SendgridService],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -1,4 +1,4 @@
-import mongoose, { HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import mongoose, { Date, HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/enums/role.enum';
 
@@ -7,7 +7,7 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ timestamps: true })
 export class User {
   @Prop({ type: SchemaTypes.ObjectId })
-  id: Types.ObjectId;
+  _id: Types.ObjectId;
 
   @Prop()
   username: string;
@@ -38,6 +38,12 @@ export class User {
 
   @Prop({ type: mongoose.Schema.Types.Date, default: new Date() })
   updatedDate: Date;
+
+  @Prop()
+  resetToken: string;
+
+  @Prop({ type: mongoose.Schema.Types.Date })
+  resetTokenExpirationDate: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
