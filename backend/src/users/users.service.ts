@@ -55,6 +55,10 @@ export class UsersService {
     await this.userModel.findByIdAndUpdate(userId, {
       resetToken: '',
       resetTokenExpirationDate: null,
-    });
+    } as User);
+  }
+
+  async activeUser(userId: string) {
+    await this.userModel.findByIdAndUpdate(userId, { isActive: true } as User);
   }
 }

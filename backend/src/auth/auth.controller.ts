@@ -7,6 +7,7 @@ import {
   Body,
   NotFoundException,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/localauth.guard';
@@ -31,7 +32,15 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() signUpUser: User) {
-    return this.authService.signup(signUpUser);
+    const createdUser = await this.authService.signup(signUpUser);
+    const activateAccountLink = this.authService.generateActivateAccountLink(
+      createdUser._id.toString(),
+    );
+    await this.sendgridService.sendActivateAccountEmail(
+      createdUser.email,
+      activateAccountLink,
+    );
+    return 'Sign up successfully. Please active your account through the email we have sent to you.';
   }
 
   @UseGuards(SessionGuard)
@@ -47,13 +56,17 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body() body: { email: string; password: string }) {
+  async forgotPassword(
+    @Body() body: { email: string; oldPassword: string; newPassword: string },
+  ) {
     const user = await this.userService.getUserByQuery({ email: body.email });
     if (!user) throw new NotFoundException('User does not exists');
+    if (!this.authService.validatePassword(body.oldPassword, user.password))
+      throw new BadRequestException('Password incorrect');
     const token = await this.authService.initiatePasswordReset(user.email);
     const renewPasswordLink = await this.authService.generateRenewPasswordLink(
       user._id.toString(),
-      body.password,
+      body.newPassword,
       token,
     );
     await this.sendgridService.sendRenewPasswordEmail(
@@ -74,5 +87,14 @@ export class AuthController {
       this.userService.resetRenewToken(userId);
     }
     return 'Reset password successfully. You can close this tab now';
+  }
+
+  @Get('active-account')
+  async activeAccount(@Query('id') userId) {
+    const user = await this.userService.getUserByQuery({ _id: userId } as User);
+    if (!user)
+      throw new NotFoundException('Not found your account. Please try again !');
+    await this.userService.activeUser(userId);
+    return 'Your account has been successfully activated. You can now continue to use our services. Thanks for choosing Drope Classroom.';
   }
 }

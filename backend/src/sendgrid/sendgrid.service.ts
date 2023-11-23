@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as SendGrid from '@sendgrid/mail';
 import { renewPasswordMail } from './mail-templates/renew-password.template';
+import { activationAccountMail } from './mail-templates/activation-account.template';
 @Injectable()
 export class SendgridService {
   constructor(private readonly configService: ConfigService) {
@@ -16,6 +17,12 @@ export class SendgridService {
 
   async sendRenewPasswordEmail(userEmail: string, renewPasswordLink: string) {
     const transportMail = renewPasswordMail(userEmail, renewPasswordLink);
+    const transport = await SendGrid.send(transportMail);
+    return transport;
+  }
+
+  async sendActivateAccountEmail(userEmail: string, activeAccountLink: string) {
+    const transportMail = activationAccountMail(userEmail, activeAccountLink);
     const transport = await SendGrid.send(transportMail);
     return transport;
   }

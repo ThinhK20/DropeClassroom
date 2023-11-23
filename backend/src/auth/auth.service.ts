@@ -1,4 +1,8 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotAcceptableException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
@@ -15,7 +19,7 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.getUserByQuery({ email });
     if (!user) return null;
-    const passwordValid = await bcrypt.compare(password, user.password);
+    const passwordValid = await this.validatePassword(password, user.password);
     if (!user) {
       throw new NotAcceptableException('Could not find the user.');
     }
@@ -33,6 +37,11 @@ export class AuthService {
   }
 
   async signup(createUserDto: User) {
+    const existedUser = await this.usersService.getUserByQuery({
+      email: createUserDto.email,
+    } as User);
+    if (existedUser) throw new BadRequestException('Email already exists');
+
     const salfOrRounds = 10;
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
@@ -41,6 +50,10 @@ export class AuthService {
     createUserDto.password = hashedPassword;
     const createdUser = await this.usersService.createNewUser(createUserDto);
     return createdUser;
+  }
+
+  async validatePassword(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
   }
 
   async initiatePasswordReset(email: string): Promise<string> {
@@ -75,11 +88,15 @@ export class AuthService {
     return false;
   }
 
-  async generateRenewPasswordLink(
+  generateRenewPasswordLink(
     userId: string,
     newPassword: string,
     token: string,
   ) {
     return `http://localhost:3000/auth/reset-password?token=${token}&id=${userId}&password=${newPassword}`;
+  }
+
+  generateActivateAccountLink(userId: string) {
+    return `http://localhost:3000/auth/active-account?id=${userId}`;
   }
 }

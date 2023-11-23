@@ -1,4 +1,4 @@
-import mongoose, { Date, HydratedDocument, SchemaTypes, Types } from 'mongoose';
+import mongoose, { Date, HydratedDocument, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/enums/role.enum';
 
@@ -6,7 +6,6 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ type: SchemaTypes.ObjectId })
   _id: Types.ObjectId;
 
   @Prop()
@@ -24,7 +23,7 @@ export class User {
   @Prop()
   age: number;
 
-  @Prop({ default: true })
+  @Prop({ default: false })
   isActive: boolean;
 
   @Prop()
