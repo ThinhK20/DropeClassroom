@@ -1,7 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../page/App";
-import TeacherMarkPage from "../components/markPage/teacher";
-import StudentMarkPage from "../components/markPage/student";
+
+import Home from "../page/home/home";
+import Schedule from "../page/schedule/Schedule";
+import Archived from "../page/achieved/Archived";
+import Setting from "../page/setting/Setting";
+import App from "../App";
+import ClassRoom from "../page/class/ClassRoom";
 
 export const router = createBrowserRouter([
   {
@@ -9,11 +13,32 @@ export const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/user/teacher/course/mark",
-    element: <TeacherMarkPage />,
+    path: "/h",
+    element: <Home />,
   },
   {
-    path: "/user/student/course/mark",
-    element: <StudentMarkPage />,
+    path: "/shedule",
+    element: <Schedule />,
   },
+  {
+    path: "/h/archived",
+    element: <Archived />,
+  },
+  {
+    path: "/s",
+    element: <Setting />,
+  },
+  {
+    path: "/c/:id",
+    element: <ClassRoom />,
+  },
+
+  // {
+  //   path: "/user/teacher/course/mark",
+  //   element: <TeacherMarkPage />,
+  // },
+  // {
+  //   path: "/user/student/course/mark",
+  //   element: <StudentMarkPage />,
+  // },
 ]);

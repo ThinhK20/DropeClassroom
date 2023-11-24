@@ -1,10 +1,10 @@
 import { User } from "../../models/User";
 import Header from "../../components/header/Header";
-import ClientWrapper from "../../components/layout/DefaultLayout";
 import Container from "../../components/Container";
 import Sidebar from "../../components/side3/Sidebar";
 import { useState } from "react";
 import CreateClassModal from "../../components/modal/CreateClassModal";
+import ClientWrapper from "../../components/ClientWrapper";
 
 export default function Home() {
   const user: User = {

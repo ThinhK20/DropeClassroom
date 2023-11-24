@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-interface DefaultLayout {
+interface ClientWrapper {
   children: React.ReactNode;
 }
 
-function DefaultLayout({ children }: DefaultLayout) {
+function ClientWrapper({ children }: ClientWrapper) {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -21,4 +21,4 @@ function DefaultLayout({ children }: DefaultLayout) {
   );
 }
 
-export default DefaultLayout;
+export default ClientWrapper;
