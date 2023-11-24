@@ -2,14 +2,10 @@ export type SideNavItem = {
     name: string;
     icon: JSX.Element;
     submenu: boolean;
+    path?: string;
     title?: string;
     subMenuItems?: SideNavItem[];
     actionGoDo?: () => void;
-};
-
-export type MenuItemWithSubMenuProps = {
-    item: SideNavItem;
-    toggleOpen: () => void;
 };
 
 export type Coords = {
@@ -17,4 +13,9 @@ export type Coords = {
     y: number,
     width: number,
     height: number,
-  }
+}
+
+export interface HeadingName  {
+    name?: string,
+    title?: string,
+}

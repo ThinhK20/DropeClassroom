@@ -1,19 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SideNavItem } from "../../shared/type/types";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
+import { useMatches } from "react-router-dom";
 
 interface SideBarItemProps {
   item: SideNavItem;
-  isActive: boolean;
+
   children?: React.ReactNode;
 }
 
-function SideBarItem({ item, isActive, children }: SideBarItemProps) {
+function SideBarItem({ item, children }: SideBarItemProps) {
+  const [url] = useMatches();
+
   const [subMenuOpen, setSubMenuOpen] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   const toggleSubMenu = () => {
     setSubMenuOpen(!subMenuOpen);
   };
+
+  useEffect(() => {
+    if(url.pathname === item.path) setIsActive(true);
+    else setIsActive(false);
+
+  }, [url.pathname, item.path]);
+  
+
+  console.log("rendring sidebar item:", item.path);
+  console.log("url: ", url.pathname);
 
   return (
     <>
@@ -31,7 +45,7 @@ function SideBarItem({ item, isActive, children }: SideBarItemProps) {
         )}
         <div className="flex flex-row items-center space-x-6 overflow-hidden">
           {item.icon}
-          <div className="flex flex-col">
+          <div className="flex flex-col" onClick={item.actionGoDo}>
             <span>{item.name}</span>
             <span className="text-sm text-gray-500">{item.title}</span>
           </div>

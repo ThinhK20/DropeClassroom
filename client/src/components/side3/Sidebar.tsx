@@ -13,6 +13,7 @@ import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import CastForEducationOutlinedIcon from "@mui/icons-material/CastForEducationOutlined";
 import AvatarCustom from "../avatar/AvatarCustom";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   user?: User;
@@ -21,13 +22,16 @@ interface SidebarProps {
 
 function Sidebar({ isOpen }: SidebarProps) {
   console.log("rendering side bar");
+  const navigate = useNavigate();
 
   const [enrolledClass, setEnrolledClass] = useState<ClassRoom[]>([
     {
+      classId: "123",
       name: "Nestjs Backend Tutorial",
       title: "Beginner",
     },
     {
+      classId: "1234",
       name: "Nextjs Fullstack Tutorial",
       title: "20CLC01",
     },
@@ -35,10 +39,12 @@ function Sidebar({ isOpen }: SidebarProps) {
 
   const [teachingClass, setTeachingClass] = useState<ClassRoom[]>([
     {
+      classId: "12345",
       name: "Java Backend Tutorial",
       title: "Beginner",
     },
     {
+      classId: "123457",
       name: "C# Backend Tutorial",
       title: "20CLC01",
     },
@@ -62,15 +68,18 @@ function Sidebar({ isOpen }: SidebarProps) {
                       <HomeOutlinedIcon sx={{ fontSize: 28, color: `black` }} />
                     ),
                     submenu: false,
+                    path: "/h",
+                    actionGoDo: () => {navigate("/h")}
                   } as SideNavItem
                 }
-                isActive={true}
               ></SideBarItem>
 
               <SideBarItem
                 item={
                   {
                     name: "Schedule",
+                    path: "/schedule",
+                    actionGoDo: () => {navigate("/schedule")},
                     icon: (
                       <CalendarTodayIcon
                         sx={{ fontSize: 28, color: `black` }}
@@ -79,7 +88,6 @@ function Sidebar({ isOpen }: SidebarProps) {
                     submenu: false,
                   } as SideNavItem
                 }
-                isActive={false}
               ></SideBarItem>
             </div>
 
@@ -97,7 +105,6 @@ function Sidebar({ isOpen }: SidebarProps) {
                       submenu: true,
                     } as SideNavItem
                   }
-                  isActive={false}
                 >
                   {teachingClass.map((classroom, id) => {
                     return (
@@ -112,10 +119,11 @@ function Sidebar({ isOpen }: SidebarProps) {
                                 classroomAvatar={true}
                               />
                             ),
+                            path: "/c/" + classroom.classId,
+                            actionGoDo: () => {navigate("/c/" + classroom.classId)},
                             submenu: false,
                           } as SideNavItem
                         }
-                        isActive={false}
                       />
                     );
                   })}
@@ -135,7 +143,6 @@ function Sidebar({ isOpen }: SidebarProps) {
                       submenu: true,
                     } as SideNavItem
                   }
-                  isActive={false}
                 >
                   {enrolledClass.map((classroom, id) => {
                     return (
@@ -151,9 +158,10 @@ function Sidebar({ isOpen }: SidebarProps) {
                               />
                             ),
                             submenu: false,
+                            path: "/c/" + classroom.classId,
+                            actionGoDo: () => {navigate("/c/" + classroom.classId)},
                           } as SideNavItem
                         }
-                        isActive={false}
                       />
                     );
                   })}
@@ -171,10 +179,11 @@ function Sidebar({ isOpen }: SidebarProps) {
                         sx={{ fontSize: 28, color: `black` }}
                       />
                     ),
+                    path: "/h/archived",
+                    actionGoDo: () => {navigate("/h/archived")},
                     submenu: false,
                   } as SideNavItem
                 }
-                isActive={false}
               ></SideBarItem>
 
               <SideBarItem
@@ -184,10 +193,11 @@ function Sidebar({ isOpen }: SidebarProps) {
                     icon: (
                       <SettingsIcon sx={{ fontSize: 28, color: `black` }} />
                     ),
+                    path: "/s",
+                    actionGoDo: () => {navigate("/s")},
                     submenu: false,
                   } as SideNavItem
                 }
-                isActive={false}
               ></SideBarItem>
             </div>
           </Container>
