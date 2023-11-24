@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
+import App from "../page/App";
 import TeacherMarkPage from "../components/markPage/teacher";
 import StudentMarkPage from "../components/markPage/student";
 
