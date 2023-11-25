@@ -6,7 +6,7 @@ import { useState } from "react";
 import CreateClassModal from "../../components/modal/CreateClassModal";
 import ClientWrapper from "../../components/ClientWrapper";
 
-export default function Home() {
+export default function Achived() {
   const user: User = {
     fullName: "Minh An",
   };
@@ -44,7 +44,9 @@ export default function Home() {
             <Sidebar isOpen={isOpenSideBar} />
             <Container>
               <main className="relative h-full pt-5 pb-16 px-6 md:px-5 max-w-full flex flex-col flex-1 items-start">
-                <img src="/src/assets/2.jpg" />
+                <h1 className="flex-1 items-center justify-center text-6xl">
+                    HELLO ACHIVED PAGE
+                </h1>
               </main>
             </Container>
           </main>

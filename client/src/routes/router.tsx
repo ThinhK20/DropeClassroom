@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Home from "../page/home/home";
 import Schedule from "../page/schedule/Schedule";
-import Archived from "../page/achieved/Archived";
+import Archived from "../page/achieved/Achived";
 import Setting from "../page/setting/Setting";
 import App from "../App";
 import ClassRoom from "../page/class/ClassRoom";
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
       element: <Home />,
    },
    {
-      path: "/shedule",
+      path: "/schedule",
       element: <Schedule />,
    },
    {
@@ -35,12 +35,12 @@ export const router = createBrowserRouter([
       element: <ClassRoom />,
    },
    {
-      path: "/signup",
-      element: <SignUp />,
-   },
-   {
       path: "/signin",
       element: <SignIn />,
+   },
+   {
+      path: "/signup",
+      element: <SignUp />,
    },
 
    // {

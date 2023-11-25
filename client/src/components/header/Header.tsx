@@ -1,15 +1,16 @@
 import { User } from "../../models/User";
-import { ClassRoom } from "../../models/ClassRoom";
 import Logo from "./Logo";
 import PlusButton from "./button/PlusButton";
 import SideBarButton from "./button/SideBarButton";
-import CurrentClassHeading from "./CurrentClassHeading";
+import CurrentClassHeading from "./HeaderHeading";
 import FunctionButton from "./button/FunctionButton";
 import AvatarButton from "./button/AvatarButton";
+import { useMatches } from "react-router-dom";
+import { HeadingName } from "../../shared/type/types";
+
 
 interface Props {
   user: User;
-  currentClass: ClassRoom | null;
   showPlusButton: boolean;
   handleToggle: () => void;
   handleCreateClass?: () => void;
@@ -18,14 +19,24 @@ interface Props {
 
 function Header({
   user,
-  currentClass,
   showPlusButton,
   handleCreateClass,
   handleJoinClass,
   handleToggle,
 }: Props) {
   console.log("Rendering header");
+  
+  const [url] = useMatches();
+  console.log(url);
+  const headingName = ():HeadingName => {
 
+    if(Number(url.id) === 2) return {name: "Schedule", title: undefined};
+    if(Number(url.id) === 3) return {name: "Archived", title: undefined};
+    if(Number(url.id) === 4) return {name: "Setting", title: undefined};
+
+    return {name: undefined, title: undefined};
+  }
+  
   return (
     <header className="relative md:sticky md:top-0 md:left-0 z-header flex flex-row items-center justify-between h-16 md:w-full border-b border-btransition-all border-gray-200 bg-white py-3 px-4">
       {/* Half Left */}
@@ -35,7 +46,7 @@ function Header({
         {/* logo */}
         <Logo />
         {/* Current Class */}
-        <CurrentClassHeading classroom={currentClass} />
+        <CurrentClassHeading  name={headingName().name} title={headingName().title}/>
       </div>
 
       {/* Half Right */}
