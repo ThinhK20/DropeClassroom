@@ -11,20 +11,69 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { MenuItem, Select } from "@mui/material";
+import { Alert, MenuItem, Select } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { signupApi } from "../../apis/authApis";
+import { SignUpUser } from "../../models/User";
+import { AxiosError } from "axios";
+import { validateEmail } from "../../libs/utils";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+   const [dateOfBirth, setDateOfBirth] = React.useState<Date | null>(
+      new Date()
+   );
+   const [errorMsg, setErrorMsg] = React.useState<string>("");
+   const [successMsg, setSuccessMsg] = React.useState<string>("");
+
    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      setSuccessMsg("");
+      setErrorMsg("");
+
       const data = new FormData(event.currentTarget);
-      console.log({
+
+      let isValid = true;
+
+      if (data.get("password") !== data.get("confirm-password")) {
+         setErrorMsg(
+            (oldMsg) =>
+               oldMsg + "Your password and confirm password must match.\n"
+         );
+         isValid = false;
+      }
+
+      if (!validateEmail(data.get("email") as string)) {
+         setErrorMsg(
+            (oldMsg) =>
+               oldMsg +
+               "Email invalid. Please fill correctly your email address.\n"
+         );
+         isValid = false;
+      }
+
+      if (!isValid) return;
+      else setErrorMsg("");
+
+      const formData = {
          email: data.get("email"),
          password: data.get("password"),
-      });
+         username: data.get("username"),
+         gender: data.get("gender"),
+         dateOfBirth,
+         role: "user",
+      } as SignUpUser;
+
+      signupApi(formData)
+         .then((res) => {
+            (event.target as HTMLFormElement).reset();
+            setSuccessMsg(res.data);
+         })
+         .catch((ex: AxiosError) => {
+            setErrorMsg((ex.response?.data as any)?.message as string);
+         });
    };
 
    return (
@@ -45,12 +94,9 @@ export default function SignUp() {
                <Typography component="h1" variant="h5">
                   Sign up
                </Typography>
-               <Box
-                  component="form"
-                  noValidate
-                  onSubmit={handleSubmit}
-                  sx={{ mt: 3 }}
-               >
+               {successMsg && <Alert severity="success">{successMsg}</Alert>}
+               {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+               <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <Grid container spacing={2}>
                      <Grid item xs={12}>
                         <TextField
@@ -70,6 +116,7 @@ export default function SignUp() {
                            id="email"
                            label="Email Address"
                            name="email"
+                           type="email"
                            autoComplete="email"
                         />
                      </Grid>
@@ -90,7 +137,7 @@ export default function SignUp() {
                            fullWidth
                            name="confirm-password"
                            label="Confirm Password"
-                           type="confirm-password"
+                           type="password"
                            id="confirm-password"
                            autoComplete="confirm-password"
                         />
@@ -102,6 +149,7 @@ export default function SignUp() {
                            placeholder="Gender"
                            fullWidth
                            value="m"
+                           name="gender"
                            label="Gender"
                         >
                            <MenuItem value={"m"}>Male</MenuItem>
@@ -109,7 +157,20 @@ export default function SignUp() {
                         </Select>
                      </Grid>
                      <Grid item xs={12} md={6}>
-                        <DatePicker label="Date of birth" />
+                        <DatePicker
+                           label="Date of birth"
+                           format={"DD/MM/YYYY"}
+                           onChange={(date: any) => {
+                              let d: Date | string = new Date(date);
+                              d = `${d.getDate()}-${d.getMonth()}-${d.getFullYear()}`;
+                              setDateOfBirth(new Date(d));
+                           }}
+                           slotProps={{
+                              textField: {
+                                 helperText: "DD/MM/YYYY",
+                              },
+                           }}
+                        />
                      </Grid>
                   </Grid>
                   <Button
@@ -122,7 +183,7 @@ export default function SignUp() {
                   </Button>
                   <Grid container justifyContent="center">
                      <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="/signin" variant="body2">
                            Already have an account? Sign in
                         </Link>
                      </Grid>

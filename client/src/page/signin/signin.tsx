@@ -12,18 +12,48 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Alert } from "@mui/material";
+import { validateEmail } from "../../libs/utils";
+import { loginApi } from "../../apis/authApis";
+import { AxiosError } from "axios";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setLogin } from "../../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+   const [errorMsg, setErrorMsg] = React.useState<string>("");
+
+   const navigate = useNavigate();
+
+   const dispatch = useAppDispatch();
+
    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      console.log({
-         email: data.get("email"),
-         password: data.get("password"),
-      });
+
+      const formData = {
+         email: data.get("email") as string,
+         password: data.get("password") as string,
+      };
+
+      if (!validateEmail(formData.email)) {
+         setErrorMsg(
+            "Email invalid. Please submit correctly your email address."
+         );
+      } else setErrorMsg("");
+
+      loginApi(formData)
+         .then(async (res) => {
+            dispatch(setLogin(res.data));
+            navigate("/");
+         })
+         .catch((ex: AxiosError) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            setErrorMsg((ex.response?.data as any)?.message as string);
+         });
    };
 
    return (
@@ -44,12 +74,8 @@ export default function SignIn() {
                <Typography component="h1" variant="h5">
                   Sign in
                </Typography>
-               <Box
-                  component="form"
-                  onSubmit={handleSubmit}
-                  noValidate
-                  sx={{ mt: 1 }}
-               >
+               <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                  {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
                   <TextField
                      margin="normal"
                      required
@@ -57,6 +83,7 @@ export default function SignIn() {
                      id="email"
                      label="Email Address"
                      name="email"
+                     type="email"
                      autoComplete="email"
                      autoFocus
                   />
@@ -89,7 +116,7 @@ export default function SignIn() {
                         </Link>
                      </Grid>
                      <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="/signup" variant="body2">
                            {"Don't have an account? Sign Up"}
                         </Link>
                      </Grid>

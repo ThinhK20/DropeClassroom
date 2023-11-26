@@ -27,7 +27,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    return await this.authService.login(req.user);
   }
 
   @Post('signup')
@@ -44,9 +44,9 @@ export class AuthController {
   }
 
   @UseGuards(SessionGuard)
-  @Get('protected')
-  sayHello(@Request() req) {
-    return req.user || 'Hello';
+  @Get()
+  getUser(@Request() req: { user: User }) {
+    return req.user;
   }
 
   @UseGuards(SessionGuard)
@@ -60,9 +60,9 @@ export class AuthController {
     @Body() body: { email: string; oldPassword: string; newPassword: string },
   ) {
     const user = await this.userService.getUserByQuery({ email: body.email });
-    if (!user) throw new NotFoundException('User does not exists');
+    if (!user) throw new NotFoundException('User does not exists.');
     if (!this.authService.validatePassword(body.oldPassword, user.password))
-      throw new BadRequestException('Password incorrect');
+      throw new BadRequestException('Password incorrect.');
     const token = await this.authService.initiatePasswordReset(user.email);
     const renewPasswordLink = await this.authService.generateRenewPasswordLink(
       user._id.toString(),

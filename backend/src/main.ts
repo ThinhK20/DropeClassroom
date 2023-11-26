@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -10,13 +11,21 @@ async function bootstrap() {
       secret: 'secretKey',
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 36000 },
+      cookie: {
+        maxAge: 360000,
+      },
     }),
   );
 
+  app.use(cookieParser());
   app.use(passport.initialize());
   app.use(passport.session());
 
-  await app.listen(3000);
+  app.enableCors({
+    origin: 'http://localhost:3000', // Replace with your ReactJS client's origin
+    credentials: true,
+  });
+
+  await app.listen(8000);
 }
 bootstrap();

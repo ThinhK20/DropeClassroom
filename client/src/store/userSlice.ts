@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { User } from "../models/User";
 
 export type UserSliceType = {
-   data: unknown;
+   data: User | null;
    token: string;
 };
 
@@ -14,14 +15,13 @@ const userSlice = createSlice({
    initialState,
    name: "user",
    reducers: {
-      setLogin(state, action) {
-         state.token = action.payload.token;
-         state.data = action.payload.user;
-      },
-      setUser(state, action) {
+      setLogin(state, action: PayloadAction<User>) {
          state.data = action.payload;
       },
-      setToken(state, action) {
+      setUser(state, action: PayloadAction<User>) {
+         state.data = action.payload;
+      },
+      setToken(state, action: PayloadAction<string>) {
          state.token = action.payload;
       },
       setLogout(state) {
