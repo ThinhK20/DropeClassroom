@@ -9,7 +9,7 @@ interface Props {
 function PlusButton({ actionCreateClass, actionJoinedClass }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log("rendering Plus Button");
+  // console.log("rendering Plus Button");
 
   const nodeRef = useRef<HTMLButtonElement>(null);
 

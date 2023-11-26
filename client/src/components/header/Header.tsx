@@ -24,10 +24,9 @@ function Header({
   handleJoinClass,
   handleToggle,
 }: Props) {
-  console.log("Rendering header");
+  // console.log("Rendering header");
   
   const [url] = useMatches();
-  console.log(url);
   const headingName = ():HeadingName => {
 
     if(Number(url.id) === 2) return {name: "Schedule", title: undefined};

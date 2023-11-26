@@ -25,10 +25,6 @@ function SideBarItem({ item, children }: SideBarItemProps) {
 
   }, [url.pathname, item.path]);
   
-
-  console.log("rendring sidebar item:", item.path);
-  console.log("url: ", url.pathname);
-
   return (
     <>
       <div

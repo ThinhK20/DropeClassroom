@@ -9,7 +9,6 @@ function ClientWrapper({ children }: ClientWrapper) {
 
   useEffect(() => {
     setHasMounted(true);
-    console.log("use effect: has mounted");
   }, []);
 
   if(!hasMounted) return null;

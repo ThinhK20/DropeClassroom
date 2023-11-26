@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 function SideBarButton({actionHandleToggle}:{actionHandleToggle: () => void}) {
-  console.log('rendering side bar button')
+  // console.log('rendering side bar button');
   
   return (
     <div className="relative hidden md:block">

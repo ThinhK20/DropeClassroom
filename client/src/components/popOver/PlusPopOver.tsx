@@ -7,7 +7,7 @@ interface PlusPopOverProps {
 }
 
 function PlusPopOver({ isOpen, toggleCreate, toggleJoin }: PlusPopOverProps) {
-  console.log("rendering Plus Poover");
+  // console.log("rendering Plus Poover");
 
   if (typeof document === "undefined") return null;
   if (!isOpen) return null;

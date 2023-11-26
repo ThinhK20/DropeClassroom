@@ -19,7 +19,7 @@ export default function Setting() {
 
   return (
     <>
-      {isCreateModal && (
+      {/* {isCreateModal && (
         <CreateClassModal
           isOpen={isCreateModal}
           handleClose={() => setIsCreateModal(!isCreateModal)}
@@ -51,7 +51,7 @@ export default function Setting() {
             </Container>
           </main>
         </Container>
-      </ClientWrapper>
+      </ClientWrapper> */}
     </>
   );
 }
