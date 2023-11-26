@@ -5,7 +5,7 @@ export const renewPasswordMail = (
   renewPasswordLink: string,
 ): MailDataRequired => {
   return {
-    to: 'nighlord13082002@gmail.com', // change to userEmail if done
+    to: userEmail, // change to userEmail if done
     subject: 'Password Renewal',
     from: 'thinhnguyent.2002@gmail.com', // should not change
     text: `Dear user,

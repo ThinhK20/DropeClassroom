@@ -4,7 +4,7 @@ import { Role } from 'src/enums/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({ timestamps: true })
+@Schema()
 export class User {
   _id: Types.ObjectId;
 
@@ -19,9 +19,6 @@ export class User {
 
   @Prop({ type: mongoose.Schema.Types.Date })
   dateOfBirth: Date;
-
-  @Prop()
-  age: number;
 
   @Prop({ default: false })
   isActive: boolean;

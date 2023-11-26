@@ -3,22 +3,21 @@ import Header from "../../components/header/Header";
 import Container from "../../components/Container";
 import Sidebar from "../../components/side3/Sidebar";
 import { useState } from "react";
-import CreateClassModal from "../../components/modal/CreateClassModal";
 import ClientWrapper from "../../components/ClientWrapper";
 
 import ReactPortalCustom from "../../components/portal/ReactPortalCustom";
 import Modal from "../../components/modal/Modal";
 
 export default function Home() {
-  const user: User = {
-    fullName: "Minh An",
-  };
+   const user = {
+      username: "Minh An",
+   } as User;
 
-  const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-  const [isCreateModal, setIsCreateModal] = useState(false);
-  const [isJoinModal, setIsJoinModal] = useState(false);
+   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
+   const [isCreateModal, setIsCreateModal] = useState(false);
+   const [isJoinModal, setIsJoinModal] = useState(false);
 
-  console.log("is Open Create class", isCreateModal);
+   console.log("is Open Create class", isCreateModal);
 
   return (
     <>

@@ -29,11 +29,13 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user._id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login(userLogin: { email: string; password: string }) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const user = await this.usersService.getUserByQuery({
+      email: userLogin.email,
+    } as User);
+
+    return user;
   }
 
   async signup(createUserDto: User) {
@@ -93,10 +95,10 @@ export class AuthService {
     newPassword: string,
     token: string,
   ) {
-    return `http://localhost:3000/auth/reset-password?token=${token}&id=${userId}&password=${newPassword}`;
+    return `http://localhost:8000/auth/reset-password?token=${token}&id=${userId}&password=${newPassword}`;
   }
 
   generateActivateAccountLink(userId: string) {
-    return `http://localhost:3000/auth/active-account?id=${userId}`;
+    return `http://localhost:8000/auth/active-account?id=${userId}`;
   }
 }
