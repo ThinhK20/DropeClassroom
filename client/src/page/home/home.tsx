@@ -7,7 +7,7 @@ import ClientWrapper from "../../components/ClientWrapper";
 
 import CreateClassModal from "../../components/modal/CreateClassModal";
 import JoinClassModal from "../../components/modal/JoinClassModal";
-import DefaultHome from "./DefaultHome";
+import MainPage from "./mainPage";
 
 export default function Home() {
   const user = {
@@ -27,14 +27,13 @@ export default function Home() {
           user={user}
           handleToggle={() => setIsOpenSideBar(!isOpenSideBar)}
         />
-
         <main
           className={`flex flex-row ${isOpenSideBar ? "md:pl-80" : "md:pl-20"}`}
         >
           <Sidebar isOpen={isOpenSideBar} />
           <Container>
 
-            <DefaultHome />
+            <MainPage />
             
           </Container>
         </main>

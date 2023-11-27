@@ -4,10 +4,11 @@ import { Avatar } from "@mui/material";
 interface AvatarCustomProps {
   name: string,
   classroomAvatar: boolean;
+  size?: number;
   url?: string
 }
 
-function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
+function AvatarCustom({name, classroomAvatar, size,url }: AvatarCustomProps) {
     
   function stringToColor(string: string) {
     let hash = 0;
@@ -50,7 +51,8 @@ function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
         alt={`${name} Profile`}
       />
     ) : (
-      <Avatar alt={`${name} Profile`} src={url} />
+      <Avatar alt={`${name} Profile`} 
+              src={url} />
     )
   );
 }
