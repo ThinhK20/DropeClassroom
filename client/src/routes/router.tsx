@@ -8,47 +8,49 @@ import App from "../App";
 import ClassRoom from "../page/class/ClassRoom";
 import SignUp from "../page/signup/signup";
 import SignIn from "../page/signin/signin";
+import TeacherMarkPage from "../page/markPage/teacher";
+import StudentMarkPage from "../page/markPage/student";
 
 export const router = createBrowserRouter([
-   {
-      path: "/",
-      element: <App />,
-   },
-   {
-      path: "/h",
-      element: <Home />,
-   },
-   {
-      path: "/schedule",
-      element: <Schedule />,
-   },
-   {
-      path: "/h/archived",
-      element: <Archived />,
-   },
-   {
-      path: "/s",
-      element: <Setting />,
-   },
-   {
-      path: "/c/:id",
-      element: <ClassRoom />,
-   },
-   {
-      path: "/signin",
-      element: <SignIn />,
-   },
-   {
-      path: "/signup",
-      element: <SignUp />,
-   },
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/h",
+    element: <Home />,
+  },
+  {
+    path: "/schedule",
+    element: <Schedule />,
+  },
+  {
+    path: "/h/archived",
+    element: <Archived />,
+  },
+  {
+    path: "/s",
+    element: <Setting />,
+  },
+  {
+    path: "/c/:id",
+    element: <ClassRoom />,
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
 
-   // {
-   //   path: "/user/teacher/course/mark",
-   //   element: <TeacherMarkPage />,
-   // },
-   // {
-   //   path: "/user/student/course/mark",
-   //   element: <StudentMarkPage />,
-   // },
+  {
+    path: "/user/teacher/course/mark",
+    element: <TeacherMarkPage />,
+  },
+  {
+    path: "/user/student/course/mark",
+    element: <StudentMarkPage />,
+  },
 ]);
