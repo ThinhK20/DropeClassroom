@@ -3,16 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ReactPortalCustom from "../portal/ReactPortalCustom";
 import Modal from "./Modal";
 import { RootState } from "../../store/store";
-import { onCloseCreateClass } from "../../store/createClassSlice";
 import InputText from "../inputs/inputText";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { onCloseJoinClass } from "../../store/joinClassSlice";
 
-function CreateClassModal() {
+function JoinClassModal() {
   const [isLoading, setIsLoading] = useState(false);
-  const showModal = useSelector((state: RootState) => state.createClass.isOpen);
+  const showModal = useSelector((state: RootState) => state.joinClass.isOpen);
   const dispatch = useDispatch();
-
-  console.log("create class modal", showModal);
 
   const {
     register,
@@ -30,38 +28,19 @@ function CreateClassModal() {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
     // call api
-  }
+  };
 
+  const headerContent = (
+    <span className="mt-2">
+        Ask your teacher for the class code, then enter it here
+    </span>
+  );
 
   const bodyContent = (
-    <div className="flex flex-col gap-4 pt-4">
+    <div className="flex flex-col gap-4 pt-4 ">
       <InputText
-        id="ClassName"
-        label="Class Name (required)"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <InputText
-        id="Section"
-        label="Section"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <InputText
-        id="Subject"
-        label="Subject"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <InputText
-        id="Room"
-        label="Room"
+        id="ClassCode"
+        label="Class Code"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -70,19 +49,31 @@ function CreateClassModal() {
     </div>
   );
 
+  const footerBody = (
+    <div className="text-sm mt-4">
+        <p>Use a class code consisting of 5-7 letters or numbers, without spaces or symbols.</p>
+        <ol className="list-disc px-4 mt-2">
+            <li>Use an authorized account.</li>
+            <li>Use a class code consisting of 5-7 letters or numbers, without spaces or symbols.</li>
+        </ol>
+    </div>
+  );
+
   return (
     <ReactPortalCustom wrapperId="react-portal-create-modal-container">
       <Modal
-        title="Create Class"
+        title="Join Class"
         disabled={isLoading}
         isOpen={showModal}
-        onClose={() => dispatch(onCloseCreateClass())}
+        onClose={() => dispatch(onCloseJoinClass())}
+        header={headerContent}
         body={bodyContent}
-        labelSubmit="Create"
+        footer={footerBody}
+        labelSubmit="Join"
         onSubmit={handleSubmit(onSubmit)}
       />
     </ReactPortalCustom>
   );
 }
 
-export default CreateClassModal;
+export default JoinClassModal;

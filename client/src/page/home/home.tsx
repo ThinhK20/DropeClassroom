@@ -6,6 +6,7 @@ import { useState } from "react";
 import ClientWrapper from "../../components/ClientWrapper";
 
 import CreateClassModal from "../../components/modal/CreateClassModal";
+import JoinClassModal from "../../components/modal/JoinClassModal";
 
 export default function Home() {
   const user = {
@@ -18,6 +19,7 @@ export default function Home() {
     <>
       <Container>
         <CreateClassModal />
+        <JoinClassModal />
       </Container>
       <ClientWrapper>
         <Header
