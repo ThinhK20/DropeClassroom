@@ -7,6 +7,7 @@ import ClientWrapper from "../../components/ClientWrapper";
 
 import CreateClassModal from "../../components/modal/CreateClassModal";
 import JoinClassModal from "../../components/modal/JoinClassModal";
+import DefaultHome from "./DefaultHome";
 
 export default function Home() {
   const user = {
@@ -32,9 +33,9 @@ export default function Home() {
         >
           <Sidebar isOpen={isOpenSideBar} />
           <Container>
-            <main className="relative h-full pt-5 pb-16 px-6 md:px-5 max-w-full flex flex-col flex-1 items-start">
-              <img src="/src/assets/2.jpg" />
-            </main>
+
+            <DefaultHome />
+            
           </Container>
         </main>
       </ClientWrapper>

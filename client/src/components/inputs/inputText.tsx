@@ -27,7 +27,7 @@ function InputText({
         {...register(id, { required })}
         placeholder=" "
         type={type}
-        className={`block p-2 pt-5 pl-3 my-1 w-full regular-18 text-gray-900 bg-blue-600/5 border-b-2 border-gray-400 focus:outline-none focus:ring-0 focus:border-blue-600 transition disabled:cursor-not-allowed disabled:opacity-50 peer ${errors[id] ? 'border-rose-500' : 'border-neutral-300'} ${errors[id] ? 'focus:border-rose-500' : 'focus:border-gray-400'}`}
+        className={`block p-2 pt-5 pl-3 my-1 w-full regular-18 text-gray-900 bg-blue-600/5 border-b-2 border-gray-400 focus:outline-none focus:ring-0 focus:border-blue-600 transition disabled:cursor-not-allowed disabled:opacity-50 peer ${errors[id] ? 'border-rose-500' : 'border-neutral-300'} ${errors[id] ? 'focus:border-rose-500' : 'focus:border-blue-600'}`}
       />
 
       <label
