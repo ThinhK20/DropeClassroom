@@ -11,17 +11,11 @@ import { HeadingName } from "../../shared/type/types";
 
 interface Props {
   user: User;
-  showPlusButton: boolean;
   handleToggle: () => void;
-  handleCreateClass?: () => void;
-  handleJoinClass?: () => void;
 }
 
 function Header({
   user,
-  showPlusButton,
-  handleCreateClass,
-  handleJoinClass,
   handleToggle,
 }: Props) {
   // console.log("Rendering header");
@@ -52,13 +46,8 @@ function Header({
       <div className="w-1/2 flex items-center justify-end gap-1 md:gap-5">
         {/* create class */}
 
-        {showPlusButton && (
-          <PlusButton
-            actionCreateClass={handleCreateClass}
-            actionJoinedClass={handleJoinClass}
-          />
-        )}
-
+        <PlusButton />
+ 
         {/* other funciton */}
         <FunctionButton />
 

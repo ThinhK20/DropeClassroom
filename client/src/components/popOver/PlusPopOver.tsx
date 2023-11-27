@@ -1,15 +1,16 @@
+import { useDispatch } from "react-redux";
 import ReactPortalCustom from "../portal/ReactPortalCustom";
+import { onOpenCreateClass } from "../../store/createClassSlice";
+import { onOpenJoinClass } from "../../store/joinClassSlice";
 
 interface PlusPopOverProps {
   isOpen: boolean;
-  toggleCreate?: () => void;
-  toggleJoin?: () => void;
 }
 
-function PlusPopOver({ isOpen, toggleCreate, toggleJoin }: PlusPopOverProps) {
-  // console.log("rendering Plus Poover");
+function PlusPopOver({ isOpen }: PlusPopOverProps) {
+  const dispatch = useDispatch();
+  console.log("rendering Plus Poover");
 
-  if (typeof document === "undefined") return null;
   if (!isOpen) return null;
 
   return (
@@ -19,14 +20,14 @@ function PlusPopOver({ isOpen, toggleCreate, toggleJoin }: PlusPopOverProps) {
           <ul className="flex flex-col gap-2 py-2">
             <li
               className="regular-20 inline-block hover:bg-gray-500/10 hover:text-black/70 px-4 py-2 cursor-pointer"
-              onClick={toggleCreate}
+              onClick={() => dispatch(onOpenCreateClass())}
             >
               <span> Create class </span>
             </li>
 
             <li
               className="regular-20 inline-block hover:bg-gray-500/10 hover:text-black/70 px-4 py-2 cursor-pointer"
-              onClick={toggleJoin}
+              onClick={() => dispatch(onOpenJoinClass())}
             >
               <span> Join class</span>
             </li>

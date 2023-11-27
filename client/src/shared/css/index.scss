@@ -61,13 +61,13 @@
     }
 
     .animation-fade-out {
-        animation: fade-out 200ms ease-out;
+        animation: fade-out 300ms ease-out;
     }
 
     @keyframes fade-out {
         from {
             opacity: 0;
-            transform: scale(0.5);
+            transform: scale(0);
         }
 
         to {
@@ -77,13 +77,13 @@
     }
 
     .animation-fade-in {
-        animation: fade-in 400ms ease-in;
+        animation: fade-in 300ms ease-in;
     }
 
     @keyframes fade-in {
         from {
             opacity: 1;
-            transform: scale(.9);
+            transform: scale(.8);
         }
 
         to {

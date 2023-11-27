@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import PlusPopOver from "../../popOver/PlusPopOver";
 
-interface Props {
-  actionCreateClass?: () => void;
-  actionJoinedClass?: () => void;
-}
 
-function PlusButton({ actionCreateClass, actionJoinedClass }: Props) {
+function PlusButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   // console.log("rendering Plus Button");
@@ -40,8 +36,6 @@ function PlusButton({ actionCreateClass, actionJoinedClass }: Props) {
       {isOpen && (
         <PlusPopOver
           isOpen={isOpen}
-          toggleCreate={actionCreateClass}
-          toggleJoin={actionJoinedClass}
         />
       )}
     </div>

@@ -1,47 +1,80 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ReactPortalCustom from "../portal/ReactPortalCustom";
-import { Container, Modal } from "@mui/material";
+import Modal from "./Modal";
+import { RootState } from "../../store/store";
+import { onCloseCreateClass } from "../../store/createClassSlice";
+import InputText from "../inputs/inputText";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 
-interface Props {
-  isOpen: boolean;
-  handleClose: () => void;
-}
-
-function CreateClassModal({ isOpen, handleClose }: Props) {
+function CreateClassModal() {
   const [isLoading, setIsLoading] = useState(false);
+  const showModal = useSelector((state: RootState) => state.createClass.isOpen);
+  const dispatch = useDispatch();
 
+  console.log("create class modal", showModal);
 
-  // close modal on click out screen
-  useEffect(() => {
-    const closeOnEscapeKey = (e: KeyboardEvent) => {
-      e.key === "Escape" ? handleClose() : null;
-    };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      className: "",
+      section: "",
+      subject: "",
+      room: "",
+    },
+  });
 
-    document.body.addEventListener("keydown", closeOnEscapeKey);
-
-    return () => {
-      document.body.removeEventListener("keydown", closeOnEscapeKey);
-    };
-  }, [handleClose]);
-
-  // disable scroll on modal load
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    console.log("document.body.style.overflow = 'hidden'");
-    return () => {
-      document.body.style.overflow = "unset";
-      console.log("document.body.style.overflow = 'unset'");
-    };
-  }, [isOpen]);
-
-
-  if (!isOpen) return null;
+  const bodyContent = (
+    <div className="flex flex-col gap-4 pt-4">
+      <InputText
+        id="Class Name"
+        label="Class Name (required)"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
+      <InputText
+        id="Section"
+        label="Section"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
+      <InputText
+        id="Subject"
+        label="Subject"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
+      <InputText
+        id="Room"
+        label="Room"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
+    </div>
+  );
 
   return (
     <ReactPortalCustom wrapperId="react-portal-create-modal-container">
-      <Container>
-        
-      </Container>
+      <Modal
+        title="Create Class"
+        disabled={isLoading}
+        isOpen={showModal}
+        onClose={() => dispatch(onCloseCreateClass())}
+        body={bodyContent}
+        labelSubmit="Create"
+        onSubmit={() => {}}
+      />
     </ReactPortalCustom>
   );
 }

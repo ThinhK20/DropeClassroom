@@ -21,13 +21,9 @@ interface SidebarProps {
 }
 
 function Sidebar({ isOpen }: SidebarProps) {
-<<<<<<< HEAD
   // console.log("rendering side bar");
   const navigate = useNavigate();
-=======
-   console.log("rendering side bar");
-   const navigate = useNavigate();
->>>>>>> a67c3be693693c937a96e7450fc05cf5be514b8c
+
 
    const [enrolledClass, setEnrolledClass] = useState<ClassRoom[]>([
       {

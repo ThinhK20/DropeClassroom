@@ -5,42 +5,24 @@ import Sidebar from "../../components/side3/Sidebar";
 import { useState } from "react";
 import ClientWrapper from "../../components/ClientWrapper";
 
-import ReactPortalCustom from "../../components/portal/ReactPortalCustom";
-import Modal from "../../components/modal/Modal";
+import CreateClassModal from "../../components/modal/CreateClassModal";
 
 export default function Home() {
-   const user = {
-      username: "Minh An",
-   } as User;
+  const user = {
+    username: "Minh An",
+  } as User;
 
-   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-   const [isCreateModal, setIsCreateModal] = useState(false);
-   const [isJoinModal, setIsJoinModal] = useState(false);
-
-   console.log("is Open Create class", isCreateModal);
+  const [isOpenSideBar, setIsOpenSideBar] = useState(true);
 
   return (
     <>
-      <ReactPortalCustom wrapperId="react-portal-create-modal-container">
-        <Container>
-          <Modal
-            isOpen={isCreateModal}
-            title="Create class"
-            onClose={() => {
-              console.log("set state is create modal");
-              setIsCreateModal(!isCreateModal);
-            }}
-          />
-        </Container>
-      </ReactPortalCustom>
-
+      <Container>
+        <CreateClassModal />
+      </Container>
       <ClientWrapper>
         <Header
           user={user}
           handleToggle={() => setIsOpenSideBar(!isOpenSideBar)}
-          showPlusButton={true}
-          handleCreateClass={() => setIsCreateModal(!isCreateModal)}
-          handleJoinClass={() => setIsJoinModal(!isJoinModal)}
         />
 
         <main
