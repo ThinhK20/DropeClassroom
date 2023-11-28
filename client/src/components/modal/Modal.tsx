@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import ReactPortalCustom from "../portal/ReactPortalCustom";
 
 interface ModalProps {
   isOpen?: boolean;
@@ -95,7 +96,7 @@ function Modal({
   if (!isOpen) return null;
 
   return (
-    <>
+    <ReactPortalCustom wrapperId="react-portal-create-modal-container">
       <div className="fixed inset-0 w-screen h-screen z-modal-bg bg-neutral-800 opacity-70" />
       <div className="fixed inset-0 z-modal flex items-center justify-center">
         <div
@@ -132,7 +133,7 @@ function Modal({
 
         </div>
       </div>
-    </>
+    </ReactPortalCustom>
   );
 }
 

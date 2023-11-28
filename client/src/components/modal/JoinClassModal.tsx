@@ -60,19 +60,17 @@ function JoinClassModal() {
   );
 
   return (
-    <ReactPortalCustom wrapperId="react-portal-create-modal-container">
-      <Modal
-        title="Join Class"
-        disabled={isLoading}
-        isOpen={showModal}
-        onClose={() => dispatch(onCloseJoinClass())}
-        header={headerContent}
-        body={bodyContent}
-        footer={footerBody}
-        labelSubmit="Join"
-        onSubmit={handleSubmit(onSubmit)}
-      />
-    </ReactPortalCustom>
+    <Modal
+      title="Join Class"
+      disabled={isLoading}
+      isOpen={showModal}
+      onClose={() => dispatch(onCloseJoinClass())}
+      header={headerContent}
+      body={bodyContent}
+      footer={footerBody}
+      labelSubmit="Join"
+      onSubmit={handleSubmit(onSubmit)}
+    />
   );
 }
 

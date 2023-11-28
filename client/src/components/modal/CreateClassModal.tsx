@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactPortalCustom from "../portal/ReactPortalCustom";
 import Modal from "./Modal";
 import { RootState } from "../../store/store";
 import { onCloseCreateClass } from "../../store/createClassSlice";
 import InputText from "../inputs/inputText";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useForm, FieldValues, SubmitHandler,  } from "react-hook-form";
 
 function CreateClassModal() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +16,7 @@ function CreateClassModal() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -32,6 +32,7 @@ function CreateClassModal() {
     // call api
   }
 
+  console.log(register("className"));
 
   const bodyContent = (
     <div className="flex flex-col gap-4 pt-4">
@@ -71,17 +72,16 @@ function CreateClassModal() {
   );
 
   return (
-    <ReactPortalCustom wrapperId="react-portal-create-modal-container">
-      <Modal
-        title="Create Class"
-        disabled={isLoading}
-        isOpen={showModal}
-        onClose={() => dispatch(onCloseCreateClass())}
-        body={bodyContent}
-        labelSubmit="Create"
-        onSubmit={handleSubmit(onSubmit)}
-      />
-    </ReactPortalCustom>
+    
+    <Modal
+      title="Create Class"
+      disabled={isLoading}
+      isOpen={showModal}
+      onClose={() => {dispatch(onCloseCreateClass()); reset();}}
+      body={bodyContent}
+      labelSubmit="Create"
+      onSubmit={handleSubmit(onSubmit)}
+    />
   );
 }
 
