@@ -8,16 +8,13 @@ export class CreateAssignmentDto {
   readonly assignmentDueTime: string;
 
   readonly assignmentClassId: string;
-  readonly assignmentClassName: string;
 
   readonly assignmentType: string;
   readonly assignmentStatus: string;
 
   readonly assignmentTeacherId: string;
-  readonly assignmentTeacherName: string;
 
   readonly assignmentStudentId: string;
-  readonly assignmentStudentName: string;
 
   readonly assignmentGrade: string;
   readonly assignmentGradeComment: string;
