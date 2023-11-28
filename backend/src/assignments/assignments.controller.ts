@@ -35,7 +35,7 @@ export class AssignmentController {
     @Param('id') _id: string,
     @Body() assignment: CreateAssignmentDto,
   ): Promise<Assignment> {
-    return this.assignmentService.updateAssignment(_id, assignment);
+    return this.assignmentService.updateAssignmentById(_id, assignment);
   }
 
   // Delete: .../assignments/_id

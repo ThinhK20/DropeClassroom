@@ -31,7 +31,7 @@ export class AssignmentService {
     return assignment;
   }
 
-  async updateAssignment(
+  async updateAssignmentById(
     id: string,
     assignmentDTO: Assignment,
   ): Promise<Assignment> {
