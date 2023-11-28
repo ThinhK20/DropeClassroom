@@ -32,6 +32,45 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Avatar from "@mui/material/Avatar";
 import { Menu, MenuItem, Tooltip } from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import ListPeople from "../../listPeople";
+import ListAssignments from "../../listAssignments";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -175,8 +214,17 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function TeacherMarkPage() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [showClass, setShowClass] = React.useState(false);
+  const [showAttempedClass, setShowAttempedClass] = React.useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -349,6 +397,7 @@ export default function TeacherMarkPage() {
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              onClick={() => setShowClass(!showClass)}
             >
               <ListItemIcon
                 sx={{
@@ -363,29 +412,34 @@ export default function TeacherMarkPage() {
                 primary={"Your Classes"}
                 sx={{ opacity: open ? 1 : 0 }}
               />
+              {showClass ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemButton>
-            {classNames.map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+            {showClass &&
+              classNames.map((text, index) => (
+                <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
                     }}
                   >
-                    <ClassIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ClassIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
           </List>
           <Divider />
           <List>
@@ -395,6 +449,7 @@ export default function TeacherMarkPage() {
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              onClick={() => setShowAttempedClass(!showAttempedClass)}
             >
               <ListItemIcon
                 sx={{
@@ -409,29 +464,34 @@ export default function TeacherMarkPage() {
                 primary={"Attemped Classes"}
                 sx={{ opacity: open ? 1 : 0 }}
               />
+              {showAttempedClass ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
             </ListItemButton>
-            {classNames.map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+            {showAttempedClass &&
+              classNames.map((text, index) => (
+                <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
                     }}
                   >
-                    <ClassIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ClassIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
           </List>
           <Divider />
           <List>
@@ -461,43 +521,74 @@ export default function TeacherMarkPage() {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <TableContainer
-            component={Paper}
+          <Tabs
+            value={value}
+            // onChange={""}
+            aria-label="basic tabs example"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             style={{
               // when sidebar is active
               marginLeft: -25,
-              marginTop: -25,
               width: "calc(100% + 50px)",
+              marginTop: -20,
             }}
+            onChange={handleChange}
           >
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Average Mark</TableCell>
-                  {assignments.map((assignment) => (
-                    <TableCell key={assignment}>{assignment}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.avg_mark}</TableCell>
+            <Tab label="Home" {...a11yProps(0)} />
+            <Tab label="In-class homework" {...a11yProps(1)} />
+            <Tab label="People" {...a11yProps(2)} />
+            <Tab label="Grades" {...a11yProps(3)} />
+          </Tabs>
+          <CustomTabPanel value={value} index={0}>
+            Item One
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <ListAssignments />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            <ListPeople />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+            <TableContainer
+              component={Paper}
+              style={{
+                // when sidebar is active
+                marginLeft: -50,
+                width: "calc(100% + 50px)",
+                marginTop: -20,
+              }}
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Average Mark</TableCell>
                     {assignments.map((assignment) => (
-                      <TableCell key={assignment}>
-                        {
-                          row.assignments?.find((a) => a.name === assignment)
-                            ?.mark
-                        }
-                      </TableCell>
+                      <TableCell key={assignment}>{assignment}</TableCell>
                     ))}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.avg_mark}</TableCell>
+                      {assignments.map((assignment) => (
+                        <TableCell key={assignment}>
+                          {
+                            row.assignments?.find((a) => a.name === assignment)
+                              ?.mark
+                          }
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </CustomTabPanel>
         </Box>
       </Box>
     </>
