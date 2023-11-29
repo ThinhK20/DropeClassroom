@@ -28,9 +28,6 @@ export class Assignment {
   assignmentClassId: string;
 
   @Prop({ required: true })
-  assignmentClassName: string;
-
-  @Prop({ required: true })
   assignmentType: string;
 
   @Prop({ required: true })
@@ -40,13 +37,7 @@ export class Assignment {
   assignmentTeacherId: string;
 
   @Prop({ required: true })
-  assignmentTeacherName: string;
-
-  @Prop({ required: true })
   assignmentStudentId: string;
-
-  @Prop({ required: true })
-  assignmentStudentName: string;
 
   @Prop({ required: true })
   assignmentGrade: string;

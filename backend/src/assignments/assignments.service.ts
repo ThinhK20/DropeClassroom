@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Assignment } from 'src/schemas/assignment.schema';
 
-@Injectable() // this is "Dependency Injection"
+@Injectable()
 export class AssignmentService {
   constructor(
     @InjectModel(Assignment.name)
@@ -29,5 +29,18 @@ export class AssignmentService {
   async deleteAssignmentById(id: string): Promise<Assignment> {
     const assignment = await this.assignmentModel.findByIdAndDelete(id);
     return assignment;
+  }
+
+  async updateAssignmentById(
+    id: string,
+    assignmentDTO: Assignment,
+  ): Promise<Assignment> {
+    const updatedAssignment = await this.assignmentModel.findByIdAndUpdate(
+      id,
+      assignmentDTO,
+      { new: true },
+    );
+    if (!updatedAssignment) throw new NotFoundException('Assignment not found');
+    return updatedAssignment;
   }
 }
