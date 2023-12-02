@@ -1,7 +1,7 @@
 import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AssignmentStatus } from 'src/enums/assignment.enum';
-import { AssignmentType } from 'src/enums/assignment.enum';
+import { AssignmentStatus } from 'src/shared/enums/assignment.enum';
+import { AssignmentType } from 'src/shared/enums/assignment.enum';
 
 export type AssignmentDocument = HydratedDocument<Assignment>;
 

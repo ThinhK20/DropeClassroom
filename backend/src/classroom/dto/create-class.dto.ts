@@ -1,13 +1,19 @@
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
 export class CreateClassDto {
-  readonly classCode: string;
-
-  readonly teacherOwnerId: string;
-
+  @IsString()
+  @IsNotEmpty()
   readonly className: string;
 
-  readonly title: string;
+  @IsOptional()
+  @IsString()
+  readonly section: string;
 
+  @IsOptional()
+  @IsString()
   readonly room: string;
 
-  readonly topic: string;
+  @IsOptional()
+  @IsString()
+  readonly subject: string;
 }

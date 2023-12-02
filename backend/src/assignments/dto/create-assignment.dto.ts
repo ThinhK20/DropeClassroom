@@ -1,4 +1,7 @@
-import { AssignmentType, AssignmentStatus } from 'src/enums/assignment.enum';
+import {
+  AssignmentType,
+  AssignmentStatus,
+} from 'src/shared/enums/assignment.enum';
 export class CreateAssignmentDto {
   readonly assignmentId: string;
   readonly assignmentName: string;

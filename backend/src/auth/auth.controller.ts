@@ -12,7 +12,7 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/localauth.guard';
 import { SessionGuard } from './guards/session.guard';
-import { User } from 'src/schemas/user.schema';
+import { User } from 'src/shared/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
 

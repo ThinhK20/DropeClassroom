@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Classroom } from 'src/schemas/classroom.schema';
+import { Classroom } from 'src/classroom/schemas/classroom.schema';
+import { generateClassCode, getRndInteger } from 'src/shared/utils/utils';
+import { CreateClassDto } from './dto/create-class.dto';
+import { User } from 'src/shared/schemas/user.schema';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -10,18 +13,35 @@ export class ClassroomService {
     private classroomModel: mongoose.Model<Classroom>,
   ) {}
 
-  async crateNewClass(classDTO: Classroom): Promise<Classroom> {
-    const res = await this.classroomModel.create(classDTO);
+  // User create new class
+  async createNewClass(
+    owner: User,
+    classroom: CreateClassDto,
+  ): Promise<Classroom> {
+    const classCode = generateClassCode();
+    const coverImage = `/src/assets/gg${getRndInteger(1, 5)}.png`;
+
+    const res = await this.classroomModel.create({
+      ...classroom,
+      owner: owner,
+      classCode: classCode,
+      coverImage: coverImage,
+    });
     return res;
   }
 
-  async getClassAll(): Promise<Classroom[]> {
-    const classes = await this.classroomModel.find();
+  // Get all class of user
+  async getClassOfUser(user: User): Promise<Classroom[]> {
+    const classes = await this.classroomModel.find({
+      'userList.userId': user._id,
+    });
+    if (classes.length < 1) throw new NotFoundException('Classroom not found');
     return classes;
   }
 
-  async getClassById(id: string): Promise<Classroom> {
-    const classroom = await this.classroomModel.findById(id);
+  // Get class following
+  async getClassById(classId: string): Promise<Classroom> {
+    const classroom = await this.classroomModel.findById(classId);
     if (!classroom) throw new NotFoundException('Classroom not found');
     return classroom;
   }

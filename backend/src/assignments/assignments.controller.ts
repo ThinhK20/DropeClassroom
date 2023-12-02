@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AssignmentService } from './assignments.service';
-import { Assignment } from 'src/schemas/assignment.schema';
+import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 
 @Controller('assignment')

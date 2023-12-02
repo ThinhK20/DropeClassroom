@@ -1,6 +1,5 @@
 import { ClassRoom } from "../../models/ClassRoom";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import { Avatar } from "@mui/material";

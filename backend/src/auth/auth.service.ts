@@ -6,8 +6,8 @@ import {
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/schemas/user.schema';
-import { generateToken } from 'src/utils/utils';
+import { User } from 'src/shared/schemas/user.schema';
+import { generateToken } from 'src/shared/utils/utils';
 
 @Injectable()
 export class AuthService {

@@ -92,4 +92,18 @@
         }
     }
 
+    .animation-translateFromX2Y {
+        animation: translateFromX2Y 300ms linear;
+    }
+
+    @keyframes translateFromX2Y {
+        from {
+            translate: translateY(-50%);
+        }
+
+        to {
+            translate: translateY(0);
+        }
+    }
+
 }

@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AssignmentController } from './assignments.controller';
 import { AssignmentService } from './assignments.service';
-import { Assignment, AssignmentSchema } from 'src/schemas/assignment.schema';
+import {
+  Assignment,
+  AssignmentSchema,
+} from 'src/shared/schemas/assignment.schema';
 
 @Module({
   imports: [
