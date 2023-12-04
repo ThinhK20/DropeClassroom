@@ -1,7 +1,7 @@
-export interface Assigment {
-  assingmentId: string;
-  assigmentName: string;
-  assigmentDescription: string;
+export interface Assignment {
+  assignmentId: string;
+  assignmentName: string;
+  assignmentDescription: string;
 }
 
 export const getAllAssignments = async () => {
@@ -13,9 +13,6 @@ export const getAllAssignments = async () => {
   })
     .then((res: any) => {
       return res.json();
-    })
-    .then((data: any) => {
-      console.log(data);
     })
     .catch((err: any) => {
       console.log(err);
@@ -32,15 +29,12 @@ export const getAssignment = async (id: string) => {
     .then((res: any) => {
       return res.json();
     })
-    .then((data: any) => {
-      console.log(data);
-    })
     .catch((err: any) => {
       console.log(err);
     });
 };
 
-export const createAssignment = async (assignment: Assigment) => {
+export const createAssignment = async (assignment: Assignment) => {
   await fetch("http://localhost:8000/assignment/create", {
     method: "POST",
     headers: {
@@ -51,16 +45,13 @@ export const createAssignment = async (assignment: Assigment) => {
     .then((res: any) => {
       return res.json();
     })
-    .then((data: any) => {
-      console.log(data);
-    })
     .catch((err: any) => {
       console.log(err);
     });
 };
 
-export const updateAssignment = async (assignment: Assigment) => {
-  await fetch(`http://localhost:8000/assignment/${assignment.assingmentId}`, {
+export const updateAssignment = async (assignment: Assignment) => {
+  await fetch(`http://localhost:8000/assignment/${assignment.assignmentId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -69,9 +60,6 @@ export const updateAssignment = async (assignment: Assigment) => {
   })
     .then((res: any) => {
       return res.json();
-    })
-    .then((data: any) => {
-      console.log(data);
     })
     .catch((err: any) => {
       console.log(err);
@@ -87,9 +75,6 @@ export const deleteAssignment = async (id: string) => {
   })
     .then((res: any) => {
       return res.json();
-    })
-    .then((data: any) => {
-      console.log(data);
     })
     .catch((err: any) => {
       console.log(err);
