@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactPortalCustom from "../portal/ReactPortalCustom";
 import Modal from "./Modal";
 import { RootState } from "../../store/store";
 import InputText from "../inputs/inputText";

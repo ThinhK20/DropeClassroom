@@ -2,56 +2,68 @@ import { User } from "../../models/User";
 import Header from "../../components/header/Header";
 import Container from "../../components/Container";
 import Sidebar from "../../components/side3/Sidebar";
-import { useState } from "react";
-import CreateClassModal from "../../components/modal/CreateClassModal";
+import { useEffect, useState } from "react";
 import ClientWrapper from "../../components/ClientWrapper";
 
-export default function Achived() {
-   const user = {
-      username: "Minh An",
-   } as User;
+import CreateClassModal from "../../components/modal/CreateClassModal";
+import JoinClassModal from "../../components/modal/JoinClassModal";
+import { useAppSelector } from "../../hooks/hooks";
+import { RootState } from "../../store/store";
+import { UserClassRoom } from "../../models";
+import { getAllClassesApi } from "../../apis/classroomApis";
+import { AxiosError } from "axios";
+import { Alert } from "@mui/material";
 
-   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-   const [isCreateModal, setIsCreateModal] = useState(false);
-   const [isJoinModal, setIsJoinModal] = useState(false);
+export default function Home() {
+  const [isOpenSideBar, setIsOpenSideBar] = useState(true);
+  const [listClasses, setListClasses] = useState<UserClassRoom>({
+    count: 0,
+    erolled_class: [],
+    teaching_class: [],
+    owner_class: []
+  });
+  const user: User = useAppSelector(
+    (state: RootState) => state.users.data
+  ) as User;
+  const [error, setError] = useState<string>("");
+  // const [isLoading, setIsLoading] = useState(false);
 
-   console.log("is Open Create class", isCreateModal);
+  useEffect(() => {
+    // setIsLoading(true);
+    getAllClassesApi()
+      .then((res) => {
+        setListClasses(res.data);
+      })
+      .catch((err: AxiosError) => {
+        setError(err.message as string);
+        console.log(err);
+      })
+      .finally(() => {
+        // setIsLoading(false);
+      });
+  }, []);
 
-   return (
-      <>
-         {isCreateModal && (
-            <CreateClassModal
-               isOpen={isCreateModal}
-               handleClose={() => setIsCreateModal(!isCreateModal)}
-            >
-               {" "}
-            </CreateClassModal>
-         )}
-         <Header
-            user={user}
-            handleToggle={() => setIsOpenSideBar(!isOpenSideBar)}
-            showPlusButton={true}
-            handleCreateClass={() => setIsCreateModal(!isCreateModal)}
-            handleJoinClass={() => setIsJoinModal(!isJoinModal)}
-         />
-         <ClientWrapper>
-            <Container>
-               <main
-                  className={`flex flex-row ${
-                     isOpenSideBar ? "md:pl-80" : "md:pl-20"
-                  }`}
-               >
-                  <Sidebar isOpen={isOpenSideBar} />
-                  <Container>
-                     <main className="relative h-full pt-5 pb-16 px-6 md:px-5 max-w-full flex flex-col flex-1 items-start">
-                        <h1 className="flex-1 items-center justify-center text-6xl">
-                           HELLO ACHIVED PAGE
-                        </h1>
-                     </main>
-                  </Container>
-               </main>
-            </Container>
-         </ClientWrapper>
-      </>
-   );
+  return (
+    <>
+      <Container>
+        {error && <Alert severity="error">{error}</Alert>}
+        <CreateClassModal />
+        <JoinClassModal />
+      </Container>
+      <ClientWrapper>
+        <Header
+          user={user}
+          handleToggle={() => setIsOpenSideBar(!isOpenSideBar)}
+        />
+        <main
+          className={`flex flex-row ${isOpenSideBar ? "md:pl-80" : "md:pl-20"}`}
+        >
+          <Sidebar isOpen={isOpenSideBar} listClasses={listClasses as UserClassRoom} />
+          <Container>
+            <h1>Achieved page</h1>
+          </Container>
+        </main>
+      </ClientWrapper>
+    </>
+  );
 }

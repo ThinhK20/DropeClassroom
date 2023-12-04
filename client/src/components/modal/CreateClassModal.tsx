@@ -11,8 +11,6 @@ function CreateClassModal() {
   const showModal = useSelector((state: RootState) => state.createClass.isOpen);
   const dispatch = useDispatch();
 
-  console.log("create class modal", showModal);
-
   const {
     register,
     handleSubmit,
@@ -31,8 +29,6 @@ function CreateClassModal() {
     setIsLoading(true);
     // call api
   }
-
-  console.log(register("className"));
 
   const bodyContent = (
     <div className="flex flex-col gap-4 pt-4">

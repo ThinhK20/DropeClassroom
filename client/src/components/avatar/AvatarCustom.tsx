@@ -4,11 +4,10 @@ import { Avatar } from "@mui/material";
 interface AvatarCustomProps {
   name: string,
   classroomAvatar: boolean;
-  size?: number;
   url?: string
 }
 
-function AvatarCustom({name, classroomAvatar, size,url }: AvatarCustomProps) {
+function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
     
   function stringToColor(string: string) {
     let hash = 0;
@@ -34,7 +33,8 @@ function AvatarCustom({name, classroomAvatar, size,url }: AvatarCustomProps) {
     
     let characters: string =  name;
     if(classroomAvatar) characters = name[0];
-    else characters = `${characters.split(" ")[0][0]}${characters.split(" ")[1][0]}`;
+    // else characters = `${characters.split(" ")[0][0]}${characters.split(" ")[1][0]}`;
+    else characters = name[0] + name[1];
   
     return {
       sx: {

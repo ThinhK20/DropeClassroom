@@ -1,10 +1,9 @@
 export type SideNavItem = {
     name: string;
-    icon: JSX.Element;
+    icon?: JSX.Element;
     submenu: boolean;
     path?: string;
     title?: string;
-    subMenuItems?: SideNavItem[];
     actionGoDo?: () => void;
 };
 

@@ -2,9 +2,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-function SideBarButton({actionHandleToggle}:{actionHandleToggle: () => void}) {
-  // console.log('rendering side bar button');
-  
+function SideBarButton({actionHandleToggle}:{actionHandleToggle: () => void}) {  
   return (
     <div className="relative hidden md:block">
       <button

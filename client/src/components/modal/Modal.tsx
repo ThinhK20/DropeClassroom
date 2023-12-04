@@ -50,7 +50,6 @@ function Modal({
 
     return () => {
       document.body.style.overflow = "unset";
-      console.log("document.body.style.overflow = 'unset'");
     };
   });
 
@@ -89,9 +88,6 @@ function Modal({
 
     onSubmit();
   }, [onSubmit, disabled]);
-
-
-  console.log("modal ", isOpen);
 
   if (!isOpen) return null;
 

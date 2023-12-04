@@ -1,5 +1,13 @@
+import { Classroom } from ".";
+
+export interface ObjectUserClassRoom {
+  classId: Classroom;
+  role: "teacher" | "student" | "owner";
+}
+
 export interface UserClassRoom {
-   classId: string;
-   userId: string;
-   role: "Student" | "Teacher";
+  count: number;
+  teaching_class: ObjectUserClassRoom[];
+  erolled_class: ObjectUserClassRoom[];
+  owner_class: ObjectUserClassRoom[];
 }

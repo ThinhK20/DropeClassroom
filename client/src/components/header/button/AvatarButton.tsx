@@ -22,19 +22,19 @@ function AvatarButton(user: User) {
     };
   }, [isOpen]);
 
-  console.log("avatar button")
-
   return (
     <>
       <button
-        className="items-center hidden md:block rounded-full ring ring-transparent ring-offset-1 focus:ring-gray-500/40 hover:ring-gray-500/30"
+        className="items-center hidden md:block rounded-full ring ring-transparent ring-offset-1 focus:ring-gray-500/40 hover:ring-gray-500/30 -ml-1"
         type="button"
         aria-label="Profile setting"
         ref={nodeRef}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="object-cover relative overflow-hidden">
-          {user.avatar === undefined ? (
+          <AvatarCustom name={user.username} classroomAvatar={false} />
+
+          {/* {user.avatar === undefined ? (
             <AvatarCustom name={user.username} classroomAvatar={false} />
           ) : (
             <AvatarCustom
@@ -42,7 +42,7 @@ function AvatarButton(user: User) {
               url={user.avatar}
               classroomAvatar={false}
             />
-          )}
+          )} */}
         </div>
       </button>
 

@@ -48,7 +48,7 @@ export default function SignIn() {
       loginApi(formData)
          .then(async (res) => {
             dispatch(setLogin(res.data));
-            navigate("/");
+            navigate("/h");
          })
          .catch((ex: AxiosError) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

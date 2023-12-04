@@ -5,8 +5,6 @@ import PlusPopOver from "../../DropDown/PlusDropDown";
 function PlusButton() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // console.log("rendering Plus Button");
-
   const nodeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
