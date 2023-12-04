@@ -76,9 +76,6 @@ export class ClassroomService {
   ): Promise<Classroom> {
     const classroom = await this.classroomModel.findOne({ _id: classId });
     if (!classroom) throw new NotFoundException('Class room not found');
-    console.log(typeof classroom.owner._id);
-    console.log(typeof user._id);
-    console.log(classroom.owner._id !== user._id);
     if (classroom.owner._id.toString() !== user._id.toString())
       throw new BadRequestException('user is not owner');
 

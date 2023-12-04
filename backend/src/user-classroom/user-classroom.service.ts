@@ -42,7 +42,6 @@ export class UserClassroomService {
           select: '_id username email',
         },
       });
-    console.log(classes);
 
     if (!classes) return [];
 
