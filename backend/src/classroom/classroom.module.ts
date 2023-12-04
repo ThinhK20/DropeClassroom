@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { ClassroomController } from './classroom.controller';
 import { ClassroomService } from './classroom.service';
 import {
   Classroom,
   ClassroomSchemaFactory,
 } from 'src/classroom/schemas/classroom.schema';
+import {
+  UserClassroom,
+  UserClassroomSchema,
+} from 'src/user-classroom/schemas/user-classroom.schema';
+import { UserClassroomModule } from 'src/user-classroom/user-classroom.module';
 
 @Module({
   imports: [
@@ -13,9 +18,15 @@ import {
       {
         name: Classroom.name,
         useFactory: ClassroomSchemaFactory,
-        imports: [],
+        inject: [getModelToken(UserClassroom.name)],
+        imports: [
+          MongooseModule.forFeature([
+            { name: UserClassroom.name, schema: UserClassroomSchema },
+          ]),
+        ],
       },
     ]),
+    UserClassroomModule,
   ],
   controllers: [ClassroomController],
   providers: [ClassroomService],

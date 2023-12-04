@@ -61,4 +61,6 @@ export class UsersService {
   async activeUser(userId: string) {
     await this.userModel.findByIdAndUpdate(userId, { isActive: true } as User);
   }
+
+  // valid user objectId
 }

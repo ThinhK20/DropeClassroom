@@ -4,6 +4,8 @@ import { UserClassroom } from './schemas/user-classroom.schema';
 import mongoose from 'mongoose';
 
 import { UserClassroomDto } from './dto/user-classroom.dto';
+import { User } from 'src/shared/schemas/user.schema';
+import { ROLE_CLASS } from 'src/shared/enums';
 
 @Injectable()
 export class UserClassroomService {
@@ -12,19 +14,48 @@ export class UserClassroomService {
     private userClassroomModel: mongoose.Model<UserClassroom>,
   ) {}
 
-  // create user in class room with roles
+  // create user in class room with role
   async insertUserClass(dto: UserClassroomDto): Promise<UserClassroom> {
     try {
-      console.log(dto);
-      // console.log(
-      //   await this.userClassroomModel
-      //     .findById('656a251e60dea2469d31f1fc')
-      //     .populate('classId'),
-      // );
       return await this.userClassroomModel.create(dto);
-      // return await this.userClassroomModel.create(dto);
     } catch (err) {
       throw new Error('Error creating instance: ' + err.message);
     }
   }
+
+  // get all teaching class of user ?
+  async getAllClassWithRole(
+    user: User,
+    role: ROLE_CLASS,
+  ): Promise<UserClassroom[]> {
+    const classes = await this.userClassroomModel
+      .find({
+        userId: user._id,
+        role: role,
+      })
+      .select('classId role -_id')
+      .populate({
+        path: 'classId',
+        select: '-createdAt -updatedAt -__v',
+        populate: {
+          path: 'owner',
+          select: '_id username email',
+        },
+      });
+    console.log(classes);
+
+    if (!classes) return [];
+
+    return classes;
+  }
+
+  // user leave out class
+
+  // invite user in class
+
+  // user join class by classcode
+
+  // user join class by link -> user is student.
+
+  // user is teacher or student ?
 }

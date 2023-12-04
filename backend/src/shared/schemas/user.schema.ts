@@ -1,4 +1,4 @@
-import mongoose, { Date, HydratedDocument, Types } from 'mongoose';
+import mongoose, { Date, HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/shared/enums/role.enum';
 
@@ -6,7 +6,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
-  _id: Types.ObjectId;
+  _id: mongoose.Schema.Types.ObjectId;
 
   @Prop()
   username: string;

@@ -4,7 +4,7 @@ import { SessionGuard } from 'src/auth/guards/session.guard';
 import { GetUser } from 'src/auth/decorator/user.decorator';
 import { User } from 'src/shared/schemas/user.schema';
 
-@Controller('u')
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -20,4 +20,6 @@ export class UsersController {
     // console.log(request.user);
     return user;
   }
+
+  // user update info
 }

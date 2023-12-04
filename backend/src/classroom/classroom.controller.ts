@@ -4,15 +4,18 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
-import { CreateClassDto } from './dto';
+import { CreateClassDto, UpdateClassDto } from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from 'src/shared/schemas/user.schema';
 import { SessionGuard } from 'src/auth/guards/session.guard';
+import { getAllClassResponse } from 'src/shared/types/response.type';
+import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 
 @Controller('c')
 export class ClassroomController {
@@ -31,17 +34,31 @@ export class ClassroomController {
     return this.classroomService.createNewClass(owner, classroom);
   }
 
-  // Get class of current user
+  // Get all classes of current user
   // Get: .../c
   @UseGuards(SessionGuard)
   @Get('all')
-  async getClassOfUser(@GetUser() user: User): Promise<Classroom[]> {
+  async getClassOfUser(
+    @GetUser() user: User,
+  ): Promise<getAllClassResponse<UserClassroom>> {
     return this.classroomService.getClassOfUser(user);
+  }
+
+  // Update info class
+  // PATCH: ../c/_id
+  @UseGuards(SessionGuard)
+  @Patch(':id')
+  async updateClassOfUser(
+    @GetUser() owner: User,
+    @Param('id') _id: string,
+    @Body() updateClass: UpdateClassDto,
+  ): Promise<Classroom> {
+    return this.classroomService.updateClassOfUser(owner, _id, updateClass);
   }
 
   // Get: .../c/_id
   @UseGuards(SessionGuard)
-  @Get('c/:id')
+  @Get(':id')
   async getClassByClassId(@Param('id') _id: string): Promise<Classroom> {
     return this.classroomService.getClassById(_id);
   }
