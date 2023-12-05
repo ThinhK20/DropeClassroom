@@ -31,7 +31,10 @@ export class ClassroomService {
       ...classroom,
       owner: owner,
     });
-    return res;
+    return res.populate({
+      path: 'owner',
+      select: '_id username email',
+    });
   }
 
   // get all class
@@ -79,11 +82,13 @@ export class ClassroomService {
     if (classroom.owner._id.toString() !== user._id.toString())
       throw new BadRequestException('user is not owner');
 
-    return await this.classroomModel.findOneAndUpdate(
-      { _id: classId },
-      updateClass,
-      { new: true },
-    );
+    return await this.classroomModel
+      .findOneAndUpdate({ _id: classId }, updateClass, { new: true })
+      .select('-_id -createdAt -updatedAt -__v')
+      .populate({
+        path: 'owner',
+        select: '_id username email',
+      });
   }
 
   // Get class by ObjectId
@@ -92,7 +97,6 @@ export class ClassroomService {
       path: 'owner',
       select: '_id username email',
     });
-    console.log(classroom);
     if (!classroom) throw new NotFoundException('Classroom not found');
     return classroom;
   }
@@ -100,6 +104,7 @@ export class ClassroomService {
   // Delete class ObjectId
   async deleteClassById(id: string): Promise<Classroom> {
     const classroom = await this.classroomModel.findOneAndDelete({ _id: id });
+    if (!classroom) throw new NotFoundException('Classroom not found');
     return classroom;
   }
 }
