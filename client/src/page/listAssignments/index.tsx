@@ -38,6 +38,11 @@ export default function ListAssignments() {
     getAllAssignments();
   }, []);
 
+  const castObjectToString = (obj: any) => {
+    const result = JSON.stringify(obj);
+    return result.substring(1, result.length - 1);
+  };
+
   const AssignmentList = () => {
     return (
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
@@ -58,7 +63,9 @@ export default function ListAssignments() {
                 aria-label="delete"
                 onClick={async () => {
                   await fetch(
-                    `http://localhost:8000/assignment/${assignment.assignmentId}`,
+                    `http://localhost:8000/assignment/${castObjectToString(
+                      assignment._id
+                    )}`,
                     {
                       method: "DELETE",
                       headers: {
@@ -67,9 +74,6 @@ export default function ListAssignments() {
                     }
                   )
                     .then((res: any) => res.json())
-                    .then((data: Assignment[]) => {
-                      getAllAssignments();
-                    })
                     .catch((err: any) => {
                       console.log(err);
                     });

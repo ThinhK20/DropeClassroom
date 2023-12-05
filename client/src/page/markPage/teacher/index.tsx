@@ -218,7 +218,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function TeacherMarkPage() {
-  getAssignment("656620a8970d86b4408aaf2a");
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
