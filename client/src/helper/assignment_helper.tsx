@@ -1,7 +1,17 @@
 export interface Assignment {
-  assignmentId: string;
+  _id: object;
   assignmentName: string;
   assignmentDescription: string;
+  assignmentDueDate: Date;
+  assignmentStatus: string;
+  assignmentCreatedBy: string;
+  assignmentUpdatedBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+  assignmentGrade: number;
+  assignmentGradeComment: string;
+  assignmentPercentage: number;
 }
 
 export const getAllAssignments = async () => {
@@ -51,7 +61,7 @@ export const createAssignment = async (assignment: Assignment) => {
 };
 
 export const updateAssignment = async (assignment: Assignment) => {
-  await fetch(`http://localhost:8000/assignment/${assignment.assignmentId}`, {
+  await fetch(`http://localhost:8000/assignment/${assignment._id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

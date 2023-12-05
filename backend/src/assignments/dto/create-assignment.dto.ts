@@ -1,32 +1,62 @@
 import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  isString,
+} from 'class-validator';
+import mongoose from 'mongoose';
+import {
   AssignmentType,
   AssignmentStatus,
 } from 'src/shared/enums/assignment.enum';
 export class CreateAssignmentDto {
-  readonly assignmentId: string;
+  readonly _id: mongoose.Schema.Types.ObjectId;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsString()
   readonly assignmentName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsString()
   readonly assignmentDescription: string;
 
+  @IsOptional()
+  @IsDate()
   readonly assignmentDueDate: Date;
-  readonly assignmentDueTime: string;
 
+  @IsOptional()
+  @IsString()
   readonly assignmentClassId: string;
 
+  @IsOptional()
+  @IsString()
   readonly assignmentType: string;
+
+  @IsOptional()
+  @IsString()
   readonly assignmentStatus: string;
 
-  readonly assignmentTeacherId: string;
+  @IsOptional()
+  @IsNumber()
+  readonly assignmentGrade: number;
 
-  readonly assignmentStudentId: string;
-
-  readonly assignmentGrade: string;
+  @IsOptional()
+  @IsString()
   readonly assignmentGradeComment: string;
 
-  readonly assignmentCreatedDate: Date;
-  readonly assignmentUpdatedDate: Date;
-
+  @IsOptional()
+  @IsString()
   readonly assignmentCreatedBy: string;
+
+  @IsOptional()
+  @IsString()
   readonly assignmentUpdatedBy: string;
 
+  @IsOptional()
+  @IsNumber()
   readonly assignmentPercentage: number;
 }

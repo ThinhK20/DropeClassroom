@@ -1,4 +1,4 @@
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AssignmentStatus } from 'src/shared/enums/assignment.enum';
 import { AssignmentType } from 'src/shared/enums/assignment.enum';
@@ -10,54 +10,36 @@ export type AssignmentDocument = HydratedDocument<Assignment>;
 })
 export class Assignment {
   @Prop({ required: true })
-  assignmentId: string;
-
-  @Prop({ required: true })
   assignmentName: string;
 
   @Prop({ required: true })
   assignmentDescription: string;
 
-  @Prop({ required: true })
+  @Prop({ default: Date.now })
   assignmentDueDate: Date;
 
-  @Prop({ required: true })
-  assignmentDueTime: string;
-
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentClassId: string;
 
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentType: string;
 
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentStatus: string;
 
-  @Prop({ required: true })
-  assignmentTeacherId: string;
+  @Prop({ default: 0 })
+  assignmentGrade: number;
 
-  @Prop({ required: true })
-  assignmentStudentId: string;
-
-  @Prop({ required: true })
-  assignmentGrade: string;
-
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentGradeComment: string;
 
-  @Prop({ required: true })
-  assignmentCreatedDate: Date;
-
-  @Prop({ required: true })
-  assignmentUpdatedDate: Date;
-
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentCreatedBy: string;
 
-  @Prop({ required: true })
+  @Prop({ default: '' })
   assignmentUpdatedBy: string;
 
-  @Prop({ required: true })
+  @Prop({ default: 0 })
   assignmentPercentage: number;
 }
 
