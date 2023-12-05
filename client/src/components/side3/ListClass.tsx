@@ -15,8 +15,6 @@ function ListClass({
 }) {
   const navigate = useNavigate();
 
-  console.log(classes);
-
   if (classes.length == 0) return <></>;
 
   return (

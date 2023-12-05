@@ -13,15 +13,16 @@ import CastForEducationOutlinedIcon from "@mui/icons-material/CastForEducationOu
 import { useNavigate } from "react-router-dom";
 import { UserClassRoom } from "../../models";
 import ListClass from "./ListClass";
+import { useAppSelector } from "../../hooks/hooks";
 
 interface SidebarProps {
-  listClasses: UserClassRoom;
   isOpen: boolean;
 }
 
-function Sidebar({ listClasses, isOpen }: SidebarProps) {
+function Sidebar({ isOpen }: SidebarProps) {
   const navigate = useNavigate();
-  console.log(listClasses);
+  const listClasses: UserClassRoom = useAppSelector((state) => state.userClassroom.classes);
+
   return (
     <aside
       className={`fixed -translate-x-80 md:-translate-x-0 left-0 md:top-16 z-sidebar ${

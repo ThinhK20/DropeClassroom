@@ -33,8 +33,8 @@ function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
     
     let characters: string =  name;
     if(classroomAvatar) characters = name[0];
-    // else characters = `${characters.split(" ")[0][0]}${characters.split(" ")[1][0]}`;
     else characters = name[0] + name[1];
+    // else characters = `${characters.split(" ")[0][0]}${characters.split(" ")[1][0]}`;
   
     return {
       sx: {

@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Classroom {
     _id: string;
     className: string;
@@ -6,5 +8,5 @@ export interface Classroom {
     room?: string;
     coverImage: string;
     classCode: string;
-    owner: string;
+    owner: User;
 }

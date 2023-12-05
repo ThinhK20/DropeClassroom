@@ -1,13 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./userSlice";
 import createClassSlice from "./createClassSlice";
 import joinClassSlice from "./joinClassSlice";
+import userClassroomSlice from "./userClassroomSlice";
+import userSlice from "./userSlice";
+
+
 
 export const store = configureStore({
    reducer: {
       users: userSlice,
       createClass: createClassSlice,
-      joinClass: joinClassSlice  
+      joinClass: joinClassSlice,
+      userClassroom: userClassroomSlice  
    },
 });
 

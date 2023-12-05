@@ -9,7 +9,6 @@ interface PlusPopOverProps {
 
 function PlusPopOver({ isOpen }: PlusPopOverProps) {
   const dispatch = useDispatch();
-  console.log("rendering Plus Poover");
 
   if (!isOpen) return null;
 

@@ -14,21 +14,25 @@ function CreateClassModal() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<FieldValues>({
+    shouldUnregister: true,
     defaultValues: {
-      className: "",
-      section: "",
-      subject: "",
-      room: "",
+      ClassName: "",
+      Section:"",
+      Subject: "",
+      Room: "",
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setIsLoading(true);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsLoading(false);
     // call api
+    console.log(data);
+
   }
+
+  console.log("create modal");
 
   const bodyContent = (
     <div className="flex flex-col gap-4 pt-4">
@@ -46,7 +50,7 @@ function CreateClassModal() {
         disabled={isLoading}
         register={register}
         errors={errors}
-        required
+
       />
       <InputText
         id="Subject"
@@ -54,7 +58,6 @@ function CreateClassModal() {
         disabled={isLoading}
         register={register}
         errors={errors}
-        required
       />
       <InputText
         id="Room"
@@ -62,7 +65,6 @@ function CreateClassModal() {
         disabled={isLoading}
         register={register}
         errors={errors}
-        required
       />
     </div>
   );
@@ -73,7 +75,7 @@ function CreateClassModal() {
       title="Create Class"
       disabled={isLoading}
       isOpen={showModal}
-      onClose={() => {dispatch(onCloseCreateClass()); reset();}}
+      onClose={() => {dispatch(onCloseCreateClass());}}
       body={bodyContent}
       labelSubmit="Create"
       onSubmit={handleSubmit(onSubmit)}
