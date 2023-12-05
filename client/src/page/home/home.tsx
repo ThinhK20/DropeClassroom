@@ -10,9 +10,8 @@ import JoinClassModal from "../../components/modal/JoinClassModal";
 import MainPage from "./mainPage";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
-import { getAllClassesApi } from "../../apis/classroomApis";
-import { AxiosError } from "axios";
 import { Alert } from "@mui/material";
+import { getAllUserClassroom } from "../../store/userClassroomSlice";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -27,53 +26,16 @@ export default function Home() {
     (state: RootState) => state.users.data
   ) as User;
 
-  // console.log("user: ", user);
-
-  // const user: User = {
-  //   _id: "6566115223c81cf1bc4e7f15",
-  //   createdDate: "",
-  //   dateOfBirth: "",
-  //   email: "anhoang483@gmail.com",
-  //   gender: "m",
-  //   isActive: true,
-  //   password: "",
-  //   role: "admin",
-  //   updatedDate: "",
-  //   username: "Minh An",
-  // };
-
   const [error, setError] = useState<string>("");
   // const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // setIsLoading(true);
-    const controller = new AbortController();
-
-    getAllClassesApi("c/all", controller.signal)
-      .then((res) => {
-        // setListClasses(res);
-        console.log(res)
-        dispatch({
-          type:'userClassrooms/getAllSuccess',
-          payload: res
-        })
-      })
-      .catch((err: AxiosError) => {
-        setError(err.message as string);
-        console.log(err);
-        if(!(err.code === 'ERR_CANCELED')){
-          dispatch({
-            type: 'userClassrooms/getAllFailed'
-          })
-        }
-      })
-      .finally(() => {
-        // setIsLoading(false);
-      });
+    const promise = dispatch(getAllUserClassroom());
 
     return () => {
-      controller.abort()
-    }
+      promise.abort();
+    };
   }, [dispatch]);
 
   return (
@@ -91,9 +53,7 @@ export default function Home() {
         <main
           className={`flex flex-row ${isOpenSideBar ? "md:pl-80" : "md:pl-20"}`}
         >
-          <Sidebar
-            isOpen={isOpenSideBar}
-          />
+          <Sidebar isOpen={isOpenSideBar} />
           <Container>
             <MainPage />
           </Container>

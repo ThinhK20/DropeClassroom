@@ -1,5 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { ObjectUserClassRoom, UserClassRoom } from "../models";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { CreateClassroom, ObjectUserClassRoom, UserClassRoom } from "../models";
+import { createClassApi, getAllClassesApi } from "../apis/classroomApis";
 
 interface UserClassRoomType {
   classes: UserClassRoom;
@@ -17,20 +18,49 @@ const initialState: UserClassRoomType = {
   currentClass: null,
 };
 
+export const getAllUserClassroom = createAsyncThunk(
+  "userClassroom/getAll",
+  async (_, thunkAPI) => {
+    const res = await getAllClassesApi("c/all", thunkAPI.signal);
+    return res;
+  }
+);
+
+export const createUserClass = createAsyncThunk(
+    "userClassroom/create",
+    async(body: CreateClassroom, thunkAPI) => {
+        const res = await createClassApi('c', body, thunkAPI.signal);
+
+        return res;
+    }
+)
+
 const UserClassroomSlice = createSlice({
   initialState,
   name: "userClassroom",
   reducers: {
-    getUserClassroom() {
+    createClass() {
       console.log("Hello");
     },
   },
   extraReducers(builder) {
-    builder.addCase("userClassrooms/getAllSuccess", (state, action: any) => {
-      state.classes = action.payload;
-    });
+    builder
+      .addCase(getAllUserClassroom.fulfilled, (state, action) => {
+        state.classes = action.payload;
+      })
+      .addCase(createUserClass.fulfilled, (state, action) => {
+        state.classes.owner_class.push(action.payload);
+      })
+      .addMatcher(
+        (action) => action.type.includes("cancel"),
+        (state, action) => {
+          console.log(current(state), action);
+        }
+      ).addDefaultCase((state, action) => {
+        console.log(`action type ${action.type}`, current(state));
+      });
   },
 });
 
-export const { getUserClassroom } = UserClassroomSlice.actions;
+export const { createClass } = UserClassroomSlice.actions;
 export default UserClassroomSlice.reducer;

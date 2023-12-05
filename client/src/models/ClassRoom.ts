@@ -10,3 +10,10 @@ export interface Classroom {
     classCode: string;
     owner: User;
 }
+
+export interface CreateClassroom {
+    className: string;
+    section?: string;
+    subject?: string;
+    room?: string;
+}
