@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
 import { RootState } from "../../store/store";
 import { onCloseCreateClass } from "../../store/createClassSlice";
 import InputText from "../inputs/inputText";
-import { useForm, FieldValues, SubmitHandler,  } from "react-hook-form";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { createUserClass } from "../../store/userClassroomSlice";
+import { CreateClassroom } from "../../models";
 
 function CreateClassModal() {
   const [isLoading, setIsLoading] = useState(false);
-  const showModal = useSelector((state: RootState) => state.createClass.isOpen);
-  const dispatch = useDispatch();
+  const showModal = useAppSelector(
+    (state: RootState) => state.createClass.isOpen
+  );
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -18,26 +22,38 @@ function CreateClassModal() {
   } = useForm<FieldValues>({
     shouldUnregister: true,
     defaultValues: {
-      ClassName: "",
-      Section:"",
-      Subject: "",
-      Room: "",
+      className: "",
+      section: "",
+      subject: "",
+      room: "",
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsLoading(false);
-    // call api
+    setIsLoading(true);
+    // // call api
     console.log(data);
+    const promise = dispatch(createUserClass(data as CreateClassroom));
+    promise
+      .then(() => {
+        dispatch(onCloseCreateClass());
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        promise.abort();
+      });
 
-  }
+  };
 
   console.log("create modal");
 
   const bodyContent = (
     <div className="flex flex-col gap-4 pt-4">
       <InputText
-        id="ClassName"
+        id="className"
         label="Class Name (required)"
         disabled={isLoading}
         register={register}
@@ -45,22 +61,21 @@ function CreateClassModal() {
         required
       />
       <InputText
-        id="Section"
+        id="section"
         label="Section"
         disabled={isLoading}
         register={register}
         errors={errors}
-
       />
       <InputText
-        id="Subject"
+        id="subject"
         label="Subject"
         disabled={isLoading}
         register={register}
         errors={errors}
       />
       <InputText
-        id="Room"
+        id="room"
         label="Room"
         disabled={isLoading}
         register={register}
@@ -70,12 +85,13 @@ function CreateClassModal() {
   );
 
   return (
-    
     <Modal
       title="Create Class"
       disabled={isLoading}
       isOpen={showModal}
-      onClose={() => {dispatch(onCloseCreateClass());}}
+      onClose={() => {
+        dispatch(onCloseCreateClass());
+      }}
       body={bodyContent}
       labelSubmit="Create"
       onSubmit={handleSubmit(onSubmit)}

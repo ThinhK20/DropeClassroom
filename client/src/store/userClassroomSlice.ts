@@ -28,10 +28,13 @@ export const getAllUserClassroom = createAsyncThunk(
 
 export const createUserClass = createAsyncThunk(
     "userClassroom/create",
-    async(body: CreateClassroom, thunkAPI) => {
+    async(body: CreateClassroom, thunkAPI): Promise<ObjectUserClassRoom> => {
         const res = await createClassApi('c', body, thunkAPI.signal);
 
-        return res;
+        return {
+          classId: res,
+          role: "owner"
+        };
     }
 )
 

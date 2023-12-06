@@ -1,4 +1,4 @@
-import { CreateClassroom, ObjectUserClassRoom, UserClassRoom } from "../models";
+import { Classroom, CreateClassroom, UserClassRoom } from "../models";
 import { axiosInstance } from "./axiosInterceptor";
 
 export const getAllClassesApi = async (
@@ -12,11 +12,8 @@ export const createClassApi = async (
   path: string,
   body: CreateClassroom,
   controler: AbortSignal
-): Promise<ObjectUserClassRoom> => {
+): Promise<Classroom> => {
   const res = (await axiosInstance.post(path, body, { signal: controler })).data;
 
-  return {
-    classId: res,
-    role: "owner",
-  };
+  return res;
 };
