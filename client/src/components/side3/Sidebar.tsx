@@ -90,7 +90,7 @@ function Sidebar({ isOpen }: SidebarProps) {
                   }
                 />
                 <ListClass
-                  name="Teaching"
+                  name="Enrolled"
                   classes={[...listClasses.erolled_class]}
                   icon={
                     <SchoolOutlinedIcon sx={{ fontSize: 28, color: `black` }} />

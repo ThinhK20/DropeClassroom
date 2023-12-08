@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { CreateClassroom, ObjectUserClassRoom, UserClassRoom } from "../models";
 import { createClassApi, getAllClassesApi } from "../apis/classroomApis";
 
@@ -42,8 +42,8 @@ const UserClassroomSlice = createSlice({
   initialState,
   name: "userClassroom",
   reducers: {
-    createClass() {
-      console.log("Hello");
+    setCurrentClass(state, action: PayloadAction<ObjectUserClassRoom>) {
+      if(state.currentClass !== action.payload) state.currentClass = action.payload;
     },
   },
   extraReducers(builder) {
@@ -65,5 +65,5 @@ const UserClassroomSlice = createSlice({
   },
 });
 
-export const { createClass } = UserClassroomSlice.actions;
+export const { setCurrentClass } = UserClassroomSlice.actions;
 export default UserClassroomSlice.reducer;

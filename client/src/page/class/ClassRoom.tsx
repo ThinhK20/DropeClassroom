@@ -19,6 +19,7 @@ export default function ClassRoom() {
   const user: User = useAppSelector(
     (state: RootState) => state.users.data
   ) as User;
+  const currentClass = useAppSelector((state) => state.userClassroom.currentClass);
 
   // const user: User = {
   //   _id: "6566115223c81cf1bc4e7f15",
@@ -53,7 +54,7 @@ export default function ClassRoom() {
         >
           <Sidebar isOpen={isOpenSideBar} />
           <main className="relative w-full h-full flex flex-col items-start overflow-hidden">
-            <NavClass />
+            <NavClass classId={currentClass?.classId._id as string}/>
             <Outlet />
           </main>
 

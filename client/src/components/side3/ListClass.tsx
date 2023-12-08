@@ -3,6 +3,8 @@ import { ObjectUserClassRoom } from "../../models";
 import SideBarItem from "./SideBarItem";
 import AvatarCustom from "../avatar/AvatarCustom";
 import { SideNavItem } from "../../shared/type/types";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setCurrentClass } from "../../store/userClassroomSlice";
 
 function ListClass({
   classes,
@@ -14,7 +16,7 @@ function ListClass({
   icon: JSX.Element;
 }) {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   if (classes.length == 0) return <></>;
 
   return (
@@ -45,6 +47,7 @@ function ListClass({
                   path: "/c/" + c.classId._id,
                   actionGoDo: () => {
                     navigate("/c/" + c.classId._id);
+                    dispatch(setCurrentClass(c));
                   },
                   submenu: false,
                 } as SideNavItem

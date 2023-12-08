@@ -3,17 +3,21 @@ import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import ButtonNav3 from "./buttonNav3";
 
-function NavClass() {
+interface Props {
+  classId: string
+}
+
+function NavClass({classId}: Props) {
 
   return (
     <div className="relative w-full flex flex-row justify-between border-b border-gray-200">
       {/* right */}
 
       <ul className="flex flex-row pl-5 cursor-pointer">
-        <ButtonNav3 path={"/c/656ddad52bcdf62b79a88fc3"} name="Stream"/>
-        <ButtonNav3 path={"/c/656ddad52bcdf62b79a88fc3/w/t/all"} name="Assignment"/>
-        <ButtonNav3 path={"/c/656ddad52bcdf62b79a88fc3/uic/all"} name="People"/>
-        <ButtonNav3 path={"/c/656ddad52bcdf62b79a88fc3/gb/all"} name="Grade"/>
+        <ButtonNav3 path={`/c/${classId}`} name="Stream"/>
+        <ButtonNav3 path={`/c/${classId}/w/t/all`} name="Assignment"/>
+        <ButtonNav3 path={`/c/${classId}/uic/all`} name="People"/>
+        <ButtonNav3 path={`/c/${classId}/gb/all`} name="Grade"/>
       </ul>
 
       {/* left */}

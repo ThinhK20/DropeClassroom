@@ -16,16 +16,16 @@ function ButtonNav3({ path, name }: Props) {
   return (
     <NavLink
       to={path}
-      className={`flex flex-col text-black/70 hover:bg-gray-400/10 hover:text-black ${
-        isActive() ? "text-blue-600" : ""
+      className={`flex flex-col text-black/70 hover:bg-gray-500/20 ${
+        isActive() ? "text-blue-600" : "hover:text-black"
       }`}
     >
       <span className="px-5 py-3">{name}</span>
       <div
-        className={`w-ful border-2 border-transparent rounded-t-full ${
-          isActive() ? "border-blue-600" : ""
+        className={`w-ful border-2 rounded-t-full ${
+          isActive() ? "border-blue-600" : "border-transparent"
         }`}
-      ></div>
+      />
     </NavLink>
   );
 }

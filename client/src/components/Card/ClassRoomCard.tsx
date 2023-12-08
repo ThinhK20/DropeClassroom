@@ -5,6 +5,8 @@ import { Avatar } from "@mui/material";
 import ClassCardDropDown from "../DropDown/ClassCardDropDown";
 import { useNavigate } from "react-router-dom";
 import { ObjectUserClassRoom } from "../../models";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setCurrentClass } from "../../store/userClassroomSlice";
 
 interface ClassroomCardProps {
   classroom: ObjectUserClassRoom;
@@ -12,6 +14,7 @@ interface ClassroomCardProps {
 
 function ClassRoomCard({ classroom }: ClassroomCardProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const pathClassRoom = "/c/" + classroom.classId._id;
 
   return (
@@ -30,6 +33,7 @@ function ClassRoomCard({ classroom }: ClassroomCardProps) {
             className="overflow-hidden flex flex-col w-full text-white hover:underline-offset-1 hover:underline cursor-pointer "
             onClick={() => {
               navigate(pathClassRoom);
+              dispatch(setCurrentClass(classroom));
             }}
           >
             <h1 className="text-3xl md:text-xl lg:text-lg xl:text-2xl font-medium truncate pl-4">

@@ -11,6 +11,7 @@ import SignIn from "../page/signin/signin";
 import TeacherMarkPage from "../page/markPage/teacher";
 import StudentMarkPage from "../page/markPage/student";
 import ExcelTable from "../components/ExcelTable/ExcelTable";
+import Stream from "../page/class/stream/Stream";
 
 export const router = createBrowserRouter([
    {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       path: "/c/:id",
       element: <ClassRoom />,
       children: [
+         {
+            path: "/c/:id",
+            element: <Stream />
+         },
          {
             path: "w/t/all",
             element: <div>Hello Assignment</div>
