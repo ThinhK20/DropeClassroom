@@ -31,7 +31,7 @@ function Header({
   }
   
   return (
-    <header className="relative md:sticky md:top-0 md:left-0 z-header flex flex-row items-center justify-between h-16 md:w-full border-b border-btransition-all border-gray-200 bg-white py-3 px-4">
+    <header className="relative md:sticky md:top-0 md:left-0 z-header flex flex-row items-center justify-between h-16 md:w-full border-b transition-all border-gray-200 bg-white py-3 px-4">
       {/* Half Left */}
       <div className="w-1/2 flex items-center gap-4">
         {/* button sidebar */}

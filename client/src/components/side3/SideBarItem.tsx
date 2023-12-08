@@ -5,14 +5,13 @@ import { useMatches } from "react-router-dom";
 
 interface SideBarItemProps {
   item: SideNavItem;
-
   children?: React.ReactNode;
 }
 
 function SideBarItem({ item, children }: SideBarItemProps) {
   const [url] = useMatches();
 
-  const [subMenuOpen, setSubMenuOpen] = useState(false);
+  const [subMenuOpen, setSubMenuOpen] = useState(true);
   const [isActive, setIsActive] = useState(false);
 
   const toggleSubMenu = () => {
@@ -20,13 +19,12 @@ function SideBarItem({ item, children }: SideBarItemProps) {
   };
 
   useEffect(() => {
-    if(url.pathname === item.path) setIsActive(true);
+    if (url.pathname === item.path) setIsActive(true);
     else setIsActive(false);
-
   }, [url.pathname, item.path]);
-  
+
   return (
-    <>
+    <div className="py-1">
       <div
         className={`h-12 w-[97%] ${item.submenu ? "" : "pl-6"} pr-2 ${
           isActive ? "bg-blue-300/25" : "hover:bg-gray-100"
@@ -48,7 +46,7 @@ function SideBarItem({ item, children }: SideBarItemProps) {
         </div>
       </div>
       {subMenuOpen && children}
-    </>
+    </div>
   );
 }
 

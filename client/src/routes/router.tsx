@@ -20,6 +20,7 @@ export const router = createBrowserRouter([
    {
       path: "/h",
       element: <Home />,
+      
    },
    {
       path: "/schedule",
@@ -36,6 +37,20 @@ export const router = createBrowserRouter([
    {
       path: "/c/:id",
       element: <ClassRoom />,
+      children: [
+         {
+            path: "w/t/all",
+            element: <div>Hello Assignment</div>
+         },
+         {
+            path: "uic/all",
+            element: <div>Hello People</div>
+         },
+         {
+            path: "gb/all",
+            element: <div>Hello Assignment</div>
+         }
+      ]
    },
    {
       path: "/signin",

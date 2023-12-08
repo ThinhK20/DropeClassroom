@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { UserClassRoom } from "../../models";
 import ListClass from "./ListClass";
 import { useAppSelector } from "../../hooks/hooks";
+// import { useAppSelector } from "../../hooks/hooks";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,6 +23,12 @@ interface SidebarProps {
 function Sidebar({ isOpen }: SidebarProps) {
   const navigate = useNavigate();
   const listClasses: UserClassRoom = useAppSelector((state) => state.userClassroom.classes);
+  // const listClasses: UserClassRoom = {
+  //   count: 0,
+  //   erolled_class: [],
+  //   teaching_class: [],
+  //   owner_class: []
+  // }
 
   return (
     <aside
