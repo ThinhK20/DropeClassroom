@@ -46,7 +46,7 @@ function AvatarButton(user: User) {
         </div>
       </button>
 
-      <AvatarDropDown isOpen={isOpen}/>
+      <AvatarDropDown isOpen={isOpen} user={user}/>
     </>
   );
 }

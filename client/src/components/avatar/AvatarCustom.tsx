@@ -2,12 +2,15 @@ import { Avatar } from "@mui/material";
 
 
 interface AvatarCustomProps {
-  name: string,
+  name: string;
   classroomAvatar: boolean;
-  url?: string
+  url?: string;
+  height?: number;
+  width?: number;
+  fontSize?: number
 }
 
-function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
+function AvatarCustom({name, classroomAvatar, url = "", height = 42, width = 42, fontSize = 20 }: AvatarCustomProps) {
     
   function stringToColor(string: string) {
     let hash = 0;
@@ -39,20 +42,25 @@ function AvatarCustom({name, classroomAvatar, url }: AvatarCustomProps) {
     return {
       sx: {
         bgcolor: stringToColor(name),
+        height: height, 
+        width: width,
+        fontSize: fontSize
       },
       children: characters,
     };
   }
 
   return(
-    url === undefined ? (
+    url === "" ? (
       <Avatar
         {...stringAvatar(name, classroomAvatar)}
         alt={`${name} Profile`}
       />
     ) : (
       <Avatar alt={`${name} Profile`} 
-              src={url} />
+              src={url}
+              sx={{height: height, width: width}} 
+      />
     )
   );
 }
