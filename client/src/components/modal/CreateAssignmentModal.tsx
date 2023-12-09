@@ -1,4 +1,15 @@
-import React from "react";
+import * as React from "react";
+import Dialog from "@mui/material/Dialog";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
 
 import { Assignment } from "../../helper/assignment_helper";
 
@@ -10,19 +21,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CalendarViewMonth } from "@mui/icons-material";
+import { useAppSelector } from "../../hooks/hooks";
 
-const style = {
-  width: "600px",
-  height: "350px",
-  bgcolor: "background.paper",
-  marginLeft: "auto",
-  marginRight: "auto",
-  padding: "5%",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function CreateAssignmentModal(props: {
   isOpen: boolean;
@@ -36,14 +44,25 @@ export default function CreateAssignmentModal(props: {
   const [assignmentName, setAssignmentName] = React.useState("");
   const [assignmentDescription, setAssignmentDescription] = React.useState("");
 
-  const randomId = () => {
-    return Math.random().toString(36).substr(2, 9);
-  };
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
 
   const newAssignment: Assignment = {
-    assignmentId: randomId(),
+    _id: Object(),
     assignmentName: assignmentName,
     assignmentDescription: assignmentDescription,
+    // assignmentDueDate: new Date().getTime(),
+    assignmentStatus: "",
+    assignmentCreatedBy: "",
+    assignmentUpdatedBy: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    __v: 0,
+    assignmentGrade: 0,
+    assignmentGradeComment: "",
+    assignmentPercentage: 0,
+    assignmentClassId: currentClass?.classId._id as string,
   };
 
   const createAssignment = async (assignment: Assignment) => {
@@ -63,57 +82,71 @@ export default function CreateAssignmentModal(props: {
   };
 
   return (
-    <div>
-      <Modal
-        open={props.isOpen}
-        onClose={() => props.onClose()}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+    <React.Fragment>
+      <Button variant="outlined" onClick={handleOpen}>
+        Create Assignment
+      </Button>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Create Assignment
-          </Typography>
-          <TextField
-            id="outlined-basic"
-            label="Assignment Name"
-            variant="outlined"
-            style={{ width: "100%", marginTop: "5%" }}
-            onChange={(e) => setAssignmentName(e.target.value)}
-          />
-          <TextField
-            id="outlined-basic"
-            label="Assignment Description"
-            variant="outlined"
-            style={{ width: "100%", marginTop: "5%" }}
-            onChange={(e) => setAssignmentDescription(e.target.value)}
-          />
-          <div style={{ display: "flex" }}>
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Create Assignment
+            </Typography>
             <Button
-              variant="contained"
-              style={{ width: "100%", marginTop: "5%" }}
+              autoFocus
+              color="inherit"
               onClick={() => {
                 createAssignment(newAssignment);
                 props.onClose();
               }}
             >
-              Create
+              save
             </Button>
-            <Button
-              variant="contained"
-              style={{ width: "100%", marginTop: "5%", marginLeft: "5%" }}
-              onClick={() => props.onClose()}
-            >
-              Cancel
-            </Button>
+          </Toolbar>
+        </AppBar>
+        <Box>
+          <div
+            className="max-w-md mx-auto"
+            style={{
+              marginTop: "5%",
+            }}
+          >
+            <div className="grid grid-cols-1 gap-6">
+              <label className="block">
+                <span className="text-gray-700">Assignment Name</span>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                  placeholder="Assignment Name"
+                  onChange={(e) => setAssignmentName(e.target.value)}
+                />
+              </label>
+              <label className="block">
+                <span className="text-gray-700">Assignment Description</span>
+                <input
+                  type="text"
+                  className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                  placeholder="Assignment Description"
+                  onChange={(e) => setAssignmentDescription(e.target.value)}
+                />
+              </label>
+            </div>
           </div>
         </Box>
-      </Modal>
-    </div>
+      </Dialog>
+    </React.Fragment>
   );
 }
