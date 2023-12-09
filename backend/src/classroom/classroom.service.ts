@@ -84,7 +84,7 @@ export class ClassroomService {
 
     return await this.classroomModel
       .findOneAndUpdate({ _id: classId }, updateClass, { new: true })
-      .select('-_id -createdAt -updatedAt -__v')
+      .select('-createdAt -updatedAt -__v')
       .populate({
         path: 'owner',
         select: '_id username email',
