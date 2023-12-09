@@ -1,18 +1,11 @@
-import {
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Typography,
-} from "@mui/material";
+import { List, ListItem, ListItemAvatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import FolderIcon from "@mui/icons-material/Folder";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AssignmentIcon from "@mui/icons-material/Assignment";
 import CreateAssignmentModal from "../../components/modal/CreateAssignmentModal";
 import { Assignment } from "../../helper/assignment_helper";
+import { useAppSelector } from "../../hooks/hooks";
 
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
@@ -43,70 +36,43 @@ export default function ListAssignments() {
     return result.substring(1, result.length - 1);
   };
 
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
+
+  const currentClassId = currentClass?.classId._id;
+
   const AssignmentList = () => {
     return (
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-        {assignments.map((assignment: Assignment) => {
-          return (
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={assignment.assignmentName}
-                secondary={assignment.assignmentDescription}
-              />
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={async () => {
-                  await fetch(
-                    `http://localhost:8000/assignment/${castObjectToString(
-                      assignment._id
-                    )}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                    }
-                  )
-                    .then((res: any) => res.json())
-                    .catch((err: any) => {
-                      console.log(err);
-                    });
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          );
-        })}
+        {assignments.map(
+          (assignment: Assignment) =>
+            assignment.assignmentClassId === currentClassId && (
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar>
+                    <FolderIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={assignment.assignmentName}
+                  secondary={assignment.assignmentDescription}
+                />
+              </ListItem>
+            )
+        )}
       </List>
     );
   };
 
   return (
     <>
-      <CreateAssignmentModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      />
       <div>
-        <div
-          className="flex flex-row"
-          style={{
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-            Assignments
-          </Typography>
-          <button onClick={() => setShowModal(true)}>
-            <AssignmentIcon />
-          </button>
+        <div className="flex flex-row">
+          <CreateAssignmentModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+          />
         </div>
         <AssignmentList />
       </div>
