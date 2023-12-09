@@ -17,3 +17,10 @@ export interface CreateClassroom {
     subject?: string;
     room?: string;
 }
+
+export interface UpdateClassroom {
+    className: string;
+    section?: string;
+    subject?: string;
+    room?: string;
+}

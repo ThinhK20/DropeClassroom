@@ -10,7 +10,6 @@ import JoinClassModal from "../../components/modal/JoinClassModal";
 import MainPage from "./mainPage";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
-import { Alert } from "@mui/material";
 import { getAllUserClassroom } from "../../store/userClassroomSlice";
 
 export default function Home() {
@@ -22,37 +21,36 @@ export default function Home() {
   //   teaching_class: [],
   //   owner_class: [],
   // });
-  // const user: User = useAppSelector(
-  //   (state: RootState) => state.users.data
-  // ) as User;
+  const user: User = useAppSelector(
+    (state: RootState) => state.users.data
+  ) as User;
 
-  const user: User = {
-    _id: "6566115223c81cf1bc4e7f15",
-    username: "Minh An",
-    email: "anhoang483@gmail.com",
-    isActive: true,
-    gender: "m",
-    role: "admin",
-    createdDate: "2023-11-28T16:11:01.769Z",
-    updatedDate: "2023-11-28T16:11:01.769Z",
-  };
+  // const user: User = {
+  //   _id: "6566115223c81cf1bc4e7f15",
+  //   username: "Minh An",
+  //   email: "anhoang483@gmail.com",
+  //   isActive: true,
+  //   gender: "m",
+  //   role: "admin",
+  //   createdDate: "2023-11-28T16:11:01.769Z",
+  //   updatedDate: "2023-11-28T16:11:01.769Z",
+  // };
 
   // const [error, setError] = useState<string>("");
   // // const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   // setIsLoading(true);
-  //   const promise = dispatch(getAllUserClassroom());
+  useEffect(() => {
+    // setIsLoading(true);
+    const promise = dispatch(getAllUserClassroom());
 
-  //   return () => {
-  //     promise.abort();
-  //   };
-  // }, [dispatch]);
+    return () => {
+      promise.abort();
+    };
+  }, [dispatch]);
 
   return (
     <>
       <Container>
-        {/* {error && <Alert severity="error">{error}</Alert>} */}
         <CreateClassModal />
         <JoinClassModal />
       </Container>

@@ -29,7 +29,7 @@ function AvatarDropDown({ user, isOpen }: DropDownProps) {
             height={80}
             fontSize={42}
           />
-          <div className="absolute right-[158px] top-[129px]">
+          <div className="absolute right-[158px] top-[129px] cursor-pointer">
             <button className="w-7 h-7 rounded-full p-1 bg-white flex justify-center items-center hover:bg-blue-50 group">
               <ModeEditOutlineOutlinedIcon sx={{ fontSize: 18 }} className="group-hover:text-blue-800"/>
             </button>

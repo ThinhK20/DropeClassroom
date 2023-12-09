@@ -54,7 +54,7 @@ function ClassRoomCard({ classroom }: ClassroomCardProps) {
 
         <div className="absolute top-0 left-0 aspect-square w-full flex flex-col justify-between">
           <div className="flex justify-end items-center pr-4 py-2">
-            <ClassCardDropDown />
+            <ClassCardDropDown userClass={classroom}/>
           </div>
 
           {(classroom.role !== 'owner') && 
