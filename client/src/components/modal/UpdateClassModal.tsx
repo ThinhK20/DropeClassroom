@@ -4,14 +4,19 @@ import InputText from "../inputs/inputText";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../hooks/hooks";
 import { ObjectUserClassRoom, UpdateClassroom } from "../../models";
+import { updateUserClass } from "../../store/userClassroomSlice";
 
 interface Props {
-    currentClass: ObjectUserClassRoom;
-    isOpen: boolean;
-    handleClose: () => void;
+  currentClass: ObjectUserClassRoom;
+  isOpen: boolean;
+  handleClose: () => void;
 }
 
-function UpdateClassModal({currentClass, isOpen = false, handleClose}: Props) {
+function UpdateClassModal({
+  currentClass,
+  isOpen = false,
+  handleClose,
+}: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -32,9 +37,22 @@ function UpdateClassModal({currentClass, isOpen = false, handleClose}: Props) {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     // // call api
-    console.log(data);
-    // const promise = dispatch(createUserClass(data as UpdateClassroom));
-
+    // console.log(data);
+    dispatch(
+      updateUserClass({
+        path: `c/${currentClass.classId._id}`,
+        body: data as UpdateClassroom,
+      })
+    )
+      .then(() => {
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const bodyContent = (
@@ -73,12 +91,12 @@ function UpdateClassModal({currentClass, isOpen = false, handleClose}: Props) {
 
   return (
     <Modal
-      title="Create Class"
+      title="Update Class"
       disabled={isLoading}
       isOpen={isOpen}
       onClose={handleClose}
       body={bodyContent}
-      labelSubmit="Create"
+      labelSubmit="Update"
       onSubmit={handleSubmit(onSubmit)}
     />
   );

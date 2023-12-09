@@ -1,4 +1,9 @@
-import { Classroom, CreateClassroom, UserClassRoom } from "../models";
+import {
+  Classroom,
+  CreateClassroom,
+  UpdateClassroom,
+  UserClassRoom,
+} from "../models";
 import { axiosInstance } from "./axiosInterceptor";
 
 export const getAllClassesApi = async (
@@ -13,7 +18,18 @@ export const createClassApi = async (
   body: CreateClassroom,
   controler: AbortSignal
 ): Promise<Classroom> => {
-  const res = (await axiosInstance.post(path, body, { signal: controler })).data;
+  const res = (await axiosInstance.post(path, body, { signal: controler }))
+    .data;
+
+  return res;
+};
+
+export const updateClassApi = async (
+  path: string,
+  body: UpdateClassroom,
+  controler: AbortSignal
+) => {
+  const res = await axiosInstance.patch(path, body, { signal: controler });
 
   return res;
 };
