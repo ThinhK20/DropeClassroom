@@ -1,14 +1,11 @@
 import * as React from "react";
 import Dialog from "@mui/material/Dialog";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
+import AddIcon from '@mui/icons-material/Add';
 import { TransitionProps } from "@mui/material/transitions";
 
 import { Assignment } from "../../helper/assignment_helper";
@@ -83,7 +80,7 @@ export default function CreateAssignmentModal(props: {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleOpen}>
+      <Button variant="outlined" onClick={handleOpen} startIcon={<AddIcon />} sx={{borderRadius: `60px`, padding: `20px`}}>
         Create Assignment
       </Button>
       <Dialog

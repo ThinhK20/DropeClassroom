@@ -1,9 +1,9 @@
 import { List, ListItem, ListItemAvatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ListItemText from "@mui/material/ListItemText";
-import Avatar from "@mui/material/Avatar";
-import FolderIcon from "@mui/icons-material/Folder";
+import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import CreateAssignmentModal from "../../components/modal/CreateAssignmentModal";
+import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { Assignment } from "../../helper/assignment_helper";
 import { useAppSelector } from "../../hooks/hooks";
 
@@ -44,20 +44,23 @@ export default function ListAssignments() {
 
   const AssignmentList = () => {
     return (
-      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <List sx={{ bgcolor: "background.paper"}} className="w-full">
         {assignments.map(
           (assignment: Assignment) =>
             assignment.assignmentClassId === currentClassId && (
-              <ListItem alignItems="flex-start">
+              <ListItem className="relative w-full border rounded-xl">
                 <ListItemAvatar>
-                  <Avatar>
-                    <FolderIcon />
-                  </Avatar>
+                  <div className="w-12 h-12 rounded-full bg-blue-600/90 flex justify-center items-center ml-5 mr-6 ">
+                    <ClassOutlinedIcon sx={{fontSize: 32, color: "whitesmoke"}}/>
+                  </div>
                 </ListItemAvatar>
                 <ListItemText
                   primary={assignment.assignmentName}
                   secondary={assignment.assignmentDescription}
                 />
+                <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
+                  <MoreVertOutlinedIcon />
+                </div>
               </ListItem>
             )
         )}
@@ -67,12 +70,16 @@ export default function ListAssignments() {
 
   return (
     <>
-      <div>
-        <div className="flex flex-row">
+      <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28">
+        <div className="flex items-center w-full">
           <CreateAssignmentModal
             isOpen={showModal}
             onClose={() => setShowModal(false)}
           />
+        </div>
+        <div className="my-5"></div>
+        <div className="w-full border-b-2 border-blue-600">
+          <span className="medium-32 text-blue-600">Topic Of Assignment</span>
         </div>
         <AssignmentList />
       </div>
