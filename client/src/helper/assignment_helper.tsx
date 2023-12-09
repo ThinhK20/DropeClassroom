@@ -2,10 +2,11 @@ export interface Assignment {
   _id: object;
   assignmentName: string;
   assignmentDescription: string;
-  assignmentDueDate: Date;
+  // assignmentDueDate: Date;
   assignmentStatus: string;
   assignmentCreatedBy: string;
   assignmentUpdatedBy: string;
+  assignmentClassId: string;
   createdAt: Date;
   updatedAt: Date;
   __v: number;

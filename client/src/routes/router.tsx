@@ -12,70 +12,61 @@ import TeacherMarkPage from "../page/markPage/teacher";
 import StudentMarkPage from "../page/markPage/student";
 import ExcelTable from "../components/ExcelTable/ExcelTable";
 import Stream from "../page/class/stream/Stream";
+import ListAssignments from "../page/listAssignments";
 
 export const router = createBrowserRouter([
-   {
-      path: "/",
-      element: <App />,
-   },
-   {
-      path: "/h",
-      element: <Home />,
-      
-   },
-   {
-      path: "/schedule",
-      element: <Schedule />,
-   },
-   {
-      path: "/h/archived",
-      element: <Archived />,
-   },
-   {
-      path: "/s",
-      element: <Setting />,
-   },
-   {
-      path: "/c/:id",
-      element: <ClassRoom />,
-      children: [
-         {
-            path: "/c/:id",
-            element: <Stream />
-         },
-         {
-            path: "w/t/all",
-            element: <div>Hello Assignment</div>
-         },
-         {
-            path: "uic/all",
-            element: <div>Hello People</div>
-         },
-         {
-            path: "gb/all",
-            element: <div>Hello Assignment</div>
-         }
-      ]
-   },
-   {
-      path: "/signin",
-      element: <SignIn />,
-   },
-   {
-      path: "/signup",
-      element: <SignUp />,
-   },
-
-   {
-      path: "/user/teacher/course/mark",
-      element: <TeacherMarkPage />,
-   },
-   {
-      path: "/user/student/course/mark",
-      element: <StudentMarkPage />,
-   },
-   {
-      path: "/testing",
-      element: <ExcelTable />,
-   },
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/h",
+    element: <Home />,
+  },
+  {
+    path: "/schedule",
+    element: <Schedule />,
+  },
+  {
+    path: "/h/archived",
+    element: <Archived />,
+  },
+  {
+    path: "/s",
+    element: <Setting />,
+  },
+  {
+    path: "/c/:id",
+    element: <ClassRoom />,
+    children: [
+      {
+        path: "/c/:id",
+        element: <Stream />,
+      },
+      {
+        path: "w/t/all",
+        element: <ListAssignments />,
+      },
+      {
+        path: "uic/all",
+        element: <div>Hello People</div>,
+      },
+      {
+        path: "gb/all",
+        element: <div>Hello grades</div>,
+      },
+    ],
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/testing",
+    element: <ExcelTable />,
+  },
 ]);
