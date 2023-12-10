@@ -9,6 +9,7 @@ import { List, ListItem, ListItemAvatar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FolderIcon from "@mui/icons-material/Folder";
 import ListItemText from "@mui/material/ListItemText";
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 
 function Stream() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -46,20 +47,25 @@ function Stream() {
 
   const AssignmentList = () => {
     return (
-      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <List sx={{ bgcolor: "background.paper" }} className="w-full">
         {assignments.map(
           (assignment: Assignment) =>
             assignment.assignmentClassId === currentClassId && (
-              <ListItem alignItems="flex-start">
+              <ListItem className="relative w-full border rounded-xl my-5">
                 <ListItemAvatar>
-                  <Avatar>
-                    <FolderIcon />
-                  </Avatar>
+                  <div className="w-12 h-12 rounded-full bg-blue-600/90 flex justify-center items-center ml-5 mr-6 ">
+                    <ClassOutlinedIcon
+                      sx={{ fontSize: 32, color: "whitesmoke" }}
+                    />
+                  </div>
                 </ListItemAvatar>
                 <ListItemText
                   primary={assignment.assignmentName}
                   secondary={assignment.assignmentDescription}
                 />
+                <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
+                  <MoreVertOutlinedIcon />
+                </div>
               </ListItem>
             )
         )}

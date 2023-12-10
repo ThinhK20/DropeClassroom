@@ -1,11 +1,12 @@
 import { List, ListItem, ListItemAvatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ListItemText from "@mui/material/ListItemText";
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 import CreateAssignmentModal from "../../components/modal/CreateAssignmentModal";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { Assignment } from "../../helper/assignment_helper";
 import { useAppSelector } from "../../hooks/hooks";
+import ViewAssigmentModal from "../../components/modal/ViewAssignmentModal";
 
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
@@ -44,19 +45,33 @@ export default function ListAssignments() {
 
   const AssignmentList = () => {
     return (
-      <List sx={{ bgcolor: "background.paper"}} className="w-full">
+      <List sx={{ bgcolor: "background.paper" }} className="w-full">
         {assignments.map(
           (assignment: Assignment) =>
             assignment.assignmentClassId === currentClassId && (
-              <ListItem className="relative w-full border rounded-xl">
+              <ListItem
+                className="relative w-full border rounded-xl my-5"
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
                 <ListItemAvatar>
                   <div className="w-12 h-12 rounded-full bg-blue-600/90 flex justify-center items-center ml-5 mr-6 ">
-                    <ClassOutlinedIcon sx={{fontSize: 32, color: "whitesmoke"}}/>
+                    <ClassOutlinedIcon
+                      sx={{ fontSize: 32, color: "whitesmoke" }}
+                    />
                   </div>
                 </ListItemAvatar>
-                <ListItemText
+                {/* <ListItemText
                   primary={assignment.assignmentName}
                   secondary={assignment.assignmentDescription}
+                /> */}
+                <ViewAssigmentModal
+                  Assignment={assignment}
+                  isOpen={showModal}
+                  onClose={() => {
+                    setShowModal(false);
+                  }}
                 />
                 <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
                   <MoreVertOutlinedIcon />
