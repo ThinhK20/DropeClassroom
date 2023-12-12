@@ -48,8 +48,6 @@ function CreateClassModal() {
 
   };
 
-  console.log("create modal");
-
   const bodyContent = (
     <div className="flex flex-col gap-4 pt-4">
       <InputText

@@ -36,6 +36,7 @@ export default function ClassRoom() {
 
   // const [isLoading, setIsLoading] = useState(false);
 
+  if(currentClass === null) return(<></>);
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function ClassRoom() {
         >
           <Sidebar isOpen={isOpenSideBar} />
           <main className="relative w-full h-full flex flex-col items-start overflow-hidden">
-            <NavClass classId={currentClass?.classId._id as string}/>
+            <NavClass />
             <Outlet />
           </main>
 

@@ -11,6 +11,7 @@ import SignIn from "../page/signin/signin";
 import ExcelTable from "../components/ExcelTable/ExcelTable";
 import Stream from "../page/class/stream/Stream";
 import ListAssignments from "../page/listAssignments";
+import People from "../page/class/people/people";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +48,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "uic/all",
-        element: <div>Hello People</div>,
+        element: <People />,
       },
       {
         path: "gb/all",

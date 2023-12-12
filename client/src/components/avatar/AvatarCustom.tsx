@@ -50,6 +50,8 @@ function AvatarCustom({name, classroomAvatar, url = "", height = 42, width = 42,
     };
   }
 
+  console.log(url);
+
   return(
     url === "" ? (
       <Avatar

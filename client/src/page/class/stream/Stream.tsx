@@ -1,7 +1,6 @@
 import AutoFixNormalOutlinedIcon from "@mui/icons-material/AutoFixNormalOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+
 import { useAppSelector } from "../../../hooks/hooks";
 import { useEffect, useState } from "react";
 import { Assignment } from "../../../helper/assignment_helper";
@@ -9,6 +8,9 @@ import { List, ListItem, ListItemAvatar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import FolderIcon from "@mui/icons-material/Folder";
 import ListItemText from "@mui/material/ListItemText";
+import JoinClass from "../../../components/box/JoinClass";
+import AsignmentComming from "../../../components/box/AsignmentComming";
+import ClassCode from "../../../components/box/ClassCode";
 
 function Stream() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -107,26 +109,9 @@ function Stream() {
       {/* notification + classcode + assignment */}
       <div className="relative grid grid-cols-5 w-full h-full mt-7 gap-6">
         <div className="col-span-1">
-          <div className="w-full border rounded-lg flex flex-col pl-2 py-4">
-            <div className="flex flex-row justify-between items-center">
-              <span>Class code</span>
-              <button className="flex justify-center items-center w-11 h-11 hover:bg-gray-500/20 rounded-full">
-                <MoreVertOutlinedIcon
-                  sx={{ fontSize: 28 }}
-                  className="text-black"
-                />
-              </button>
-            </div>
-
-            <div className="flex flex-row gap-2 items-center">
-              <span className="medium-24">
-                {currentClass?.classId.classCode}
-              </span>
-              <button className="flex justify-center items-center w-9 h-9 hover:bg-gray-500/20 rounded-full">
-                <ContentCopyOutlinedIcon sx={{ fontSize: 18 }} />
-              </button>
-            </div>
-          </div>
+          {currentClass?.role !== "student" && <ClassCode classCode={currentClass?.classId.classCode as string}/>}
+          {currentClass?.role === "student" && <JoinClass />}
+          <AsignmentComming />
         </div>
 
         <div className="col-span-4 -mt-3 flex flex-col flex-1">

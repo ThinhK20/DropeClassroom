@@ -2,22 +2,33 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import ButtonNav3 from "./buttonNav3";
+import { useAppSelector } from "../../hooks/hooks";
 
-interface Props {
-  classId: string
-}
+function NavClass() {
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
 
-function NavClass({classId}: Props) {
+  if (currentClass === null) return <></>;
 
   return (
     <div className="relative w-full flex flex-row justify-between border-b border-gray-200">
       {/* right */}
 
       <ul className="flex flex-row pl-5 cursor-pointer">
-        <ButtonNav3 path={`/c/${classId}`} name="Stream"/>
-        <ButtonNav3 path={`/c/${classId}/w/t/all`} name="Assignment"/>
-        <ButtonNav3 path={`/c/${classId}/uic/all`} name="People"/>
-        <ButtonNav3 path={`/c/${classId}/gb/all`} name="Grade"/>
+        <ButtonNav3 path={`/c/${currentClass.classId._id}`} name="Stream" />
+        <ButtonNav3
+          path={`/c/${currentClass.classId._id}/w/t/all`}
+          name="Assignment"
+        />
+        <ButtonNav3
+          path={`/c/${currentClass.classId._id}/uic/all`}
+          name="People"
+        />
+        <ButtonNav3
+          path={`/c/${currentClass.classId._id}/gb/all`}
+          name="Grade"
+        />
       </ul>
 
       {/* left */}
@@ -30,9 +41,11 @@ function NavClass({classId}: Props) {
           <TodayOutlinedIcon sx={{ height: 20, width: 20 }} />
         </button>
 
-        <button className="w-10 h-10 hover:bg-gray-400/10 rounded-full flex items-center justify-center">
-          <SettingsOutlinedIcon sx={{ height: 20, width: 20 }} />
-        </button>
+        {currentClass.role === "owner" && (
+          <button className="w-10 h-10 hover:bg-gray-400/10 rounded-full flex items-center justify-center">
+            <SettingsOutlinedIcon sx={{ height: 20, width: 20 }} />
+          </button>
+        )}
       </div>
     </div>
   );
