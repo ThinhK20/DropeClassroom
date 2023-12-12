@@ -15,7 +15,7 @@ import {
   getAllClassResponse,
   userClassResponse,
 } from 'src/shared/types/response.type';
-import { JoinClassDto, UpdateClassDto } from './dto';
+import { AddUserClassroomDto, JoinClassDto, UpdateClassDto } from './dto';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -125,7 +125,7 @@ export class ClassroomService {
     console.log(existClass);
     if (!existClass) throw new NotFoundException('Classroom not found');
 
-    const userClass = await this.userClassroomService.insertUserClass({
+    const userClass = await this.userClassroomService.createUserClass({
       classId: existClass,
       role: ROLE_CLASS.Student,
       userId: user,
@@ -136,5 +136,46 @@ export class ClassroomService {
       role: userClass.role,
       classId: userClass.classId,
     };
+  }
+
+  // get all user in class
+  async getAllUser(classId: string): Promise<UserClassroom[]> {
+    const existClass = this.classroomModel.findOne({ _id: classId });
+
+    if (!existClass) throw new NotFoundException('Class not exists');
+
+    return await this.userClassroomService.getAllUser(classId);
+  }
+
+  // add user to class
+  async addUserClass(
+    owner: User,
+    user: AddUserClassroomDto,
+    classId: string,
+  ): Promise<UserClassroom> {
+    const classroom = await this.classroomModel.findOne({ _id: classId });
+    if (!classroom) throw new NotFoundException('Class room not found');
+    if (classroom.owner._id.toString() !== owner._id.toString())
+      throw new BadRequestException('user is not owner');
+
+    return await this.userClassroomService.createUserClass({
+      classId: classroom,
+      role: user.role,
+      userId: user.userId,
+    });
+  }
+
+  // delete user
+  async deleteUserClass(
+    owner: User,
+    deleteUser: string,
+    classId: string,
+  ): Promise<UserClassroom> {
+    const classroom = await this.classroomModel.findOne({ _id: classId });
+    if (!classroom) throw new NotFoundException('Class room not found');
+    if (classroom.owner._id.toString() !== owner._id.toString())
+      throw new BadRequestException('user is not owner');
+
+    return await this.userClassroomService.deleteUserClass(deleteUser, classId);
   }
 }

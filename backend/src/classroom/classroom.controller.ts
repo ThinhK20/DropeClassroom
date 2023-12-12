@@ -10,7 +10,12 @@ import {
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
-import { CreateClassDto, JoinClassDto, UpdateClassDto } from './dto';
+import {
+  AddUserClassroomDto,
+  CreateClassDto,
+  JoinClassDto,
+  UpdateClassDto,
+} from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from 'src/shared/schemas/user.schema';
 import { SessionGuard } from 'src/auth/guards/session.guard';
@@ -81,6 +86,35 @@ export class ClassroomController {
     @Body() code: JoinClassDto,
   ): Promise<userClassResponse<Classroom>> {
     return this.classroomService.joinClassByCode(user, code);
+  }
+
+  // Get: ../c/uic/all
+  @UseGuards(SessionGuard)
+  @Get(':id/uic')
+  async getAllUser(@Param('id') id: string): Promise<UserClassroom[]> {
+    return this.classroomService.getAllUser(id);
+  }
+
+  // Post: ../c/:id/uic
+  @UseGuards(SessionGuard)
+  @Post(':id/uic')
+  async addUserClass(
+    @Param('id') id: string,
+    @GetUser() owner: User,
+    @Body() dto: AddUserClassroomDto,
+  ): Promise<UserClassroom> {
+    return this.classroomService.addUserClass(owner, dto, id);
+  }
+
+  // Delete: ../c/:id/uic
+  @UseGuards(SessionGuard)
+  @Delete(':id/uic')
+  async deleteUserClass(
+    @Param('id') id: string,
+    @GetUser() owner: User,
+    @Body('user') u: string,
+  ): Promise<UserClassroom> {
+    return this.classroomService.deleteUserClass(owner, u, id);
   }
 }
 

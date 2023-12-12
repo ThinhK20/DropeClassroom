@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserClassroom } from './schemas/user-classroom.schema';
 import mongoose from 'mongoose';
@@ -15,7 +15,7 @@ export class UserClassroomService {
   ) {}
 
   // create user in class room with role
-  async insertUserClass(dto: UserClassroomDto): Promise<UserClassroom> {
+  async createUserClass(dto: UserClassroomDto): Promise<UserClassroom> {
     try {
       return (await this.userClassroomModel.create(dto)).populate({
         path: 'classId',
@@ -28,6 +28,21 @@ export class UserClassroomService {
     } catch (err) {
       throw new Error('Error creating instance: ' + err.message);
     }
+  }
+
+  // delete user in class room by owner
+  async deleteUserClass(
+    deleteUserId: string,
+    classId: string,
+  ): Promise<UserClassroom> {
+    const deletedUser = await this.userClassroomModel.findOneAndDelete({
+      classId: classId,
+      userId: deleteUserId,
+    });
+    if (!deletedUser)
+      throw new NotFoundException(`${deleteUserId} or ${classId} not exists `);
+
+    return deletedUser;
   }
 
   // get all teaching class of user ?
@@ -56,12 +71,17 @@ export class UserClassroomService {
   }
 
   // get all user in class
+  async getAllUser(classId: string): Promise<UserClassroom[]> {
+    const lists = await this.userClassroomModel
+      .find({ classId: classId })
+      .select('userId role -_id')
+      .populate({
+        path: 'userId',
+        select: '_id username email',
+      });
+
+    return lists;
+  }
 
   // invite user in class
-
-  // user join class by classcode
-
-  // user join class by link -> user is student.
-
-  // user is teacher or student ?
 }

@@ -13,8 +13,8 @@ export class UserClassroomController {
 
   @UseGuards(SessionGuard)
   @Post()
-  async insertUserClass(@Body() dto: UserClassroomDto): Promise<UserClassroom> {
-    return this.userClassroomService.insertUserClass(dto);
+  async createUserClass(@Body() dto: UserClassroomDto): Promise<UserClassroom> {
+    return this.userClassroomService.createUserClass(dto);
   }
 
   @UseGuards(SessionGuard)
