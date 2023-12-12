@@ -7,6 +7,7 @@ import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { Assignment } from "../../helper/assignment_helper";
 import { useAppSelector } from "../../hooks/hooks";
 import ViewAssigmentModal from "../../components/modal/ViewAssignmentModal";
+import UpdateAssignmentModal from "../../components/modal/UpdateAssignmentModal";
 
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
@@ -67,14 +68,21 @@ export default function ListAssignments() {
                   secondary={assignment.assignmentDescription}
                 /> */}
                 <ViewAssigmentModal
-                  Assignment={assignment}
+                  assignment={assignment}
                   isOpen={showModal}
                   onClose={() => {
                     setShowModal(false);
                   }}
+                  role={""}
                 />
                 <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
-                  <MoreVertOutlinedIcon />
+                  <UpdateAssignmentModal
+                    assignment={assignment}
+                    isOpen={showModal}
+                    onClose={() => {
+                      setShowModal(false);
+                    }}
+                  />
                 </div>
               </ListItem>
             )

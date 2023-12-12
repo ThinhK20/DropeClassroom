@@ -6,11 +6,21 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import AddIcon from "@mui/icons-material/Add";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { TransitionProps } from "@mui/material/transitions";
 
-import { Assignment } from "../../helper/assignment_helper";
+import {
+  Assignment,
+  convertDateToString,
+  convertStringToDate,
+} from "../../helper/assignment_helper";
 
 import { Box, Button, Typography } from "@mui/material";
+import { useAppSelector } from "../../hooks/hooks";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import UpdateAssignmentModal from "./UpdateAssignmentModal";
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement;
@@ -23,12 +33,38 @@ const Transition = React.forwardRef(function Transition(
 export default function ViewAssigmentModal(props: {
   isOpen: boolean;
   onClose: () => void;
-  Assignment: Assignment;
+  assignment: Assignment;
+  role: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [openUpdate, setOpenUpdate] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleCloseUpdate = () => setOpenUpdate(false);
+
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
+
+  const updatedAssignment: Assignment = {
+    _id: Object(),
+    assignmentName: props.assignment.assignmentName,
+    assignmentDescription: props.assignment.assignmentDescription,
+    assignmentDueDate: props.assignment.assignmentDueDate,
+    assignmentStatus: props.assignment.assignmentStatus,
+    assignmentCreatedBy: props.assignment.assignmentCreatedBy,
+    assignmentUpdatedBy: props.assignment.assignmentUpdatedBy,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    __v: 0,
+    assignmentGrade: props.assignment.assignmentGrade,
+    assignmentGradeComment: props.assignment.assignmentGradeComment,
+    assignmentPercentage: props.assignment.assignmentPercentage,
+    assignmentClassId: currentClass?.classId._id as string,
+  };
 
   return (
     <React.Fragment>
@@ -39,7 +75,7 @@ export default function ViewAssigmentModal(props: {
           border: "0px solid #3f51b5",
         }}
       >
-        {props.Assignment.assignmentName}
+        {props.assignment.assignmentName}
       </Button>
       <Dialog
         fullScreen
@@ -58,7 +94,7 @@ export default function ViewAssigmentModal(props: {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {props.Assignment.assignmentName}
+              {props.assignment.assignmentName}
             </Typography>
             <Button
               autoFocus
@@ -67,34 +103,71 @@ export default function ViewAssigmentModal(props: {
                 handleClose();
               }}
             >
-              Update
+              Close
             </Button>
           </Toolbar>
         </AppBar>
         <Box>
           <div
-            className="max-w-md mx-auto"
             style={{
+              paddingLeft: "30%",
+              paddingRight: "30%",
               marginTop: "5%",
+              marginBottom: "5%",
             }}
           >
-            <div className="grid grid-cols-1 gap-6">
-              <label className="block">
-                <span className="text-gray-700">Assignment Name</span>
-                <input
-                  type="text"
-                  className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-                  placeholder="Assignment Name"
-                />
-              </label>
-              <label className="block">
-                <span className="text-gray-700">Assignment Description</span>
-                <input
-                  type="text"
-                  className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-                  placeholder="Assignment Description"
-                />
-              </label>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <AssignmentIcon />
+              <Typography variant="h6" component="div">
+                {props.assignment.assignmentName}
+              </Typography>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="div">
+                {props.assignment.assignmentCreatedBy || "No one"}
+              </Typography>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                marginRight: "50px",
+              }}
+            >
+              <CalendarTodayIcon />
+              <Typography component="div">
+                {convertDateToString(
+                  convertStringToDate(props.assignment.assignmentDueDate)
+                )}
+              </Typography>
+              <AssignmentTurnedInIcon />
+              <Typography component="div">
+                {props.assignment.assignmentStatus}
+              </Typography>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="div">
+                {props.assignment.assignmentDescription}
+              </Typography>
             </div>
           </div>
         </Box>

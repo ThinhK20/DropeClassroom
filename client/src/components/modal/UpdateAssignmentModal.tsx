@@ -21,6 +21,23 @@ import {
   Typography,
 } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
+import { Edit } from "@mui/icons-material";
+
+const updateAssignment = async (assignment: Assignment) => {
+  await fetch(`http://localhost:8000/assignment/${assignment._id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(assignment),
+  })
+    .then((res: any) => {
+      return res.json();
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
+};
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -31,9 +48,10 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CreateAssignmentModal(props: {
+export default function UpdateAssignmentModal(props: {
   isOpen: boolean;
   onClose: () => void;
+  assignment: Assignment;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -41,38 +59,8 @@ export default function CreateAssignmentModal(props: {
   const handleClose = () => setOpen(false);
 
   const [assignment, setAssignment] = React.useState({
-    assignmentName: "",
-    assignmentDescription: "",
-    assignmentDueDate: "",
-    assignmentStatus: "In Progress",
-    assignmentCreatedBy: "",
-    assignmentUpdatedBy: "",
-    assignmentGrade: 0,
-    assignmentGradeComment: "",
-    assignmentPercentage: 50,
-    assignmentClassId: "",
+    ...props.assignment,
   });
-
-  const currentClass = useAppSelector(
-    (state) => state.userClassroom.currentClass
-  );
-
-  const newAssignment: Assignment = {
-    _id: Object(),
-    assignmentName: assignment.assignmentName,
-    assignmentDescription: assignment.assignmentDescription,
-    assignmentDueDate: assignment.assignmentDueDate,
-    assignmentStatus: assignment.assignmentStatus,
-    assignmentCreatedBy: assignment.assignmentCreatedBy,
-    assignmentUpdatedBy: assignment.assignmentUpdatedBy,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    __v: 0,
-    assignmentGrade: assignment.assignmentGrade,
-    assignmentGradeComment: assignment.assignmentGradeComment,
-    assignmentPercentage: assignment.assignmentPercentage,
-    assignmentClassId: currentClass?.classId._id as string,
-  };
 
   const createAssignment = async (assignment: Assignment) => {
     await fetch("http://localhost:8000/assignment/create", {
@@ -92,17 +80,16 @@ export default function CreateAssignmentModal(props: {
 
   return (
     <React.Fragment>
-      <Button
-        variant="outlined"
-        onClick={handleOpen}
-        startIcon={<AddIcon />}
-        sx={{ borderRadius: `60px`, padding: `20px` }}
-      >
-        Create Assignment
+      <Button onClick={handleOpen}>
+        <Edit
+          style={{
+            border: "0px solid #3f51b5",
+          }}
+        />
       </Button>
       <Dialog
         fullScreen
-        open={open}
+        open={props.isOpen}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
@@ -117,13 +104,13 @@ export default function CreateAssignmentModal(props: {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Create Assignment
+              Update Assignment {assignment.assignmentName}
             </Typography>
             <Button
               autoFocus
               color="inherit"
               onClick={() => {
-                createAssignment(newAssignment);
+                createAssignment(assignment);
                 handleClose();
               }}
             >
