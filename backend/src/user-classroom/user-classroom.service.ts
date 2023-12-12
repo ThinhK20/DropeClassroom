@@ -17,7 +17,14 @@ export class UserClassroomService {
   // create user in class room with role
   async insertUserClass(dto: UserClassroomDto): Promise<UserClassroom> {
     try {
-      return await this.userClassroomModel.create(dto);
+      return (await this.userClassroomModel.create(dto)).populate({
+        path: 'classId',
+        select: '-createdAt -updatedAt -__v',
+        populate: {
+          path: 'owner',
+          select: '_id username email',
+        },
+      });
     } catch (err) {
       throw new Error('Error creating instance: ' + err.message);
     }
@@ -48,7 +55,7 @@ export class UserClassroomService {
     return classes;
   }
 
-  // user leave out class
+  // get all user in class
 
   // invite user in class
 

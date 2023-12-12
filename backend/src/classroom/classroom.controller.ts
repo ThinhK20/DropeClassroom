@@ -10,11 +10,14 @@ import {
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
-import { CreateClassDto, UpdateClassDto } from './dto';
+import { CreateClassDto, JoinClassDto, UpdateClassDto } from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from 'src/shared/schemas/user.schema';
 import { SessionGuard } from 'src/auth/guards/session.guard';
-import { getAllClassResponse } from 'src/shared/types/response.type';
+import {
+  getAllClassResponse,
+  userClassResponse,
+} from 'src/shared/types/response.type';
 import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 
 @Controller('c')
@@ -68,6 +71,16 @@ export class ClassroomController {
   @Delete(':id')
   async deleteClassById(@Param('id') _id: string): Promise<Classroom> {
     return this.classroomService.deleteClassById(_id);
+  }
+
+  // Post: .../c/uic
+  @UseGuards(SessionGuard)
+  @Post('uic')
+  async joinClassBycode(
+    @GetUser() user,
+    @Body() code: JoinClassDto,
+  ): Promise<userClassResponse<Classroom>> {
+    return this.classroomService.joinClassByCode(user, code);
   }
 }
 

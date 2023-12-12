@@ -33,6 +33,9 @@ export class Classroom {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 
+  @Prop({ required: true, default: true })
+  isActive: boolean;
+
   // asignment
 
   // notification

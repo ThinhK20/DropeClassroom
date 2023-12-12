@@ -11,8 +11,11 @@ import { User } from 'src/shared/schemas/user.schema';
 import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 import { UserClassroomService } from 'src/user-classroom/user-classroom.service';
 import { ROLE_CLASS } from 'src/shared/enums';
-import { getAllClassResponse } from 'src/shared/types/response.type';
-import { UpdateClassDto } from './dto';
+import {
+  getAllClassResponse,
+  userClassResponse,
+} from 'src/shared/types/response.type';
+import { JoinClassDto, UpdateClassDto } from './dto';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -93,10 +96,13 @@ export class ClassroomService {
 
   // Get class by ObjectId
   async getClassById(classId: string): Promise<Classroom> {
-    const classroom = await this.classroomModel.findById(classId).populate({
-      path: 'owner',
-      select: '_id username email',
-    });
+    const classroom = await this.classroomModel
+      .findById(classId)
+      .select('-createdAt -updatedAt -__v')
+      .populate({
+        path: 'owner',
+        select: '_id username email',
+      });
     if (!classroom) throw new NotFoundException('Classroom not found');
     return classroom;
   }
@@ -106,5 +112,29 @@ export class ClassroomService {
     const classroom = await this.classroomModel.findOneAndDelete({ _id: id });
     if (!classroom) throw new NotFoundException('Classroom not found');
     return classroom;
+  }
+
+  // Join class by code
+  async joinClassByCode(
+    user: User,
+    code: JoinClassDto,
+  ): Promise<userClassResponse<Classroom>> {
+    const existClass = await this.classroomModel.findOne({
+      classCode: code.classCode,
+    });
+    console.log(existClass);
+    if (!existClass) throw new NotFoundException('Classroom not found');
+
+    const userClass = await this.userClassroomService.insertUserClass({
+      classId: existClass,
+      role: ROLE_CLASS.Student,
+      userId: user,
+    });
+    // console.log(userClass);
+
+    return {
+      role: userClass.role,
+      classId: userClass.classId,
+    };
   }
 }
