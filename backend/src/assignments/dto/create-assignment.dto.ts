@@ -25,8 +25,8 @@ export class CreateAssignmentDto {
   readonly assignmentDescription: string;
 
   @IsOptional()
-  @IsDate()
-  readonly assignmentDueDate: Date;
+  @IsString()
+  readonly assignmentDueDate: string;
 
   @IsOptional()
   @IsString()

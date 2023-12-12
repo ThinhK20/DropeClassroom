@@ -2,7 +2,7 @@ export interface Assignment {
   _id: object;
   assignmentName: string;
   assignmentDescription: string;
-  // assignmentDueDate: Date;
+  assignmentDueDate: string;
   assignmentStatus: string;
   assignmentCreatedBy: string;
   assignmentUpdatedBy: string;
@@ -14,6 +14,22 @@ export interface Assignment {
   assignmentGradeComment: string;
   assignmentPercentage: number;
 }
+
+export const convertDateToString = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const dateString = `${year}-${month}-${day}`;
+
+  return dateString;
+};
+
+export const convertStringToDate = (date: string) => {
+  const dateObject = new Date(date);
+
+  return dateObject;
+};
 
 export const getAllAssignments = async () => {
   await fetch("http://localhost:8000/assignment", {

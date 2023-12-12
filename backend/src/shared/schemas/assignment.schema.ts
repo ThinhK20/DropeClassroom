@@ -15,8 +15,8 @@ export class Assignment {
   @Prop({ required: true })
   assignmentDescription: string;
 
-  @Prop({ default: Date.now })
-  assignmentDueDate: Date;
+  @Prop({ default: '' })
+  assignmentDueDate: string;
 
   @Prop({ default: '' })
   assignmentClassId: string;
