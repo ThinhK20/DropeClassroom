@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import PlusPopOver from "../../DropDown/PlusDropDown";
-
+import PlusPopOver from "../../dropDown/PlusDropDown";
 
 function PlusButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,11 +30,7 @@ function PlusButton() {
         +
       </button>
 
-      {isOpen && (
-        <PlusPopOver
-          isOpen={isOpen}
-        />
-      )}
+      {isOpen && <PlusPopOver isOpen={isOpen} />}
     </div>
   );
 }

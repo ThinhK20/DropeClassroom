@@ -1,7 +1,12 @@
-import { Classroom } from ".";
+import { Classroom, User } from ".";
 
 export interface ObjectUserClassRoom {
   classId: Classroom;
+  role: "teacher" | "student" | "owner";
+}
+
+export interface ObjectUser {
+  userId: User;
   role: "teacher" | "student" | "owner";
 }
 

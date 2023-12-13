@@ -1,6 +1,7 @@
 import {
   Classroom,
   CreateClassroom,
+  ObjectUser,
   UpdateClassroom,
   UserClassRoom,
 } from "../models";
@@ -32,4 +33,11 @@ export const updateClassApi = async (
   const res = await axiosInstance.patch(path, body, { signal: controler });
 
   return res;
+};
+
+export const getAllUsersClassApi = async (
+  id: string,
+  controler: AbortSignal
+): Promise<ObjectUser[]> => {
+  return (await axiosInstance.get(`c/${id}/uic`, { signal: controler })).data;
 };

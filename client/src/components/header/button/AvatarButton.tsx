@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { User } from "../../../models/User";
 import AvatarCustom from "../../avatar/AvatarCustom";
-import AvatarDropDown from "../../DropDown/AvatarDropDown";
+import AvatarDropDown from "../../dropDown/AvatarDropDown";
 
 function AvatarButton(user: User) {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +46,7 @@ function AvatarButton(user: User) {
         </div>
       </button>
 
-      <AvatarDropDown isOpen={isOpen} user={user}/>
+      <AvatarDropDown isOpen={isOpen} user={user} />
     </>
   );
 }
