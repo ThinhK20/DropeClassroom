@@ -7,20 +7,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import AddIcon from "@mui/icons-material/Add";
 import { TransitionProps } from "@mui/material/transitions";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
-
 import { Assignment } from "../../helper/assignment_helper";
-
-import {
-  Box,
-  Button,
-  Input,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
+import { useNavigate } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -39,6 +29,14 @@ export default function CreateAssignmentModal(props: {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const navigate = useNavigate();
+
+  const currentClassId = useAppSelector(
+    (state) => state.userClassroom.currentClass?.classId._id
+  );
+
+  const link = `/c/${currentClassId}`;
 
   const [assignment, setAssignment] = React.useState({
     assignmentName: "",
@@ -124,7 +122,7 @@ export default function CreateAssignmentModal(props: {
               color="inherit"
               onClick={() => {
                 createAssignment(newAssignment);
-                handleClose();
+                navigate(link);
               }}
             >
               save

@@ -89,7 +89,7 @@ export default function UpdateAssignmentModal(props: {
       </Button>
       <Dialog
         fullScreen
-        open={props.isOpen}
+        open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
@@ -110,7 +110,7 @@ export default function UpdateAssignmentModal(props: {
               autoFocus
               color="inherit"
               onClick={() => {
-                createAssignment(assignment);
+                updateAssignment(assignment);
                 handleClose();
               }}
             >
