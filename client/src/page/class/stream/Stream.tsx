@@ -5,9 +5,12 @@ import { useAppSelector } from "../../../hooks/hooks";
 import { useEffect, useState } from "react";
 import { Assignment } from "../../../helper/assignment_helper";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import FolderIcon from "@mui/icons-material/Folder";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import ListItemText from "@mui/material/ListItemText";
+import ClassCode from "../../../components/box/ClassCode";
+import JoinClass from "../../../components/box/JoinClass";
+import AsignmentComming from "../../../components/box/AsignmentComming";
 
 function Stream() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -78,7 +81,7 @@ function Stream() {
                   secondary={assignment.assignmentDescription}
                 />
                 <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
-                  <DeleteIcon
+                  <DeleteOutlinedIcon
                     onClick={() =>
                       deleteAssignment(castObjectToString(assignment._id))
                     }

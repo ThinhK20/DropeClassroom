@@ -14,7 +14,7 @@ function People() {
     updatedDate: "2023-11-28T16:11:01.769Z",
   };
   return (
-    <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-10 px-2 xl:px-52 ">
+    <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-44 ">
       {/* Teacher */}
       <div className="w-full flex justify-between items-center border-b-2 border-blue-600 mt-10">
         <p className="text-blue-600 medium-32 ml-2 mb-4">Teachers</p>
