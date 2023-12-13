@@ -70,7 +70,7 @@ export class UserClassroomService {
     return classes;
   }
 
-  // get all user in class
+  // get all user not owner in class
   async getAllUser(classId: string): Promise<UserClassroom[]> {
     const lists = await this.userClassroomModel
       .find({ classId: classId })

@@ -30,9 +30,8 @@ export class ClassroomController {
   // Classroom service is automatically created when initializing the controller
   constructor(private classroomService: ClassroomService) {}
 
-  // some request from client
   // create new class
-  // Post: .../
+  // Post: .../c
   @UseGuards(SessionGuard)
   @Post()
   async createNewClass(
@@ -43,7 +42,7 @@ export class ClassroomController {
   }
 
   // Get all classes of current user
-  // Get: .../c
+  // Get: .../c/all
   @UseGuards(SessionGuard)
   @Get('all')
   async getClassOfUser(

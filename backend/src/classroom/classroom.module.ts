@@ -11,6 +11,7 @@ import {
   UserClassroomSchema,
 } from 'src/user-classroom/schemas/user-classroom.schema';
 import { UserClassroomModule } from 'src/user-classroom/user-classroom.module';
+import { ClassroomRepository } from './repositories/classroom.repository';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { UserClassroomModule } from 'src/user-classroom/user-classroom.module';
     UserClassroomModule,
   ],
   controllers: [ClassroomController],
-  providers: [ClassroomService],
+  providers: [ClassroomService, ClassroomRepository],
   exports: [ClassroomService],
 })
 export class ClassroomModule {}
