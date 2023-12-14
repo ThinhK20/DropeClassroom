@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import AddIcon from "@mui/icons-material/Add";
 import { TransitionProps } from "@mui/material/transitions";
-import { Assignment } from "../../helper/assignment_helper";
+import { Assignment } from "../../models";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
@@ -55,24 +55,19 @@ export default function CreateAssignmentModal(props: {
     (state) => state.userClassroom.currentClass
   );
 
-  const newAssignment: Assignment = {
-    _id: Object(),
+  const newAssignment = {
     assignmentName: assignment.assignmentName,
     assignmentDescription: assignment.assignmentDescription,
     assignmentDueDate: assignment.assignmentDueDate,
     assignmentStatus: assignment.assignmentStatus,
     assignmentCreatedBy: assignment.assignmentCreatedBy,
     assignmentUpdatedBy: assignment.assignmentUpdatedBy,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    __v: 0,
     assignmentGrade: assignment.assignmentGrade,
-    assignmentGradeComment: assignment.assignmentGradeComment,
     assignmentPercentage: assignment.assignmentPercentage,
     assignmentClassId: currentClass?.classId._id as string,
   };
 
-  const createAssignment = async (assignment: Assignment) => {
+  const createAssignment = async (assignment: any) => {
     await fetch("http://localhost:8000/assignment/create", {
       method: "POST",
       headers: {

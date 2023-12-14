@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { AssignmentService } from './assignments.service';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 
 @Controller('assignment')
 export class AssignmentController {
@@ -33,7 +34,7 @@ export class AssignmentController {
   @Post(':id')
   async updateAssignmentById(
     @Param('id') _id: string,
-    @Body() assignment: CreateAssignmentDto,
+    @Body() assignment: UpdateAssignmentDto,
   ): Promise<Assignment> {
     return this.assignmentService.updateAssignmentById(_id, assignment);
   }

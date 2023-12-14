@@ -1,14 +1,13 @@
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AssignmentStatus } from 'src/shared/enums/assignment.enum';
-import { AssignmentType } from 'src/shared/enums/assignment.enum';
-
 export type AssignmentDocument = HydratedDocument<Assignment>;
 
 @Schema({
   timestamps: true,
 })
 export class Assignment {
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop({ required: true })
   assignmentName: string;
 

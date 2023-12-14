@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
+import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 
 @Injectable()
 export class AssignmentService {
@@ -10,8 +12,12 @@ export class AssignmentService {
     private assignmentModel: mongoose.Model<Assignment>,
   ) {}
 
-  async createNewAssignment(assignmentDTO: Assignment): Promise<Assignment> {
-    const res = await this.assignmentModel.create(assignmentDTO);
+  async createNewAssignment(
+    assignment: CreateAssignmentDto,
+  ): Promise<Assignment> {
+    const res = await this.assignmentModel.create({
+      ...assignment,
+    });
     return res;
   }
 
@@ -21,26 +27,37 @@ export class AssignmentService {
   }
 
   async getAssignmentById(id: string): Promise<Assignment> {
-    const assignment = await this.assignmentModel.findById(id);
+    const assignment = await this.assignmentModel
+      .findById(id)
+      .select('-createdAt -updatedAt -__v');
     if (!assignment) throw new NotFoundException('Assignment not found');
     return assignment;
   }
 
   async deleteAssignmentById(id: string): Promise<Assignment> {
-    const assignment = await this.assignmentModel.findByIdAndDelete(id);
+    const assignment = await this.assignmentModel.findOneAndDelete({
+      _id: id,
+    });
+    if (!assignment) throw new NotFoundException('Assignment not found');
     return assignment;
   }
 
   async updateAssignmentById(
     id: string,
-    assignmentDTO: Assignment,
+    updateAssignment: UpdateAssignmentDto,
   ): Promise<Assignment> {
-    const updatedAssignment = await this.assignmentModel.findByIdAndUpdate(
-      id,
-      assignmentDTO,
-      { new: true },
+    const assignment = await this.assignmentModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        ...updateAssignment,
+      },
+      {
+        new: true,
+      },
     );
-    if (!updatedAssignment) throw new NotFoundException('Assignment not found');
-    return updatedAssignment;
+    if (!assignment) throw new NotFoundException('Assignment not found');
+    return assignment;
   }
 }

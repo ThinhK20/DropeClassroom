@@ -5,22 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
-import AddIcon from "@mui/icons-material/Add";
 import { TransitionProps } from "@mui/material/transitions";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
-import { Assignment } from "../../helper/assignment_helper";
-
-import {
-  Box,
-  Button,
-  Input,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useAppSelector } from "../../hooks/hooks";
+import { Assignment } from "../../models";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
 const updateAssignment = async (assignment: Assignment) => {
@@ -61,22 +49,6 @@ export default function UpdateAssignmentModal(props: {
   const [assignment, setAssignment] = React.useState({
     ...props.assignment,
   });
-
-  const createAssignment = async (assignment: Assignment) => {
-    await fetch("http://localhost:8000/assignment/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(assignment),
-    })
-      .then((res: any) => {
-        return res.json();
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  };
 
   return (
     <React.Fragment>
@@ -132,6 +104,7 @@ export default function UpdateAssignmentModal(props: {
             label="Assignment Name"
             variant="outlined"
             sx={{ width: 700, mb: 3 }}
+            value={assignment.assignmentName}
             onChange={(e) =>
               setAssignment({
                 ...assignment,
@@ -150,6 +123,7 @@ export default function UpdateAssignmentModal(props: {
                 assignmentDescription: e.target.value,
               })
             }
+            value={assignment.assignmentDescription}
             style={{ width: 700, marginBottom: 20, height: 400 }}
           />
           <Box
@@ -170,6 +144,7 @@ export default function UpdateAssignmentModal(props: {
               InputLabelProps={{
                 shrink: true,
               }}
+              value={assignment.assignmentDueDate}
               onChange={(e) =>
                 setAssignment({
                   ...assignment,
@@ -187,6 +162,7 @@ export default function UpdateAssignmentModal(props: {
               type="number"
               variant="outlined"
               sx={{ width: 300, mb: 3 }}
+              value={assignment.assignmentPercentage}
               defaultValue={assignment.assignmentPercentage}
               onChange={(e) =>
                 setAssignment({
