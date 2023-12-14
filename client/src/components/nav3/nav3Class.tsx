@@ -12,10 +12,10 @@ function NavClass() {
   if (currentClass === null) return <></>;
 
   return (
-    <div className="relative w-full flex flex-row justify-between border-b border-gray-200">
-      {/* right */}
+    <div className="fixed w-[80%] flex flex-row justify-between border-b border-gray-200 bg-white z-50">
+      {/* left */}
 
-      <ul className="flex flex-row pl-5 cursor-pointer">
+      <div className="flex flex-row pl-5 cursor-pointer">
         <ButtonNav3 path={`/c/${currentClass.classId._id}`} name="Stream" />
         <ButtonNav3
           path={`/c/${currentClass.classId._id}/w/t/all`}
@@ -29,10 +29,9 @@ function NavClass() {
           path={`/c/${currentClass.classId._id}/gb/all`}
           name="Grade"
         />
-      </ul>
-
-      {/* left */}
-      <div className="w-1/3 flex flex-row justify-end items-center space-x-1 pr-4">
+      </div>
+      {/* right */}
+      <div className="flex flex-row justify-end items-center space-x-1 pr-4 bg-white mr-2">
         <button className="w-10 h-10 hover:bg-gray-400/10 rounded-full flex items-center justify-center">
           <FolderOutlinedIcon sx={{ height: 20, width: 20 }} />
         </button>

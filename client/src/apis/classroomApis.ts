@@ -41,3 +41,11 @@ export const getAllUsersClassApi = async (
 ): Promise<ObjectUser[]> => {
   return (await axiosInstance.get(`c/${id}/uic`, { signal: controler })).data;
 };
+
+export const addUserToClassApi = async (id: string, body: ObjectUser, controler: AbortSignal) => {
+  return await axiosInstance.post(`c/${id}/uic`, body, {signal: controler})
+}
+
+export const deleteUserClassApi = async (id: string, body: {user: string}, controler: AbortSignal) => {
+  return await axiosInstance.post(`c/${id}/rm-uic`, body, {signal: controler})
+} 

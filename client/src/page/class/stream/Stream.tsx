@@ -93,7 +93,7 @@ function Stream() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28 ">
+    <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-16 px-2 xl:px-28 ">
       {/* cover image */}
       <div className="relative w-full h-60">
         <img

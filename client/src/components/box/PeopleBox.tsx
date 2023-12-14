@@ -4,9 +4,10 @@ import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
 interface Props {
   user: ObjectUser;
+  removePeople: (u: ObjectUser) => void;
 }
 
-function PeopleBox({ user }: Props) {
+function PeopleBox({ user, removePeople }: Props) {
   return (
     <>
       <div className="flex justify-between items-center">
@@ -32,6 +33,7 @@ function PeopleBox({ user }: Props) {
             className={`mr-2 w-11 h-11 rounded-full text-3xl hover:bg-gray-500/20 ${
               user.role === "owner" ? "hidden" : "flex"
             } items-center justify-center pb-1`}
+            onClick={() => removePeople(user)}
           >
             -
           </button>

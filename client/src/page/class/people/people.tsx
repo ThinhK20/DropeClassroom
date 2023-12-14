@@ -1,10 +1,15 @@
-import { ObjectUser } from "../../../models";
+import { ObjectUser, User } from "../../../models";
 import AddPeopleDropDown from "../../../components/dropDown/AddPeopleDropDown";
 import { useAppSelector } from "../../../hooks/hooks";
-import { getAllUsersClassApi } from "../../../apis/classroomApis";
+import {
+  addUserToClassApi,
+  deleteUserClassApi,
+  getAllUsersClassApi,
+} from "../../../apis/classroomApis";
 import PeopleBox from "../../../components/box/PeopleBox";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
+import { getAllUsersNotInClassApi } from "../../../apis/userApis";
 
 function People() {
   const currentClass = useAppSelector(
@@ -12,6 +17,7 @@ function People() {
   );
 
   const [listUser, setListUser] = useState<ObjectUser[]>([]);
+  const [listUserNotIn, setListUserNotIn] = useState<User[]>([]);
   const [isFetch, setIsFetch] = useState<boolean>(false);
 
   // const user: User = {
@@ -25,6 +31,65 @@ function People() {
   //   updatedDate: "2023-11-28T16:11:01.769Z",
   // };
 
+  const removePeople = (u: ObjectUser) => {
+    if (!currentClass) return;
+    const updateList = listUser.filter(
+      (user) => user.userId._id.toString() !== u.userId._id.toString()
+    );
+
+    const controller = new AbortController();
+    deleteUserClassApi(
+      currentClass.classId._id,
+      { user: u.userId._id },
+      controller.signal
+    )
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        controller.abort();
+        return;
+      })
+      .finally(() => {
+        controller.abort();
+      });
+
+    setListUser(updateList);
+    setListUserNotIn([...listUserNotIn, u.userId]);
+  };
+
+  const addPeople2Class = (u: User, role: "teacher" | "student" | "owner") => {
+    if (!currentClass) return;
+
+    const updateList = listUserNotIn.filter(
+      (user) => user._id.toString() !== u._id.toString()
+    );
+    const controller = new AbortController();
+    addUserToClassApi(
+      currentClass?.classId._id as string,
+      {
+        userId: u,
+        role: role,
+      },
+      controller.signal
+    )
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        controller.abort();
+        return;
+      })
+      .finally(() => {
+        controller.abort();
+      });
+
+    setListUserNotIn(updateList);
+    setListUser([...listUser, { userId: u, role }]);
+  };
+
   const countStudent = (u: ObjectUser[]): number => {
     let count = 0;
     u.find((_u) => {
@@ -36,20 +101,34 @@ function People() {
 
   useEffect(() => {
     if (!isFetch) {
-      console.log("home");
+      console.log("get here 1");
       if (!currentClass) return;
       const controller = new AbortController();
       getAllUsersClassApi(currentClass.classId._id, controller.signal)
         .then((data) => {
           setListUser(data);
+          const controller_post = new AbortController();
+          getAllUsersNotInClassApi({ users: [...data] }, controller_post.signal)
+            .then((data) => {
+              setListUserNotIn(data);
+              console.log(data);
+            })
+            .catch((err: AxiosError) => {
+              setIsFetch(true);
+              console.log(err);
+            })
+            .finally(() => {
+              controller_post.abort();
+            });
           setIsFetch(true);
         })
         .catch((err: AxiosError) => {
           console.log(err);
-          return [];
+          setIsFetch(true);
         })
         .finally(() => {
           controller.abort();
+          setIsFetch(true);
         });
     }
   });
@@ -57,11 +136,17 @@ function People() {
   if (!currentClass) return <></>;
 
   return (
-    <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-44 ">
+    <div className="w-full min-h-[700px] flex flex-col flex-1 items-start pt-16 px-2 xl:px-44 overflow-auto hide-scrollbar">
       {/* Teacher */}
       <div className="w-full flex justify-between items-center border-b-2 border-blue-600 mt-10">
         <p className="text-blue-600 medium-32 ml-2 mb-4">Teachers</p>
-        {currentClass.role === "owner" && <AddPeopleDropDown />}
+        {currentClass.role === "owner" && (
+          <AddPeopleDropDown
+            userNotIn={listUserNotIn}
+            role="teacher"
+            addPeople={addPeople2Class}
+          />
+        )}
       </div>
 
       <div className="w-full divide-y flex flex-col">
@@ -70,10 +155,12 @@ function People() {
             userId: currentClass.classId.owner,
             role: "owner",
           }}
+          removePeople={removePeople}
         />
 
         {listUser.map((u, idx) => {
-          if (u.role === "teacher") return <PeopleBox user={u} key={idx} />;
+          if (u.role === "teacher")
+            return <PeopleBox user={u} key={idx} removePeople={removePeople} />;
           else return <></>;
         })}
       </div>
@@ -85,13 +172,18 @@ function People() {
           <p className="text-blue-600 medium-14 pr-2">{`${countStudent(
             listUser
           )} students`}</p>
-          {currentClass.role === "owner" && <AddPeopleDropDown />}
+          <AddPeopleDropDown
+            userNotIn={listUserNotIn}
+            role="student"
+            addPeople={addPeople2Class}
+          />
         </div>
       </div>
 
       <div className="w-full divide-y flex flex-col">
         {listUser.map((u, idx) => {
-          if (u.role === "student") return <PeopleBox user={u} key={idx} />;
+          if (u.role === "student")
+            return <PeopleBox user={u} key={idx} removePeople={removePeople} />;
           else return <></>;
         })}
       </div>
