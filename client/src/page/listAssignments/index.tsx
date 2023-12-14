@@ -4,11 +4,11 @@ import ListItemText from "@mui/material/ListItemText";
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 import CreateAssignmentModal from "../../components/modal/CreateAssignmentModal";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
-import { Assignment } from "../../helper/assignment_helper";
+import { Assignment } from "../../models";
 import { useAppSelector } from "../../hooks/hooks";
 import ViewAssigmentModal from "../../components/modal/ViewAssignmentModal";
 import UpdateAssignmentModal from "../../components/modal/UpdateAssignmentModal";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -23,6 +23,21 @@ export default function ListAssignments() {
       .then((res: any) => res.json())
       .then((data: Assignment[]) => {
         setAssignments(data);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
+  const deleteAssignment = async (assignment: Assignment) => {
+    await fetch(`http://localhost:8000/assignment/${assignment._id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res: any) => {
+        return res.json();
       })
       .catch((err: any) => {
         console.log(err);
@@ -75,12 +90,18 @@ export default function ListAssignments() {
                   }}
                   role={""}
                 />
-                <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
+                <div className="absolute right-0 mr-3 w-11 h-11 flex row items-center rounded-full cursor-pointer">
                   <UpdateAssignmentModal
                     assignment={assignment}
                     isOpen={showModal}
                     onClose={() => {
                       setShowModal(false);
+                    }}
+                  />
+                  <DeleteIcon
+                    onClick={() => {
+                      deleteAssignment(assignment);
+                      getAllAssignments();
                     }}
                   />
                 </div>
