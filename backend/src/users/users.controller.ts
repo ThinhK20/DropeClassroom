@@ -1,8 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { GetUser } from 'src/auth/decorator/user.decorator';
 import { User } from 'src/shared/schemas/user.schema';
+import { GetUserDto } from './dto';
 
 @Controller()
 export class UsersController {
@@ -21,5 +22,10 @@ export class UsersController {
     return user;
   }
 
-  // user update info
+  // Get user not in array
+  @UseGuards(SessionGuard)
+  @Post('/u/nic')
+  async getAllUserNotIn(@Body() users: GetUserDto): Promise<User[]> {
+    return this.usersService.getAllUserNotIn(users);
+  }
 }

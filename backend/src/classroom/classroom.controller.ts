@@ -107,7 +107,7 @@ export class ClassroomController {
 
   // Delete: ../c/:id/uic
   @UseGuards(SessionGuard)
-  @Delete(':id/uic')
+  @Post(':id/rm-uic')
   async deleteUserClass(
     @Param('id') id: string,
     @GetUser() owner: User,

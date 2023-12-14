@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Date, Model } from 'mongoose';
 import { User } from 'src/shared/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import { GetUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -63,4 +64,15 @@ export class UsersService {
   }
 
   // valid user objectId
+  async getAllUserNotIn(users: GetUserDto): Promise<User[]> {
+    const userIds = users.users.map((user) => user.userId._id);
+
+    const res = this.userModel.find({
+      _id: {
+        $nin: [...userIds],
+      },
+    });
+
+    return res;
+  }
 }
