@@ -9,9 +9,11 @@ import { useAppSelector } from "../../hooks/hooks";
 import ViewAssigmentModal from "../../components/modal/ViewAssignmentModal";
 import UpdateAssignmentModal from "../../components/modal/UpdateAssignmentModal";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const navigate = useNavigate();
 
   const getAllAssignments = async () => {
     await fetch("http://localhost:8000/assignment", {
@@ -59,6 +61,8 @@ export default function ListAssignments() {
 
   const currentClassId = currentClass?.classId._id;
 
+  const link = `/c/${currentClassId}`;
+
   const AssignmentList = () => {
     return (
       <List sx={{ bgcolor: "background.paper" }} className="w-full">
@@ -101,7 +105,7 @@ export default function ListAssignments() {
                   <DeleteIcon
                     onClick={() => {
                       deleteAssignment(assignment);
-                      getAllAssignments();
+                      navigate(link);
                     }}
                   />
                 </div>
