@@ -1,16 +1,6 @@
-import {
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  isString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import mongoose from 'mongoose';
-import {
-  AssignmentType,
-  AssignmentStatus,
-} from 'src/shared/enums/assignment.enum';
+
 export class CreateAssignmentDto {
   readonly _id: mongoose.Schema.Types.ObjectId;
 

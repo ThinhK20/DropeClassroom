@@ -28,6 +28,12 @@ export class AssignmentController {
   async getAssignmentById(@Param('id') _id: string): Promise<Assignment> {
     return this.assignmentService.getAssignmentById(_id);
   }
+  @Get('class/:id')
+  async getAssignmentsByClassId(
+    @Param('id') _id: string,
+  ): Promise<Assignment[]> {
+    return this.assignmentService.getAssignmentByClassId(_id);
+  }
 
   // update: .../assignments/_id
   @Post(':id')

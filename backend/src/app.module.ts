@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { SendgridService } from './sendgrid/sendgrid.service';
 import { MailController } from './mail/mail.controller';
 import { UserClassroomModule } from './user-classroom/user-classroom.module';
+import { StudentAssignmentModule } from './student-assignment/student-assignment.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserClassroomModule } from './user-classroom/user-classroom.module';
     AssignmentModule,
     AuthModule,
     UserClassroomModule,
+    StudentAssignmentModule,
   ],
   controllers: [AppController, MailController],
   providers: [AppService, SendgridService],

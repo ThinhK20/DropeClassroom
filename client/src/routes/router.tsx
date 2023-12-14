@@ -12,60 +12,61 @@ import ExcelTable from "../components/ExcelTable/ExcelTable";
 import Stream from "../page/class/stream/Stream";
 import ListAssignments from "../page/listAssignments";
 import People from "../page/class/people/people";
+import ScoreManagement from "../page/class/score-management/score-management";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/h",
-    element: <Home />,
-  },
-  {
-    path: "/schedule",
-    element: <Schedule />,
-  },
-  {
-    path: "/h/archived",
-    element: <Archived />,
-  },
-  {
-    path: "/s",
-    element: <Setting />,
-  },
-  {
-    path: "/c/:id",
-    element: <ClassRoom />,
-    children: [
-      {
-        path: "/c/:id",
-        element: <Stream />,
-      },
-      {
-        path: "w/t/all",
-        element: <ListAssignments />,
-      },
-      {
-        path: "uic/all",
-        element: <People />,
-      },
-      {
-        path: "gb/all",
-        element: <div>Hello grades</div>,
-      },
-    ],
-  },
-  {
-    path: "/signin",
-    element: <SignIn />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/testing",
-    element: <ExcelTable />,
-  },
+   {
+      path: "/",
+      element: <App />,
+   },
+   {
+      path: "/h",
+      element: <Home />,
+   },
+   {
+      path: "/schedule",
+      element: <Schedule />,
+   },
+   {
+      path: "/h/archived",
+      element: <Archived />,
+   },
+   {
+      path: "/s",
+      element: <Setting />,
+   },
+   {
+      path: "/c/:id",
+      element: <ClassRoom />,
+      children: [
+         {
+            path: "/c/:id",
+            element: <Stream />,
+         },
+         {
+            path: "w/t/all",
+            element: <ListAssignments />,
+         },
+         {
+            path: "uic/all",
+            element: <People />,
+         },
+         {
+            path: "gb/all",
+            element: <ScoreManagement />,
+         },
+      ],
+   },
+   {
+      path: "/signin",
+      element: <SignIn />,
+   },
+   {
+      path: "/signup",
+      element: <SignUp />,
+   },
+   {
+      path: "/testing",
+      element: <ExcelTable />,
+   },
 ]);

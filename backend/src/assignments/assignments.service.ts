@@ -21,9 +21,17 @@ export class AssignmentService {
   }
 
   async getAssignmentById(id: string): Promise<Assignment> {
-    const assignment = await this.assignmentModel.findById(id);
-    if (!assignment) throw new NotFoundException('Assignment not found');
-    return assignment;
+    const assignments = await this.assignmentModel.findById(id);
+    if (!assignments) throw new NotFoundException('Assignment not found');
+    return assignments;
+  }
+
+  async getAssignmentByClassId(id: string): Promise<Assignment[]> {
+    const assignments = await this.assignmentModel.find({
+      assignmentClassId: { $eq: id },
+    });
+    if (!assignments) throw new NotFoundException('Assignment not found');
+    return assignments;
   }
 
   async deleteAssignmentById(id: string): Promise<Assignment> {
