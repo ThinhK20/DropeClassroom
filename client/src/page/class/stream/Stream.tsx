@@ -1,19 +1,21 @@
 import AutoFixNormalOutlinedIcon from "@mui/icons-material/AutoFixNormalOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 
-import { useAppSelector } from "../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useEffect, useState } from "react";
-import { Assignment } from "../../../helper/assignment_helper";
+import { Assignment } from "../../../models";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 import ListItemText from "@mui/material/ListItemText";
 import ClassCode from "../../../components/box/ClassCode";
 import JoinClass from "../../../components/box/JoinClass";
 import AsignmentComming from "../../../components/box/AsignmentComming";
+import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 
 function Stream() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const dispatch = useAppDispatch();
 
   const getAllAssignments = async () => {
     await fetch("http://localhost:8000/assignment", {
@@ -65,7 +67,7 @@ function Stream() {
   const AssignmentList = () => {
     return (
       <List sx={{ bgcolor: "background.paper" }} className="w-full">
-        {assignments.map(
+        {assignments.reverse().map(
           (assignment: Assignment) =>
             assignment.assignmentClassId === currentClassId && (
               <ListItem className="relative w-full border rounded-xl my-5">
@@ -81,11 +83,7 @@ function Stream() {
                   secondary={assignment.assignmentDescription}
                 />
                 <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
-                  <DeleteOutlinedIcon
-                    onClick={() =>
-                      deleteAssignment(castObjectToString(assignment._id))
-                    }
-                  />
+                  <MoreVertOutlinedIcon />
                 </div>
               </ListItem>
             )
@@ -134,7 +132,9 @@ function Stream() {
       {/* notification + classcode + assignment */}
       <div className="relative grid grid-cols-5 w-full h-full mt-7 gap-6">
         <div className="col-span-1">
-          {currentClass?.role !== "student" && <ClassCode classCode={currentClass?.classId.classCode as string}/>}
+          {currentClass?.role !== "student" && (
+            <ClassCode classCode={currentClass?.classId.classCode as string} />
+          )}
           {currentClass?.role === "student" && <JoinClass />}
           <AsignmentComming />
         </div>

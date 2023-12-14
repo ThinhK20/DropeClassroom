@@ -1,15 +1,9 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import mongoose from 'mongoose';
-
 export class CreateAssignmentDto {
-  readonly _id: mongoose.Schema.Types.ObjectId;
-
-  @IsString()
   @IsNotEmpty()
   @IsString()
   readonly assignmentName: string;
 
-  @IsString()
   @IsNotEmpty()
   @IsString()
   readonly assignmentDescription: string;

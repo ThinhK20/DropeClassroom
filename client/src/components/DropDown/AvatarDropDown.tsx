@@ -4,6 +4,9 @@ import ReactPortalCustom from "../portal/ReactPortalCustom";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setLogout } from "../../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 interface DropDownProps {
    user: User;
@@ -11,7 +14,14 @@ interface DropDownProps {
 }
 
 function AvatarDropDown({ user, isOpen }: DropDownProps) {
+   const dispatch = useAppDispatch();
+   const navigate = useNavigate();
    if (!isOpen) return null;
+
+   const logOutHandler = () => {
+      dispatch(setLogout());
+      navigate("/signin");
+   };
 
    return (
       <ReactPortalCustom wrapperId="react-portal-drop-down-Avatar-container">
@@ -48,7 +58,10 @@ function AvatarDropDown({ user, isOpen }: DropDownProps) {
                   <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
                   <p className="text-2xl pb-1">Sign in</p>
                </button>
-               <button className="flex gap-4 py-4 px-4 items-center flex-1 hover:bg-gray-500/20 rounded-b-3xl">
+               <button
+                  onClick={logOutHandler}
+                  className="flex gap-4 py-4 px-4 items-center flex-1 hover:bg-gray-500/20 rounded-b-3xl"
+               >
                   <LogoutOutlinedIcon sx={{ fontSize: 32 }} />
                   <p className="text-2xl pb-1">Log out</p>
                </button>

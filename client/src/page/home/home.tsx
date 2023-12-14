@@ -41,7 +41,6 @@ export default function Home() {
 
   useEffect(() => {
     // setIsLoading(true);
-    console.log("mount home");
     const promise = dispatch(getAllUserClassroom());
 
     return () => {

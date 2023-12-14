@@ -1,8 +1,7 @@
-import { BaseEntity } from 'src/shared/base/base.schema';
 import { BaseRepositoryInterface } from './base.interface.repository';
 import { Model } from 'mongoose';
 
-export abstract class BaseRepositoryAbstract<T extends BaseEntity>
+export abstract class BaseRepositoryAbstract<T>
   implements BaseRepositoryInterface<T>
 {
   protected constructor(private readonly model: Model<T>) {
