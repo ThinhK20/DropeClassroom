@@ -54,9 +54,12 @@ function AvatarDropDown({ user, isOpen }: DropDownProps) {
             </div>
 
             <div className="w-full bg-white rounded-3xl my-3 flex flex-col divide-y-4 divide-blue-50">
-               <button className="flex gap-4 py-4 px-4 items-center flex-1 hover:bg-gray-500/20 rounded-t-3xl">
+               <button
+                  onClick={() => navigate("/signin")}
+                  className="flex gap-4 py-4 px-4 items-center flex-1 hover:bg-gray-500/20 rounded-t-3xl"
+               >
                   <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
-                  <p className="text-2xl pb-1">Sign in</p>
+                  <p className="text-2xl pb-1">Switch account</p>
                </button>
                <button
                   onClick={logOutHandler}
