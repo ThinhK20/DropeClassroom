@@ -118,8 +118,18 @@ export default function ListAssignments() {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28">
-        <div className="flex items-center w-full">
+      <div
+        className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28"
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        <div
+          className="flex items-center w-full"
+          style={{
+            marginTop: 50,
+          }}
+        >
           <CreateAssignmentModal
             isOpen={showModal}
             onClose={() => setShowModal(false)}
