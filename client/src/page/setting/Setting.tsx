@@ -2,51 +2,29 @@ import { User } from "../../models/User";
 import Header from "../../components/header/Header";
 import Container from "../../components/Container";
 import Sidebar from "../../components/side3/Sidebar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ClientWrapper from "../../components/ClientWrapper";
-
 import CreateClassModal from "../../components/modal/CreateClassModal";
 import JoinClassModal from "../../components/modal/JoinClassModal";
 import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
-import { UserClassRoom } from "../../models";
-import { getAllClassesApi } from "../../apis/classroomApis";
-import { AxiosError } from "axios";
-import { Alert } from "@mui/material";
+import AvatarCustom from "../../components/avatar/AvatarCustom";
+import AccountInfo from "./accountInfo/AccountInfo";
 
-export default function Home() {
+// import { Alert } from "@mui/material";
+
+export default function ClassRoom() {
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-  const [listClasses, setListClasses] = useState<UserClassRoom>({
-    count: 0,
-    erolled_class: [],
-    teaching_class: [],
-    owner_class: []
-  });
   const user: User = useAppSelector(
     (state: RootState) => state.users.data
   ) as User;
-  const [error, setError] = useState<string>("");
-  // const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // setIsLoading(true);
-    getAllClassesApi()
-      .then((res) => {
-        setListClasses(res.data);
-      })
-      .catch((err: AxiosError) => {
-        setError(err.message as string);
-        console.log(err);
-      })
-      .finally(() => {
-        // setIsLoading(false);
-      });
-  }, []);
+  if (!user) return null;
 
   return (
     <>
       <Container>
-        {error && <Alert severity="error">{error}</Alert>}
+        {/* {error && <Alert severity="error">{error}</Alert>} */}
         <CreateClassModal />
         <JoinClassModal />
       </Container>
@@ -58,10 +36,38 @@ export default function Home() {
         <main
           className={`flex flex-row ${isOpenSideBar ? "md:pl-80" : "md:pl-20"}`}
         >
-          <Sidebar isOpen={isOpenSideBar} listClasses={listClasses as UserClassRoom} />
-          <Container>
-            <h1>Hello setting</h1>
-          </Container>
+          <Sidebar isOpen={isOpenSideBar} />
+          <main className="relative w-full h-full flex flex-col items-start overflow-hidden">
+            <div className="w-full h-full flex flex-col flex-1 items-start overflow-x-hidden pt-5 px-2 xl:px-52">
+              {/* Profile */}
+              <div className="w-full border rounded-lg py-5 px-7 mb-5">
+                <h1 className="bold-32 mb-1">Profile</h1>
+                <p className="medium-24 my-1">Profile picture</p>
+                <div className="relative flex items-center gap-1  py-1 max-w-fit hover:bg-blue-50/50 group cursor-pointer rounded-lg">
+                  <AvatarCustom
+                    classroomAvatar={false}
+                    name={user.username}
+                    url={"/src/assets/testimonial-03.jpg"}
+                    height={40}
+                    width={40}
+                  />
+
+                  <button
+                    className="text-blue-600 p-2 group-hover:text-blue-800"
+                    onClick={() => {}}
+                  >
+                    Change
+                  </button>
+                </div>
+                <AccountInfo user={user}/>
+                <p className="medium-24 my-1">Account Setting</p>
+              </div>
+
+              <div className="w-full border rounded-lg py-5 px-7">
+                <h1 className="medium-24 mb-1">Notifications</h1>
+              </div>
+            </div>
+          </main>
         </main>
       </ClientWrapper>
     </>

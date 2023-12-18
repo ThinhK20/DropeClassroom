@@ -172,11 +172,13 @@ function People() {
           <p className="text-blue-600 medium-14 pr-2">{`${countStudent(
             listUser
           )} students`}</p>
-          <AddPeopleDropDown
-            userNotIn={listUserNotIn}
-            role="student"
-            addPeople={addPeople2Class}
-          />
+          {currentClass.role === "owner" && (
+            <AddPeopleDropDown
+              userNotIn={listUserNotIn}
+              role="student"
+              addPeople={addPeople2Class}
+            />
+          )}
         </div>
       </div>
 

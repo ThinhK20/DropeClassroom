@@ -19,7 +19,7 @@ function Header({ user, handleToggle }: Props) {
   const currentClass = useAppSelector(
     (state) => state.userClassroom.currentClass
   );
-  
+
   const headingName = (): HeadingName => {
     if (Number(url.id) === 2) return { name: "Schedule", title: undefined };
     if (Number(url.id) === 3) return { name: "Archived", title: undefined };
@@ -51,8 +51,8 @@ function Header({ user, handleToggle }: Props) {
       {/* Half Right */}
       <div className="w-1/2 flex items-center justify-end gap-1 md:gap-5">
         {/* create class */}
-
-        <PlusButton />
+        {(Number(url.id) === 1) && <PlusButton />}
+        
 
         {/* other funciton */}
         <FunctionButton />

@@ -5,7 +5,7 @@ import AvatarCustom from "../avatar/AvatarCustom";
 
 interface Props {
   userNotIn: User[];
-  role: "teacher" | "student" | "owner"
+  role: "teacher" | "student" | "owner";
   addPeople: (u: User, role: "teacher" | "student" | "owner") => void;
 }
 
@@ -42,24 +42,28 @@ function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
           isDropDown ? "block opacity-100" : "hidden opacity-0"
         } bg-white z-[99] border rounded shadow-lg top-8 right-8 overflow-y-auto hide-scrollbar max-h-56 `}
       >
-        <ul className="flex flex-col py-2 divide-y-2">
-          {userNotIn.map((u, idx) => {
-            return (
-              <li className="flex items-center py-2 px-4 hover:bg-gray-500/20 space-x-6 cursor-pointer" key={idx}
+        {userNotIn.length > 0 && (
+          <ul className={`flex flex-col py-2 divide-y-2`}>
+            {userNotIn.map((u, idx) => {
+              return (
+                <li
+                  className="flex items-center py-2 px-4 hover:bg-gray-500/20 space-x-6 cursor-pointer"
+                  key={idx}
                   onClick={() => addPeople(u, role)}
-              >
-                <AvatarCustom
-                  name={u.username}
-                  classroomAvatar={false}
-                  height={38}
-                  width={38}
-                  fontSize={20}
-                />
-                <div className="whitespace-nowrap">{u.email}</div>
-              </li>
-            );
-          })}
-        </ul>
+                >
+                  <AvatarCustom
+                    name={u.username}
+                    classroomAvatar={false}
+                    height={38}
+                    width={38}
+                    fontSize={20}
+                  />
+                  <div className="whitespace-nowrap">{u.email}</div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
