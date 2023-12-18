@@ -18,13 +18,13 @@ async function bootstrap() {
     }),
   );
 
-  // validate input
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
+  // // validate input
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     forbidNonWhitelisted: true,
+  //   }),
+  // );
 
   app.use(cookieParser());
   app.use(passport.initialize());
