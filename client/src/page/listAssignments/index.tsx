@@ -9,9 +9,11 @@ import { useAppSelector } from "../../hooks/hooks";
 import ViewAssigmentModal from "../../components/modal/ViewAssignmentModal";
 import UpdateAssignmentModal from "../../components/modal/UpdateAssignmentModal";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 export default function ListAssignments() {
   const [showModal, setShowModal] = React.useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const navigate = useNavigate();
 
   const getAllAssignments = async () => {
     await fetch("http://localhost:8000/assignment", {
@@ -59,6 +61,8 @@ export default function ListAssignments() {
 
   const currentClassId = currentClass?.classId._id;
 
+  const link = `/c/${currentClassId}`;
+
   const AssignmentList = () => {
     return (
       <List sx={{ bgcolor: "background.paper" }} className="w-full">
@@ -101,7 +105,7 @@ export default function ListAssignments() {
                   <DeleteIcon
                     onClick={() => {
                       deleteAssignment(assignment);
-                      getAllAssignments();
+                      navigate(link);
                     }}
                   />
                 </div>
@@ -114,8 +118,18 @@ export default function ListAssignments() {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28">
-        <div className="flex items-center w-full">
+      <div
+        className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28"
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        <div
+          className="flex items-center w-full"
+          style={{
+            marginTop: 50,
+          }}
+        >
           <CreateAssignmentModal
             isOpen={showModal}
             onClose={() => setShowModal(false)}

@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 
-import { Assignment } from "../../models";
+import { Assignment, UpdateAssignment } from "../../models";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
@@ -50,6 +50,20 @@ export default function UpdateAssignmentModal(props: {
     ...props.assignment,
   });
 
+  const updatedAssignment: Assignment = {
+    assignmentName: assignment.assignmentName,
+    assignmentDescription: assignment.assignmentDescription,
+    assignmentDueDate: assignment.assignmentDueDate,
+    assignmentPercentage: assignment.assignmentPercentage,
+    assignmentClassId: assignment.assignmentClassId,
+    assignmentGrade: assignment.assignmentGrade,
+    assignmentGradeComment: assignment.assignmentGradeComment,
+    assignmentStatus: assignment.assignmentStatus,
+    assignmentUpdatedBy: assignment.assignmentUpdatedBy,
+    _id: assignment._id,
+    assignmentCreatedBy: assignment.assignmentCreatedBy,
+  };
+
   return (
     <React.Fragment>
       <Button onClick={handleOpen}>
@@ -82,7 +96,7 @@ export default function UpdateAssignmentModal(props: {
               autoFocus
               color="inherit"
               onClick={() => {
-                updateAssignment(assignment);
+                updateAssignment(updatedAssignment);
                 handleClose();
               }}
             >

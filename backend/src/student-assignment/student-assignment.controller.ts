@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -6,11 +7,15 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { StudentAssignmentDto } from './dto/student-assignment.dto';
 import { StudentAssignmentService } from './student-assignment.service';
 import { StudentAssignment } from './schemas/student-assignment.schema';
 import { UpdateStudentAssignmentDto } from './dto/update-student-assignment.dto';
+import mongoose from 'mongoose';
+import { SessionGuard } from 'src/auth/guards/session.guard';
 
 @Controller('student-assignments')
 export class StudentAssignmentController {
@@ -33,19 +38,36 @@ export class StudentAssignmentController {
   }
 
   // Get: .../assignments/_id
-  @Get(':id')
+  @Get('assignment/:id')
   async getStudentAssignmentById(
-    @Param('id') _id: string,
+    @Param('id') _id: any,
   ): Promise<StudentAssignment> {
-    return this.studentAssignmentService.getAssignmentById(_id);
+    return await this.studentAssignmentService.getAssignmentById(_id);
   }
 
-  @Put('update') // create new assignment
+  @Get('class')
+  async getStudentAssignmentsByClassId(
+    @Query('id') id,
+    @Query('group') isGroup,
+  ): Promise<StudentAssignment[]> {
+    if (!isGroup || isGroup === 'false') {
+      return await this.studentAssignmentService.getAllAssignmentsByClassId(id);
+    } else {
+      return await this.studentAssignmentService.getAllGroupStudentAssignmentsByClassId(
+        id,
+      );
+    }
+  }
+
+  @Put('update/:id') // create new assignment
   async updateStudentAssignment(
-    @Body() studentAssignment: UpdateStudentAssignmentDto,
-  ): Promise<void> {
-    console.log('Student assignemnt: ', studentAssignment);
-    // return this.studentAssignmentService.createNewAssignment(studentAssignment);
+    @Param('id') id: any,
+    @Body() studentAssignment: StudentAssignment,
+  ): Promise<StudentAssignment> {
+    return await this.studentAssignmentService.updateAssignmentById(
+      id,
+      studentAssignment,
+    );
   }
 
   // Delete: .../assignments/_id
