@@ -1,14 +1,52 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+   getStudentAssignmentById,
+   updateStudentAssignmentApi,
+} from "../../../apis/studentAssignmentApis";
+import { toast } from "react-toastify";
+import { UpdateStudentAssignment } from "../../../models/StudentAssignment";
 
-export default function SetStudentScore() {
+type Props = {
+   id: string;
+};
+
+export default function SetStudentScore(props: Props) {
    const [open, setOpen] = useState(false);
+   const [student, setStudent] = useState();
    const handleOpen = () => setOpen(true);
    const handleClose = () => setOpen(false);
 
    const handleSubmit = () => {
-      handleClose();
+      const submitData: UpdateStudentAssignment = {
+         assignmentId: student.assignmentId,
+         grade: student.grade,
+         studentId: student.studentId,
+      };
+      console.log("Submit data: ", submitData);
+
+      updateStudentAssignmentApi(student._id, student)
+         .then((res) => {
+            toast.success("Updated successfully.");
+         })
+         .catch((err) => toast.error(err))
+         .finally(() => handleClose());
    };
+
+   useEffect(() => {
+      getStudentAssignmentById(props.id)
+         .then((res) => {
+            setStudent(res.data);
+         })
+         .catch((err) => console.log("Error: ", err));
+   }, []);
+
+   function handleChangeScore(
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+   ) {
+      setStudent({ ...student, grade: e.target.value });
+   }
+
    return (
       <>
          <button onClick={handleOpen}>Set student score</button>
@@ -27,8 +65,12 @@ export default function SetStudentScore() {
                   assignment's score.
                </Typography>
                <div className="flex items-center gap-4 pt-4">
-                  <Typography>Thinh Nguyen</Typography>
-                  <TextField type="number" value={0}></TextField>
+                  <Typography>{student?.studentId?.username}</Typography>
+                  <TextField
+                     type="number"
+                     value={student?.grade}
+                     onChange={handleChangeScore}
+                  ></TextField>
                </div>
                <div className="pt-4 flex justify-end gap-4">
                   <Button variant="text" onClick={handleClose}>

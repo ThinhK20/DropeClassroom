@@ -8,3 +8,9 @@ export interface StudentAssignment {
    status: AssignmentStatusEnum;
    isActive: boolean;
 }
+
+export interface UpdateStudentAssignment {
+   assignmentId: string;
+   studentId: string;
+   grade: string;
+}

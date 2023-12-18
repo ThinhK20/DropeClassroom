@@ -9,92 +9,90 @@ import { createUserClass } from "../../store/userClassroomSlice";
 import { CreateClassroom } from "../../models";
 
 function CreateClassModal() {
-  const [isLoading, setIsLoading] = useState(false);
-  const showModal = useAppSelector(
-    (state: RootState) => state.createClass.isOpen
-  );
-  const dispatch = useAppDispatch();
+   const [isLoading, setIsLoading] = useState(false);
+   const showModal = useAppSelector(
+      (state: RootState) => state.createClass.isOpen
+   );
+   const dispatch = useAppDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    shouldUnregister: true,
-    defaultValues: {
-      className: "",
-      section: "",
-      subject: "",
-      room: "",
-    },
-  });
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+   } = useForm<FieldValues>({
+      shouldUnregister: true,
+      defaultValues: {
+         className: "",
+         section: "",
+         subject: "",
+         room: "",
+      },
+   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsLoading(true);
-    // // call api
-    console.log(data);
-    const promise = dispatch(createUserClass(data as CreateClassroom));
-    promise
-      .then(() => {
-        dispatch(onCloseCreateClass());
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        promise.abort();
-      });
+   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+      setIsLoading(true);
+      // // call api
+      const promise = dispatch(createUserClass(data as CreateClassroom));
+      promise
+         .then(() => {
+            dispatch(onCloseCreateClass());
+         })
+         .catch((err) => {
+            console.log(err);
+         })
+         .finally(() => {
+            setIsLoading(false);
+            promise.abort();
+         });
+   };
 
-  };
+   const bodyContent = (
+      <div className="flex flex-col gap-4 pt-4">
+         <InputText
+            id="className"
+            label="Class Name (required)"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+         />
+         <InputText
+            id="section"
+            label="Section"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+         />
+         <InputText
+            id="subject"
+            label="Subject"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+         />
+         <InputText
+            id="room"
+            label="Room"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+         />
+      </div>
+   );
 
-  const bodyContent = (
-    <div className="flex flex-col gap-4 pt-4">
-      <InputText
-        id="className"
-        label="Class Name (required)"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
+   return (
+      <Modal
+         title="Create Class"
+         disabled={isLoading}
+         isOpen={showModal}
+         onClose={() => {
+            dispatch(onCloseCreateClass());
+         }}
+         body={bodyContent}
+         labelSubmit="Create"
+         onSubmit={handleSubmit(onSubmit)}
       />
-      <InputText
-        id="section"
-        label="Section"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-      />
-      <InputText
-        id="subject"
-        label="Subject"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-      />
-      <InputText
-        id="room"
-        label="Room"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-      />
-    </div>
-  );
-
-  return (
-    <Modal
-      title="Create Class"
-      disabled={isLoading}
-      isOpen={showModal}
-      onClose={() => {
-        dispatch(onCloseCreateClass());
-      }}
-      body={bodyContent}
-      labelSubmit="Create"
-      onSubmit={handleSubmit(onSubmit)}
-    />
-  );
+   );
 }
 
 export default CreateClassModal;
