@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faEllipsisVertical, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-   IconButton,
-   Menu,
-   MenuItem,
    Paper,
    Table,
    TableBody,
@@ -19,8 +16,10 @@ import { StudentAssignment } from "../../../models/StudentAssignment";
 import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
 import { getAssignmentsByClassId } from "../../../apis/assignmentApis";
 import { useLocation } from "react-router-dom";
-import SetStudentScore from "./set-student-score";
 import { Assignment } from "../../../models";
+import ExportScoreBoard from "./export-score-board";
+import ScoreTableHead from "./score-table-head";
+import ScoreTableCell from "./score-table-cell";
 
 export default function ScoreManagement() {
    const [groupStudentAssignmentsById, setGroupStudentAssignmentsById] =
@@ -47,9 +46,6 @@ export default function ScoreManagement() {
       const result = inputString.slice(startIndex, endIndex);
       return result;
    }
-
-   const [subMenuEl, setSubMenuEl] = useState(null);
-   const open = Boolean(subMenuEl);
 
    const calculateAverageScores = useMemo(() => {
       const existedGroupIds = [] as string[];
@@ -87,9 +83,13 @@ export default function ScoreManagement() {
    }, [assignments, groupStudentAssignmentsById]);
 
    useEffect(() => {
+      init();
+   }, []);
+
+   function init() {
       const promises = [
-         getAllStudentAssignmentsByClassId(getClassId()),
-         getAllStudentAssignmentsByClassId(getClassId(), true),
+         getAllStudentAssignmentsByClassId(true, getClassId()),
+         getAllStudentAssignmentsByClassId(true, getClassId(), true),
          getAssignmentsByClassId(getClassId()),
       ];
 
@@ -102,17 +102,6 @@ export default function ScoreManagement() {
          .catch((error) => {
             console.error("Error fetching data:", error);
          });
-   }, []);
-
-   function renderHead(id: string) {
-      const assignment = assignments.find((x) => x._id === (id as any));
-      return (
-         <TableCell className="flex flex-col h-[200px]">
-            <Typography fontSize={12}>No submission deadline</Typography>
-            <Typography>{assignment?.assignmentName}</Typography>
-            <Typography fontSize={12}>Max score: 100</Typography>
-         </TableCell>
-      );
    }
 
    function renderTableSummaryCell() {
@@ -124,71 +113,24 @@ export default function ScoreManagement() {
       ));
    }
 
-   function renderTableCell(score: number, assignmentId?: string) {
-      const handleClick = (event: any) => {
-         setSubMenuEl(event.currentTarget);
-      };
-
-      const handleClose = () => {
-         setSubMenuEl(null);
-      };
-
-      return (
-         <TableCell align="left" scope="row">
-            <div className="flex items-center justify-between">
-               <div>
-                  <label>{score}</label>
-                  <label>/100</label>
-               </div>
-               <div>
-                  <IconButton
-                     aria-label="more"
-                     id="long-button"
-                     aria-controls={open ? "long-menu" : undefined}
-                     aria-expanded={open ? "true" : undefined}
-                     aria-haspopup="true"
-                     onClick={handleClick}
-                  >
-                     <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </IconButton>
-                  <Menu
-                     id="long-menu"
-                     MenuListProps={{
-                        "aria-labelledby": "long-button",
-                     }}
-                     anchorEl={subMenuEl}
-                     open={open}
-                     onClose={handleClose}
-                     PaperProps={{
-                        style: {
-                           maxHeight: 48 * 4.5,
-                           width: "20ch",
-                        },
-                     }}
-                  >
-                     <MenuItem>
-                        <SetStudentScore id={assignmentId} />
-                     </MenuItem>
-                     <MenuItem>View</MenuItem>
-                     <MenuItem>Accept reasons</MenuItem>
-                  </Menu>
-               </div>
-            </div>
-         </TableCell>
-      );
-   }
-
    return (
       <TableContainer component={Paper}>
          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
                <TableRow>
                   <TableCell>Sort by Name</TableCell>
-                  {calculateAverageScores.map((averageScore) => {
-                     return renderHead(
-                        averageScore?.assignmentId?.toString() as string
+                  {calculateAverageScores.map((averageScore, key) => {
+                     const assignment = assignments.find(
+                        (x) => x._id === averageScore?.assignmentId?.toString()
+                     );
+                     return (
+                        <ScoreTableHead key={key} assignment={assignment} />
                      );
                   })}
+                  <TableCell>
+                     <ExportScoreBoard />
+                     {/* <DownloadAssignmentTemplate /> */}
+                  </TableCell>
                </TableRow>
             </TableHead>
             <TableBody>
@@ -208,7 +150,7 @@ export default function ScoreManagement() {
                   </TableCell>
                   {renderTableSummaryCell()}
                </TableRow>
-               {groupStudentAssignmentsByStudentId.map((row) => (
+               {groupStudentAssignmentsByStudentId.map((row: any) => (
                   <TableRow
                      key={row?.studentId}
                      sx={{
@@ -222,12 +164,15 @@ export default function ScoreManagement() {
                      >
                         <Typography>Thinh Nguyen</Typography>
                      </TableCell>
-                     {row.assignments.map((assignment: any) => {
-                        console.log("assignment: ", assignment);
-                        if (!assignment) return renderTableCell(0);
-                        return renderTableCell(
-                           assignment?.averageScore,
-                           assignment._id
+                     {row.assignments.map((assignment: any, key: number) => {
+                        if (!assignment)
+                           return <ScoreTableCell key={key} score={0} />;
+                        return (
+                           <ScoreTableCell
+                              score={assignment?.averageScore}
+                              assignmentId={assignment._id}
+                              key={key}
+                           />
                         );
                      })}
                   </TableRow>

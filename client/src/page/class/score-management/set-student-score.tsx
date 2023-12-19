@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
@@ -5,7 +6,6 @@ import {
    updateStudentAssignmentApi,
 } from "../../../apis/studentAssignmentApis";
 import { toast } from "react-toastify";
-import { UpdateStudentAssignment } from "../../../models/StudentAssignment";
 
 type Props = {
    id: string;
@@ -13,20 +13,13 @@ type Props = {
 
 export default function SetStudentScore(props: Props) {
    const [open, setOpen] = useState(false);
-   const [student, setStudent] = useState();
+   const [student, setStudent] = useState<any>();
    const handleOpen = () => setOpen(true);
    const handleClose = () => setOpen(false);
 
    const handleSubmit = () => {
-      const submitData: UpdateStudentAssignment = {
-         assignmentId: student.assignmentId,
-         grade: student.grade,
-         studentId: student.studentId,
-      };
-      console.log("Submit data: ", submitData);
-
       updateStudentAssignmentApi(student._id, student)
-         .then((res) => {
+         .then(() => {
             toast.success("Updated successfully.");
          })
          .catch((err) => toast.error(err))

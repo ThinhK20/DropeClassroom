@@ -10,11 +10,12 @@ export const getStudentAssignmentById = async (id: string) => {
 };
 
 export const getAllStudentAssignmentsByClassId = async (
+   isCalculated: boolean = false,
    id: string,
    isGroup: boolean = false
 ) => {
    return await axiosInstance.get(
-      `/student-assignments/class?id=${id}&group=${isGroup}`
+      `/student-assignments/class?id=${id}&group=${isGroup}&calculated=${isCalculated}`
    );
 };
 

@@ -13,9 +13,6 @@ import {
 import { StudentAssignmentDto } from './dto/student-assignment.dto';
 import { StudentAssignmentService } from './student-assignment.service';
 import { StudentAssignment } from './schemas/student-assignment.schema';
-import { UpdateStudentAssignmentDto } from './dto/update-student-assignment.dto';
-import mongoose from 'mongoose';
-import { SessionGuard } from 'src/auth/guards/session.guard';
 
 @Controller('student-assignments')
 export class StudentAssignmentController {
@@ -49,9 +46,16 @@ export class StudentAssignmentController {
   async getStudentAssignmentsByClassId(
     @Query('id') id,
     @Query('group') isGroup,
+    @Query('calculated') isCalculated,
   ): Promise<StudentAssignment[]> {
-    if (!isGroup || isGroup === 'false') {
+    if (!isCalculated || isCalculated === 'false') {
       return await this.studentAssignmentService.getAllAssignmentsByClassId(id);
+    }
+
+    if (!isGroup || isGroup === 'false') {
+      return await this.studentAssignmentService.getAllAssignmentsGroupByClassId(
+        id,
+      );
     } else {
       return await this.studentAssignmentService.getAllGroupStudentAssignmentsByClassId(
         id,
