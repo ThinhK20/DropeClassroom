@@ -32,14 +32,9 @@ export default function CreateAssignmentModal(props: {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const navigate = useNavigate();
-
   const currentClassId = useAppSelector(
     (state) => state.userClassroom.currentClass?.classId._id
   );
-
-  const link = `/c/${currentClassId}`;
-  const linkAssignments = `/c/${currentClassId}/w/t/all`;
 
   const [assignment, setAssignment] = React.useState({
     assignmentName: "",
