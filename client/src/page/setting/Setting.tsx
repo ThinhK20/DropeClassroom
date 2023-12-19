@@ -10,6 +10,7 @@ import { useAppSelector } from "../../hooks/hooks";
 import { RootState } from "../../store/store";
 import AvatarCustom from "../../components/avatar/AvatarCustom";
 import AccountInfo from "./accountInfo/AccountInfo";
+import AccountSetting from "./accountInfo/AccountSetting";
 
 // import { Alert } from "@mui/material";
 
@@ -43,7 +44,7 @@ export default function ClassRoom() {
               <div className="w-full border rounded-lg py-5 px-7 mb-5">
                 <h1 className="bold-32 mb-1">Profile</h1>
                 <p className="medium-24 my-1">Profile picture</p>
-                <div className="relative flex items-center gap-1  py-1 max-w-fit hover:bg-blue-50/50 group cursor-pointer rounded-lg">
+                <div className="relative flex items-center gap-1 py-1 max-w-fit hover:bg-blue-50/50 group cursor-pointer rounded-lg">
                   <AvatarCustom
                     classroomAvatar={false}
                     name={user.username}
@@ -59,12 +60,35 @@ export default function ClassRoom() {
                     Change
                   </button>
                 </div>
-                <AccountInfo user={user}/>
-                <p className="medium-24 my-1">Account Setting</p>
+                <AccountInfo user={user} />
+                <AccountSetting user={user} />
               </div>
 
-              <div className="w-full border rounded-lg py-5 px-7">
-                <h1 className="medium-24 mb-1">Notifications</h1>
+              <div className="w-full border rounded-lg py-5 px-7 divide-y-0 mb-14">
+                <div>
+                  <h1 className="medium-24 mb-1">Notifications</h1>
+
+                  <h2 className="medium-24 mt-5">Email</h2>
+                  <p className="mb-3">
+                    These settings apply to the notifications you get by email
+                  </p>
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <p>Allow email notifications</p>
+                      <label
+                        htmlFor="check__email"
+                        className="relative cursor-pointer group"
+                      >
+                        <input
+                          type="checkbox"
+                          id="check__email"
+                          className="appearance-none bg-gray-500/50 checked:bg-blue-500/70 transition-all duration-200 w-10 h-4 rounded-full peer"
+                        />
+                        <span className="absolute left-0 top-0 -translate-x-1 -translate-y-[0.85px] w-6 h-6 peer-checked:bg-blue-600 bg-gray-500 rounded-full peer-checked:translate-x-5 transition-all duration-200"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </main>

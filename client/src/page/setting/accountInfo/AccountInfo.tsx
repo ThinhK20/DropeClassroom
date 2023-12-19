@@ -17,7 +17,7 @@ interface Props {
   user: User;
 }
 
-function AccountInfo({user}: Props) {
+function AccountInfo({ user }: Props) {
   const [isDisabled, setIsDisabled] = useState(true);
 
   const {
@@ -46,15 +46,17 @@ function AccountInfo({user}: Props) {
         <p className="medium-24 my-1">
           Account Info <span className="text-rose-600">*</span>
         </p>
-        <button
-          className="w-7 h-7 rounded-lg flex justify-center items-center hover:bg-blue-50/60  transition-all hover:scale-110 hover:-translate-y-1 duration-200"
-          onClick={() => setIsDisabled(!isDisabled)}
-        >
-          <DriveFileRenameOutlineOutlinedIcon
-            sx={{ fontSize: 18 }}
-            className="text-gray-500"
-          />
-        </button>
+        {isDisabled && (
+          <button
+            className="w-7 h-7 rounded-lg flex justify-center items-center hover:bg-blue-50/60  transition-all hover:scale-110 hover:-translate-y-1 duration-200"
+            onClick={() => setIsDisabled(false)}
+          >
+            <DriveFileRenameOutlineOutlinedIcon
+              sx={{ fontSize: 18 }}
+              className="text-gray-500"
+            />
+          </button>
+        )}
       </div>
 
       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
