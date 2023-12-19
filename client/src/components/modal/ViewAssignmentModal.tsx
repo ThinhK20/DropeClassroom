@@ -36,31 +36,8 @@ export default function ViewAssigmentModal(props: {
   role: string;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [openUpdate, setOpenUpdate] = React.useState(false);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleOpenUpdate = () => setOpenUpdate(true);
-  const handleCloseUpdate = () => setOpenUpdate(false);
-
-  const currentClass = useAppSelector(
-    (state) => state.userClassroom.currentClass
-  );
-
-  const updatedAssignment: Assignment = {
-    _id: Object(),
-    assignmentName: props.assignment.assignmentName,
-    assignmentDescription: props.assignment.assignmentDescription,
-    assignmentDueDate: props.assignment.assignmentDueDate,
-    assignmentStatus: props.assignment.assignmentStatus,
-    assignmentCreatedBy: props.assignment.assignmentCreatedBy,
-    assignmentUpdatedBy: props.assignment.assignmentUpdatedBy,
-    assignmentGrade: props.assignment.assignmentGrade,
-    assignmentGradeComment: props.assignment.assignmentGradeComment,
-    assignmentPercentage: props.assignment.assignmentPercentage,
-    assignmentClassId: currentClass?.classId._id as string,
-  };
 
   return (
     <React.Fragment>
@@ -105,66 +82,46 @@ export default function ViewAssigmentModal(props: {
         </AppBar>
         <Box>
           <div
+            className="w-full h-full flex flex-col flex-1 items-start overflow-hidden pt-5 px-2 xl:px-28"
             style={{
-              paddingLeft: "30%",
-              paddingRight: "30%",
-              marginTop: "5%",
-              marginBottom: "5%",
+              marginBottom: 20,
             }}
           >
             <div
+              className="flex items-center w-full"
+              style={{
+                marginTop: 50,
+              }}
+            ></div>
+            <div className="my-5"></div>
+            <div
+              className="w-full border-b-2 border-blue-600"
               style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <AssignmentIcon />
-              <Typography variant="h6" component="div">
+              <span className="medium-32 text-blue-600">
                 {props.assignment.assignmentName}
-              </Typography>
+              </span>
+              <span className="text-gray-400 ml-3">
+                {props.assignment.assignmentDueDate}
+              </span>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Typography component="div">
-                {props.assignment.assignmentCreatedBy || "No one"}
-              </Typography>
+            <div className="my-5">
+              <span className="text-gray-400 ml-3">
+                {props.assignment.assignmentCreatedBy}
+              </span>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                marginRight: "50px",
-              }}
-            >
-              <CalendarTodayIcon />
-              <Typography component="div">
-                {convertDateToString(
-                  convertStringToDate(props.assignment.assignmentDueDate)
-                )}
-              </Typography>
-              <AssignmentTurnedInIcon />
-              <Typography component="div">
-                {props.assignment.assignmentStatus}
-              </Typography>
+            <div className="my-3">
+              <span className="text-gray-400 ml-3">
+                {props.assignment.assignmentGrade} marks
+              </span>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Typography component="div">
-                {props.assignment.assignmentDescription}
-              </Typography>
-            </div>
+            <span className="text-gray-400 ml-3">
+              {props.assignment.assignmentDescription}
+            </span>
           </div>
         </Box>
       </Dialog>

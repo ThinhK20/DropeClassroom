@@ -28,7 +28,20 @@ export class StudentAssignmentService {
     return assignments;
   }
 
-  async getAllAssignmentsByClassId(id: string): Promise<any> {
+  async getAllAssignmentsByClassId(id: string): Promise<StudentAssignment[]> {
+    const assignment = await this.assignmentModel.findOne({
+      assignmentClassId: id,
+    });
+    if (!assignment) return [];
+    const studentAssignments = await this.studentAssignmentModel
+      .find({
+        assignmentId: assignment._id,
+      })
+      .populate('studentId');
+    return studentAssignments;
+  }
+
+  async getAllAssignmentsGroupByClassId(id: string): Promise<any> {
     const assignments = await this.assignmentModel.find({
       assignmentClassId: { $eq: id },
     });
@@ -56,7 +69,7 @@ export class StudentAssignmentService {
       assignmentClassId: { $eq: id },
     });
     if (!assignments) throw new NotFoundException('Assignment not found');
-    const studentAssignments = await this.getAllAssignmentsByClassId(id);
+    const studentAssignments = await this.getAllAssignmentsGroupByClassId(id);
 
     const existedGroupIds = [] as string[];
     const averageScores = assignments.map((assignment) => {

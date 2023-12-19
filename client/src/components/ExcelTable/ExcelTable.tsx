@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useTable } from "react-table";
 import userData from "./users.json";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { CSVLink } from "react-csv";
 import CSVSelector from "../CSVSelector/CSVSelector";
 
@@ -37,8 +37,6 @@ export default function ExcelTable() {
       ]),
    ];
 
-   useEffect(() => {}, [importCsvData]);
-
    return (
       <div className="App">
          <CSVSelector onChange={(_data) => setImportCsvData(_data)} />
@@ -64,11 +62,9 @@ export default function ExcelTable() {
                </tbody>
             </table>
          )}
-
          <CSVLink filename="my-file.csv" data={csvData}>
             Export to CSV
          </CSVLink>
-
          <table {...getTableProps()}>
             <thead>
                {headerGroups.map((headerGroup) => (
