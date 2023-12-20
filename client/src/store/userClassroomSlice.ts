@@ -15,6 +15,7 @@ import {
   createClassApi,
   getAllClassesApi,
   updateClassApi,
+  userJoinClassByCodeApi,
 } from "../apis/classroomApis";
 
 interface UserClassRoomType {
@@ -64,6 +65,15 @@ export const updateUserClass = createAsyncThunk(
   }
 );
 
+export const userJoinClassByCode = createAsyncThunk(
+  "userClassoom/joinClassByCode",
+  async (body: {classCode: string}, thunkAPI): Promise<ObjectUserClassRoom> => {
+    const res = await userJoinClassByCodeApi(body, thunkAPI.signal);
+
+    return res.data;
+  }
+)
+
 const UserClassroomSlice = createSlice({
   initialState,
   name: "userClassroom",
@@ -92,6 +102,9 @@ const UserClassroomSlice = createSlice({
           }
           return false;
         })
+      })
+      .addCase(userJoinClassByCode.fulfilled, (state, action) => {
+        state.classes.erolled_class.push(action.payload);
       })
       .addMatcher(
         (action) => action.type.includes("cancel"),

@@ -49,3 +49,7 @@ export const addUserToClassApi = async (id: string, body: ObjectUser, controler:
 export const deleteUserClassApi = async (id: string, body: {user: string}, controler: AbortSignal) => {
   return await axiosInstance.post(`c/${id}/rm-uic`, body, {signal: controler})
 } 
+
+export const userJoinClassByCodeApi = async (body: {classCode: string}, controler: AbortSignal) => {
+  return await axiosInstance.post(`c/uic`, body, {signal: controler});
+} 
