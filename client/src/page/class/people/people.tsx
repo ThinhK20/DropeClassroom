@@ -10,6 +10,7 @@ import PeopleBox from "../../../components/box/PeopleBox";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { getAllUsersNotInClassApi } from "../../../apis/userApis";
+import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
 function People() {
   const currentClass = useAppSelector(
@@ -150,17 +151,34 @@ function People() {
       </div>
 
       <div className="w-full divide-y flex flex-col">
-        <PeopleBox
-          user={{
-            userId: currentClass.classId.owner,
-            role: "owner",
-          }}
-          removePeople={removePeople}
-        />
+        <div className="w-full flex items-center justify-between">
+          <PeopleBox
+            currentRole={currentClass}
+            user={{
+              userId: currentClass.classId.owner,
+              role: "owner",
+            }}
+            removePeople={removePeople}
+          />
+          {currentClass.role !== "owner" && (
+            <button
+              className={`mr-2 w-11 h-11 rounded-full hover:bg-gray-500/20 flex items-center justify-center`}
+            >
+              <MailOutlineOutlinedIcon />
+            </button>
+          )}
+        </div>
 
         {listUser.map((u, idx) => {
           if (u.role === "teacher")
-            return <PeopleBox user={u} key={idx} removePeople={removePeople} />;
+            return (
+              <PeopleBox
+                currentRole={currentClass}
+                user={u}
+                key={idx}
+                removePeople={removePeople}
+              />
+            );
           else return <></>;
         })}
       </div>
@@ -185,7 +203,14 @@ function People() {
       <div className="w-full divide-y flex flex-col">
         {listUser.map((u, idx) => {
           if (u.role === "student")
-            return <PeopleBox user={u} key={idx} removePeople={removePeople} />;
+            return (
+              <PeopleBox
+                currentRole={currentClass}
+                user={u}
+                key={idx}
+                removePeople={removePeople}
+              />
+            );
           else return <></>;
         })}
       </div>

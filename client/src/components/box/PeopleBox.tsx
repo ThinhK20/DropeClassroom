@@ -1,13 +1,14 @@
-import { ObjectUser } from "../../models";
+import { ObjectUser, ObjectUserClassRoom } from "../../models";
 import AvatarCustom from "../avatar/AvatarCustom";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
 interface Props {
+  currentRole: ObjectUserClassRoom;
   user: ObjectUser;
   removePeople: (u: ObjectUser) => void;
 }
 
-function PeopleBox({ user, removePeople }: Props) {
+function PeopleBox({ currentRole, user, removePeople }: Props) {
   return (
     <>
       <div className="flex justify-between items-center">
@@ -29,14 +30,16 @@ function PeopleBox({ user, removePeople }: Props) {
           >
             <MailOutlineOutlinedIcon />
           </button>
-          <button
-            className={`mr-2 w-11 h-11 rounded-full text-3xl hover:bg-gray-500/20 ${
-              user.role === "owner" ? "hidden" : "flex"
-            } items-center justify-center pb-1`}
-            onClick={() => removePeople(user)}
-          >
-            -
-          </button>
+          {currentRole.role === "owner" && (
+            <button
+              className={`mr-2 w-11 h-11 rounded-full text-3xl hover:bg-gray-500/20 ${
+                user.role === "owner" ? "hidden" : "flex"
+              } items-center justify-center pb-1`}
+              onClick={() => removePeople(user)}
+            >
+              -
+            </button>
+          )}
         </div>
       </div>
     </>
