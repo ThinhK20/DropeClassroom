@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+   Box,
    IconButton,
    Menu,
    MenuItem,
@@ -10,6 +11,7 @@ import { Assignment } from "../../../models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { updateAssignmentStatusApi } from "../../../apis/assignmentApis";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -17,6 +19,7 @@ interface Props {
 
 export default function ScoreTableHead(props: Props) {
    const [subMenuEl, setSubMenuEl] = useState(null);
+   const [openMarkFinishConfirm, setOpenMarkFinishConfirm] = useState(false);
    const open = Boolean(subMenuEl);
    const handleClick = (event: any) => {
       setSubMenuEl(event.currentTarget);
@@ -25,6 +28,8 @@ export default function ScoreTableHead(props: Props) {
    const handleClose = () => {
       setSubMenuEl(null);
    };
+
+   function markAssignmentToFinish() {}
 
    return (
       <TableCell className="flex flex-col h-[200px]">
@@ -60,7 +65,9 @@ export default function ScoreTableHead(props: Props) {
                      },
                   }}
                >
-                  <MenuItem>Mark to finish</MenuItem>
+                  <MenuItem onClick={() => setOpenMarkFinishConfirm(true)}>
+                     Mark to finish
+                  </MenuItem>
                </Menu>
             </div>
          </div>

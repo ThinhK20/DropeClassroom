@@ -105,8 +105,13 @@ export default function ScoreManagement() {
    }
 
    function renderTableSummaryCell() {
-      return calculateAverageScores.map((avgScore) => (
-         <TableCell className="flex flex-row" align="left" scope="row">
+      return calculateAverageScores.map((avgScore, key) => (
+         <TableCell
+            className="flex flex-row"
+            align="left"
+            key={key}
+            scope="row"
+         >
             <label>{avgScore?.averageScore}</label>
             <label>/100</label>
          </TableCell>

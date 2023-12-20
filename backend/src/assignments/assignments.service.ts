@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
+import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 
 @Injectable()
 export class AssignmentService {
@@ -67,5 +68,14 @@ export class AssignmentService {
     );
     if (!assignment) throw new NotFoundException('Assignment not found');
     return assignment;
+  }
+
+  async updateAssignmentStatus(
+    id: string,
+    status: AssignmentStatus,
+  ): Promise<boolean> {
+    return await this.assignmentModel.findByIdAndUpdate(id, {
+      assignmentStatus: status,
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { axiosInstance } from "./axiosInterceptor";
 import { AxiosResponse } from "axios";
 import { Assignment, CreateAssignment, UpdateAssignment } from "../models";
+import { AssignmentStatusEnum } from "../shared/enums/StudentAssignment";
 
 export const getAssignmentsApi = async () => {
    return await axiosInstance.get("/assignment");
@@ -47,8 +48,11 @@ export const deleteAssignmentApi = async (
    return res;
 };
 
-// BEGIN: assignmentApis.ts
-
-// Your code here
-
-// END: assignmentApis.ts
+export const updateAssignmentStatusApi = async (
+   id: string,
+   status: AssignmentStatusEnum
+) => {
+   return await axiosInstance.put(
+      `/assignment/update/status?id=${id}&status=${status}`
+   );
+};
