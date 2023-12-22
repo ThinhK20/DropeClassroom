@@ -5,12 +5,16 @@ import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
+import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
+// import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
 
 @Injectable()
 export class AssignmentService {
   constructor(
     @InjectModel(Assignment.name)
     private assignmentModel: mongoose.Model<Assignment>,
+    @InjectModel(StudentAssignment.name)
+    private studentAssignmentsModel: mongoose.Model<StudentAssignment>,
   ) {}
 
   async createNewAssignment(
@@ -74,8 +78,13 @@ export class AssignmentService {
     id: string,
     status: AssignmentStatus,
   ): Promise<boolean> {
-    return await this.assignmentModel.findByIdAndUpdate(id, {
+    await this.assignmentModel.findByIdAndUpdate(id, {
       assignmentStatus: status,
     });
+    await this.studentAssignmentsModel.updateMany(
+      { assignmentId: id },
+      { status: AssignmentStatus.Completed },
+    );
+    return true;
   }
 }

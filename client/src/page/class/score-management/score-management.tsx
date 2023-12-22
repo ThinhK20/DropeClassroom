@@ -176,6 +176,7 @@ export default function ScoreManagement() {
                            <ScoreTableCell
                               score={assignment?.averageScore}
                               assignmentId={assignment._id}
+                              assignmentStatus={assignment?.status}
                               key={key}
                            />
                         );
