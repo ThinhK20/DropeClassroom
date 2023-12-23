@@ -46,6 +46,16 @@ export class UserClassroom {
 
   @Prop({ required: true, enum: ROLE_CLASS })
   role: ROLE_CLASS;
+
+  // classcode + hashstring
+  @Prop({ default: '' })
+  studentId: string;
+
+  @Prop({ default: false })
+  isActiveStudentId: boolean;
+
+  @Prop({ default: true })
+  isActive: boolean;
 }
 
 const UserClassroomSchema = SchemaFactory.createForClass(UserClassroom);

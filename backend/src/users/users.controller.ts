@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { GetUser } from 'src/auth/decorator/user.decorator';
 import { User } from 'src/shared/schemas/user.schema';
-import { GetUserDto } from './dto';
+import { GetUserDto, UpdateUserDto } from './dto';
+import { UserResponse } from 'src/shared/types/response.type';
 
 @Controller()
 export class UsersController {
@@ -27,5 +28,15 @@ export class UsersController {
   @Post('/u/nic')
   async getAllUserNotIn(@Body() users: GetUserDto): Promise<User[]> {
     return this.usersService.getAllUserNotIn(users);
+  }
+
+  // Update User
+  @UseGuards(SessionGuard)
+  @Patch('/u/nic')
+  async updateUser(
+    @GetUser() u: User,
+    @Body() update: UpdateUserDto,
+  ): Promise<UserResponse> {
+    return this.usersService._updateUser(u, update);
   }
 }

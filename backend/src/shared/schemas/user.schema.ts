@@ -40,6 +40,12 @@ export class User {
 
   @Prop({ type: mongoose.Schema.Types.Date })
   resetTokenExpirationDate: Date;
+
+  @Prop({ default: '' })
+  address: string;
+
+  @Prop({ default: '' })
+  about: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

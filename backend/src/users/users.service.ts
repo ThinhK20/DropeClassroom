@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Date, Model } from 'mongoose';
 import { User } from 'src/shared/schemas/user.schema';
 import * as bcrypt from 'bcrypt';
-import { GetUserDto } from './dto';
+import { GetUserDto, UpdateUserDto } from './dto';
+import { UserResponse } from 'src/shared/types/response.type';
 
 @Injectable()
 export class UsersService {
@@ -74,5 +75,28 @@ export class UsersService {
     });
 
     return res;
+  }
+
+  // update user
+  async _updateUser(
+    user: User,
+    updateDoc: UpdateUserDto,
+  ): Promise<UserResponse> {
+    const res = await this.userModel.findByIdAndUpdate(user._id, updateDoc);
+    if (!res) throw new NotFoundException('User not found');
+
+    return {
+      _id: res._id.toString(),
+      username: res.username,
+      email: res.email,
+      dateOfBirth: res.dateOfBirth,
+      isActive: res.isActive,
+      gender: res.gender,
+      role: res.role,
+      createdDate: res.createdDate,
+      updatedDate: res.updatedDate,
+      address: res.address,
+      about: res.about,
+    };
   }
 }
