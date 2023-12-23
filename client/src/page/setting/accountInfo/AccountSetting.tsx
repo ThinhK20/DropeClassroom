@@ -14,8 +14,8 @@ function AccountSetting({ user }: Props) {
   } = useForm<FieldValues>({
     shouldUnregister: true,
     defaultValues: {
-      password: "",
-      newPassword: "",
+      password: "123456789",
+      newPassword: "123456789",
     },
   });
 
@@ -52,7 +52,8 @@ function AccountSetting({ user }: Props) {
           />
 
           <InputBoxText
-            id="password"
+            id="newPassword"
+            type="password"
             label="New Password"
             register={register}
             errors={errors}
