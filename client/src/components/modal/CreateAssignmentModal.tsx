@@ -40,7 +40,7 @@ export default function CreateAssignmentModal(props: {
     assignmentName: "",
     assignmentDescription: "",
     assignmentDueDate: "",
-    assignmentStatus: "In Progress",
+    assignmentStatus: "Pending",
     assignmentCreatedBy: "",
     assignmentUpdatedBy: "",
     assignmentGrade: 0,

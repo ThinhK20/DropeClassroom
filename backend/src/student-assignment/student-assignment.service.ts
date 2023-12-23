@@ -107,8 +107,8 @@ export class StudentAssignmentService {
     const mergedData = result1.reduce((acc: any, item) => {
       const existingItem = acc.find(
         (x) =>
-          x.studentId?.toString() ===
-          item.studentAssignments[0].studentId?.toString(),
+          x.studentId.toString() ===
+          item.studentAssignments[0]?.studentId?.toString(),
       );
 
       if (existingItem) {
@@ -168,7 +168,10 @@ export class StudentAssignmentService {
     assignmentDTO: StudentAssignment,
   ): Promise<StudentAssignment> {
     const updatedAssignment =
-      await this.studentAssignmentModel.findOneAndUpdate(assignmentDTO);
+      await this.studentAssignmentModel.findOneAndUpdate(
+        { _id: id },
+        assignmentDTO,
+      );
     if (!updatedAssignment)
       throw new NotFoundException('Student assignment not found');
     return updatedAssignment;

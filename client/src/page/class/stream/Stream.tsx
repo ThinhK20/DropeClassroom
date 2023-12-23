@@ -12,8 +12,13 @@ import ClassCode from "../../../components/box/ClassCode";
 import JoinClass from "../../../components/box/JoinClass";
 import AsignmentComming from "../../../components/box/AsignmentComming";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
+import UpdateAssignmentModal from "../../../components/modal/UpdateAssignmentModal";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ViewAssigmentModal from "../../../components/modal/ViewAssignmentModal";
+import React from "react";
 
 function Stream() {
+  const [showModal, setShowModal] = React.useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const dispatch = useAppDispatch();
 
@@ -67,10 +72,15 @@ function Stream() {
   const AssignmentList = () => {
     return (
       <List sx={{ bgcolor: "background.paper" }} className="w-full">
-        {assignments.reverse().map(
+        {assignments.map(
           (assignment: Assignment) =>
             assignment.assignmentClassId === currentClassId && (
-              <ListItem className="relative w-full border rounded-xl my-5">
+              <ListItem
+                className="relative w-full border rounded-xl my-5"
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
                 <ListItemAvatar>
                   <div className="w-12 h-12 rounded-full bg-blue-600/90 flex justify-center items-center ml-5 mr-6 ">
                     <ClassOutlinedIcon
@@ -78,12 +88,32 @@ function Stream() {
                     />
                   </div>
                 </ListItemAvatar>
-                <ListItemText
+                {/* <ListItemText
                   primary={assignment.assignmentName}
                   secondary={assignment.assignmentDescription}
+                /> */}
+                <ViewAssigmentModal
+                  assignment={assignment}
+                  isOpen={showModal}
+                  onClose={() => {
+                    setShowModal(false);
+                  }}
+                  role={""}
                 />
-                <div className="absolute right-0 mr-3 w-11 h-11 flex justify-center items-center hover:bg-gray-500/20 rounded-full cursor-pointer">
-                  <MoreVertOutlinedIcon />
+                <div className="absolute right-0 mr-3 w-11 h-11 flex row items-center rounded-full cursor-pointer">
+                  <UpdateAssignmentModal
+                    assignment={assignment}
+                    isOpen={showModal}
+                    onClose={() => {
+                      setShowModal(false);
+                    }}
+                  />
+                  <DeleteIcon
+                    onClick={() => {
+                      deleteAssignment(assignment._id);
+                      window.location.reload();
+                    }}
+                  />
                 </div>
               </ListItem>
             )

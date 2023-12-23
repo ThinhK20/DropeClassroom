@@ -12,6 +12,7 @@ import { SendgridService } from './sendgrid/sendgrid.service';
 import { MailController } from './mail/mail.controller';
 import { UserClassroomModule } from './user-classroom/user-classroom.module';
 import { StudentAssignmentModule } from './student-assignment/student-assignment.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { StudentAssignmentModule } from './student-assignment/student-assignment
     AuthModule,
     UserClassroomModule,
     StudentAssignmentModule,
+    NotificationModule,
   ],
   controllers: [AppController, MailController],
   providers: [AppService, SendgridService],

@@ -61,8 +61,6 @@ export default function ListAssignments() {
 
   const currentClassId = currentClass?.classId._id;
 
-  const link = `/c/${currentClassId}`;
-
   const AssignmentList = () => {
     return (
       <List sx={{ bgcolor: "background.paper" }} className="w-full">
@@ -105,7 +103,7 @@ export default function ListAssignments() {
                   <DeleteIcon
                     onClick={() => {
                       deleteAssignment(assignment);
-                      navigate(link);
+                      window.location.reload();
                     }}
                   />
                 </div>

@@ -1,8 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { AssignmentService } from './assignments.service';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
+import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 
 @Controller('assignment')
 export class AssignmentController {
@@ -16,6 +26,19 @@ export class AssignmentController {
     @Body() assignment: CreateAssignmentDto,
   ): Promise<Assignment> {
     return this.assignmentService.createNewAssignment(assignment);
+  }
+
+  @Put('update/status')
+  async updateAssignmentStatus(
+    @Query('id') id,
+    @Query('status') status: AssignmentStatus,
+  ): Promise<boolean> {
+    try {
+      await this.assignmentService.updateAssignmentStatus(id, status);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   // Get: .../assignments

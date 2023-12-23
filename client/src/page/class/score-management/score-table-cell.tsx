@@ -4,10 +4,12 @@ import { IconButton, Menu, MenuItem, TableCell } from "@mui/material";
 import SetStudentScore from "./set-student-score";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 
 interface Props {
    score: number;
    assignmentId?: string;
+   assignmentStatus?: AssignmentStatusEnum;
 }
 
 export default function ScoreTableCell(props: Props) {
@@ -16,13 +18,19 @@ export default function ScoreTableCell(props: Props) {
    const handleClick = (event: any) => {
       setSubMenuEl(event.currentTarget);
    };
+   console.log(props.assignmentStatus);
 
    const handleClose = () => {
       setSubMenuEl(null);
    };
 
    return (
-      <TableCell align="left" scope="row">
+      <TableCell
+         align="left"
+         scope="row"
+         component="th"
+         className="flex items-center"
+      >
          <div className="flex items-center justify-between">
             <div>
                <label>{props.score}</label>
@@ -54,9 +62,12 @@ export default function ScoreTableCell(props: Props) {
                      },
                   }}
                >
-                  <MenuItem>
-                     <SetStudentScore id={props.assignmentId as string} />
-                  </MenuItem>
+                  {props.assignmentStatus !==
+                     AssignmentStatusEnum.Completed && (
+                     <MenuItem>
+                        <SetStudentScore id={props.assignmentId as string} />
+                     </MenuItem>
+                  )}
                   <MenuItem>View</MenuItem>
                   <MenuItem>Accept reasons</MenuItem>
                </Menu>

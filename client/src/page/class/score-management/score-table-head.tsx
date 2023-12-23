@@ -10,6 +10,9 @@ import { Assignment } from "../../../models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { updateAssignmentStatusApi } from "../../../apis/assignmentApis";
+import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
+import { toast } from "react-toastify";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -17,6 +20,7 @@ interface Props {
 
 export default function ScoreTableHead(props: Props) {
    const [subMenuEl, setSubMenuEl] = useState(null);
+   // const [openMarkFinishConfirm, setOpenMarkFinishConfirm] = useState(false);
    const open = Boolean(subMenuEl);
    const handleClick = (event: any) => {
       setSubMenuEl(event.currentTarget);
@@ -26,6 +30,19 @@ export default function ScoreTableHead(props: Props) {
       setSubMenuEl(null);
    };
 
+   function markAssignmentToFinish() {
+      updateAssignmentStatusApi(
+         props.assignment?._id?.toString() as string,
+         AssignmentStatusEnum.Completed
+      )
+         .then(() => {
+            toast.success(
+               `Mark assignment ${props.assignment?.assignmentName} as completed successfully.`
+            );
+         })
+         .catch((err) => toast.error(err));
+   }
+
    return (
       <TableCell className="flex flex-col h-[200px]">
          <div className="flex items-center justify-between">
@@ -33,6 +50,17 @@ export default function ScoreTableHead(props: Props) {
                <Typography fontSize={12}>No submission deadline</Typography>
                <Typography>{props.assignment?.assignmentName}</Typography>
                <Typography fontSize={12}>Max score: 100</Typography>
+            </div>
+            <div>
+               {props.assignment?.assignmentStatus ===
+                  AssignmentStatusEnum.Completed && (
+                  <Typography
+                     className="bg-green-600 px-2 text-center rounded py-1 text-white"
+                     fontSize={12}
+                  >
+                     {props.assignment?.assignmentStatus}
+                  </Typography>
+               )}
             </div>
             <div>
                <IconButton
@@ -60,7 +88,13 @@ export default function ScoreTableHead(props: Props) {
                      },
                   }}
                >
-                  <MenuItem>Mark to finish</MenuItem>
+                  {props.assignment?.assignmentStatus !==
+                     AssignmentStatusEnum.Completed && (
+                     <MenuItem onClick={markAssignmentToFinish}>
+                        Mark to finish
+                     </MenuItem>
+                  )}
+                  <MenuItem>View</MenuItem>
                </Menu>
             </div>
          </div>

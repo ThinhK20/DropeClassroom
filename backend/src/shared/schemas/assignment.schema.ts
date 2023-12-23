@@ -1,5 +1,6 @@
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 export type AssignmentDocument = HydratedDocument<Assignment>;
 
 @Schema({
@@ -23,8 +24,8 @@ export class Assignment {
   @Prop({ default: '' })
   assignmentType: string;
 
-  @Prop({ default: '' })
-  assignmentStatus: string;
+  @Prop({ default: AssignmentStatus.Pending, enum: AssignmentStatus })
+  assignmentStatus: AssignmentStatus;
 
   @Prop({ default: 0 })
   assignmentGrade: number;
