@@ -29,19 +29,22 @@ function JoinClassModal() {
     setIsLoading(true);
     console.log(data.classCode);
     // call api
-    const promise = dispatch(userJoinClassByCode({classCode: data.classCode}));
+    const promise = dispatch(
+      userJoinClassByCode({ classCode: data.classCode })
+    );
 
-    promise.then(() => {
-      reset();
-      dispatch(onCloseJoinClass());
-    })
-    .catch((err: AxiosError) => {
-      console.log(err);
-    })
-    .finally(() => {
-      setIsLoading(false);
-      promise.abort();
-    })
+    promise
+      .then(() => {
+        reset();
+        dispatch(onCloseJoinClass());
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        promise.abort();
+      });
   };
 
   const headerContent = (
@@ -84,7 +87,10 @@ function JoinClassModal() {
       title="Join Class"
       disabled={isLoading}
       isOpen={showModal}
-      onClose={() => {dispatch(onCloseJoinClass()); reset();}}
+      onClose={() => {
+        dispatch(onCloseJoinClass());
+        reset();
+      }}
       header={headerContent}
       body={bodyContent}
       footer={footerBody}

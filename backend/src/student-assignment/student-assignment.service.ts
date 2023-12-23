@@ -107,8 +107,8 @@ export class StudentAssignmentService {
     const mergedData = result1.reduce((acc: any, item) => {
       const existingItem = acc.find(
         (x) =>
-          x.studentId.toString() ===
-          item.studentAssignments[0].studentId.toString(),
+          x.studentId?.toString() ===
+          item.studentAssignments[0].studentId?.toString(),
       );
 
       if (existingItem) {
