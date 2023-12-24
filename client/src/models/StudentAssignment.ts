@@ -1,9 +1,9 @@
-import { User } from ".";
+import { Assignment, UserClassRoom } from ".";
 import { AssignmentStatusEnum } from "../shared/enums/StudentAssignment";
 export interface StudentAssignment {
    _id: string;
-   studentId: User;
-   assignmentId: string;
+   studentId: UserClassRoom;
+   assignmentId: Assignment;
    grade: number;
    status: AssignmentStatusEnum;
    isActive: boolean;

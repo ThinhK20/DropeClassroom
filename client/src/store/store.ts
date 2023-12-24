@@ -8,26 +8,28 @@ import storage from "redux-persist/lib/storage";
 import assignmentSlice from "./assignmentSlice";
 import updateAssignmentSlice from "./updateAssignmentSlice";
 import createAssignmentSlice from "./createAssignmentSlice";
+import gradeReviewsSlice from "./gradeReviewsSlice";
 
 const rootReducer = combineReducers({
-  users: userSlice,
-  createClass: createClassSlice,
-  joinClass: joinClassSlice,
-  userClassroom: userClassroomSlice,
-  createAssignment: createAssignmentSlice,
-  updateAssignment: updateAssignmentSlice,
-  assignment: assignmentSlice,
+   users: userSlice,
+   createClass: createClassSlice,
+   joinClass: joinClassSlice,
+   userClassroom: userClassroomSlice,
+   createAssignment: createAssignmentSlice,
+   updateAssignment: updateAssignmentSlice,
+   assignment: assignmentSlice,
+   gradeReviews: gradeReviewsSlice,
 });
 
 const persistConfig = {
-  key: "root",
-  storage,
+   key: "root",
+   storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+   reducer: persistedReducer,
 });
 
 export const persistor = persistStore(store);

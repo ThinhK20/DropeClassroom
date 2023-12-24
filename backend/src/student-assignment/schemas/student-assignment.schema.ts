@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
-import { User } from 'src/shared/schemas/user.schema';
+import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 
 export type StudentDocument = HydratedDocument<StudentAssignment>;
 
@@ -10,8 +10,12 @@ export type StudentDocument = HydratedDocument<StudentAssignment>;
 export class StudentAssignment {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  studentId: User;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserClassroom',
+  })
+  studentId: UserClassroom;
 
   @Prop({
     required: true,
