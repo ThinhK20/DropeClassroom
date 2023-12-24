@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Date, Model } from 'mongoose';
 import { User } from 'src/shared/schemas/user.schema';
@@ -98,5 +102,14 @@ export class UsersService {
       address: res.address,
       about: res.about,
     };
+  }
+
+  // inActive User
+  async _inActiveUser(userId: string) {
+    try {
+      await this.userModel.findByIdAndUpdate(userId, { isActive: false });
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 }
