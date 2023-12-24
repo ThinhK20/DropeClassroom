@@ -40,7 +40,7 @@ export default function GradeReviews() {
    return (
       <Paper sx={{ width: "100%", paddingTop: "50px" }}>
          <CreateGradeReview />
-         <TableContainer sx={{ maxHeight: 440 }}>
+         <TableContainer>
             <Table>
                <TableHead>
                   <TableRow>

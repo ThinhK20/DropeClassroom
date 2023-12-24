@@ -11,6 +11,7 @@ import {
    TextField,
    TextareaAutosize,
    Toolbar,
+   Tooltip,
    Typography,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
@@ -20,6 +21,8 @@ import React from "react";
 import { useAppSelector } from "../../../hooks/hooks";
 import { useLocation } from "react-router-dom";
 import { CreateGradeReviewType } from "../../../models/GradeReview";
+import { createGradeReviewApi } from "../../../apis/gradeReviewsApis";
+import { toast } from "react-toastify";
 
 const Transition = React.forwardRef(function Transition(
    props: TransitionProps & {
@@ -34,6 +37,12 @@ export default function CreateGradeReview() {
    const [open, setOpen] = useState(false);
    const location = useLocation();
    const assignments = useAppSelector((state) => state.assignment).assignments;
+   const groupStudentAssignmentsByStudentId = useAppSelector(
+      (state) => state.studentAssignments
+   ).data.groupStudentAssignmentsByStudentId;
+
+   const [assignmentId, setAssignmentId] = useState<string>();
+
    const handleOpen = () => setOpen(true);
    const handleClose = () => setOpen(false);
 
@@ -52,25 +61,37 @@ export default function CreateGradeReview() {
    }
 
    function handleSubmit() {
-      setSubmitData(
-         () =>
-            ({ ...submitData, classId: getClassId() } as CreateGradeReviewType)
-      );
       if (!submitData) {
          console.error("Create grade review is empty.");
       }
 
-      // createGradeReviewApi(submitData as CreateGradeReviewType);
-      handleClose();
+      const modifiedData = {
+         ...submitData,
+         classId: getClassId(),
+         studentAssignment:
+            groupStudentAssignmentsByStudentId[0].assignments.find(
+               (val) => (val.assignmentId as any) === assignmentId?.toString()
+            )?._id,
+      };
+      createGradeReviewApi(modifiedData as CreateGradeReviewType)
+         .then(() => {
+            toast.success("Request successfully.");
+         })
+         .catch((err) => toast.error(err))
+         .finally(() => {
+            handleClose();
+         });
    }
 
    return (
       <div className="pt-2">
-         <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleOpen}
-         ></Button>
+         {groupStudentAssignmentsByStudentId.length > 0 && (
+            <Tooltip title="Create a new grade request">
+               <Button variant="outlined" color="primary" onClick={handleOpen}>
+                  Create
+               </Button>
+            </Tooltip>
+         )}
          <Dialog
             fullScreen
             open={open}
@@ -137,15 +158,15 @@ export default function CreateGradeReview() {
                                  <Select
                                     placeholder="Assignment name"
                                     onChange={(e) =>
-                                       setSubmitData({
-                                          ...submitData,
-                                          studentAssignment: e.target.value,
-                                       } as any)
+                                       setAssignmentId(e.target.value as string)
                                     }
                                     className="flex w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
                                  >
                                     {assignments.map((assignment) => (
-                                       <MenuItem value={assignment._id}>
+                                       <MenuItem
+                                          key={assignment._id}
+                                          value={assignment._id}
+                                       >
                                           {assignment.assignmentName}
                                        </MenuItem>
                                     ))}

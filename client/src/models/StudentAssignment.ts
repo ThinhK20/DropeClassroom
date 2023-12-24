@@ -14,3 +14,8 @@ export interface UpdateStudentAssignment {
    studentId: string;
    grade: string;
 }
+
+export interface GroupStudentAssignmentsByStudentId {
+   studentId: string;
+   assignments: StudentAssignment[];
+}

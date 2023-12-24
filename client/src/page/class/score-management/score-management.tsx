@@ -20,6 +20,8 @@ import { Assignment } from "../../../models";
 import ExportScoreBoard from "./export-score-board";
 import ScoreTableHead from "./score-table-head";
 import ScoreTableCell from "./score-table-cell";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { setGroupStudentAssignmentsByStudentId } from "../../../store/studentAssignmentSlice";
 
 export default function ScoreManagement() {
    const [groupStudentAssignmentsById, setGroupStudentAssignmentsById] =
@@ -28,12 +30,12 @@ export default function ScoreManagement() {
       }>({});
 
    const [assignments, setAssignments] = useState<Assignment[]>([]);
-   const [
-      groupStudentAssignmentsByStudentId,
-      setGroupStudentAssignmentsByStudentId,
-   ] = useState<any>([]);
 
    const location = useLocation();
+   const dispatch = useAppDispatch();
+   const groupStudentAssignmentsByStudentId = useAppSelector(
+      (state) => state.studentAssignments
+   ).data.groupStudentAssignmentsByStudentId;
 
    function getClassId() {
       const inputString = location.pathname;
@@ -96,7 +98,9 @@ export default function ScoreManagement() {
       Promise.all(promises)
          .then(([groupAssignments1, groupAssignments2, assignments]) => {
             setGroupStudentAssignmentsById(groupAssignments1.data);
-            setGroupStudentAssignmentsByStudentId(groupAssignments2.data);
+            dispatch(
+               setGroupStudentAssignmentsByStudentId(groupAssignments2.data)
+            );
             setAssignments(assignments.data);
          })
          .catch((error) => {
