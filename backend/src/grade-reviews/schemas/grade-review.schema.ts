@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Classroom } from 'src/classroom/schemas/classroom.schema';
 import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
 
 export type GradeReviewDocument = HydratedDocument<GradeReview>;
@@ -7,6 +8,13 @@ export type GradeReviewDocument = HydratedDocument<GradeReview>;
 @Schema({ collection: 'GradeReview', timestamps: true })
 export class GradeReview {
   _id: mongoose.Schema.Types.ObjectId;
+
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Classroom',
+  })
+  classId: Classroom;
 
   @Prop({
     required: true,

@@ -13,6 +13,7 @@ import Stream from "../page/class/stream/Stream";
 import ListAssignments from "../page/listAssignments";
 import People from "../page/class/people/people";
 import ScoreManagement from "../page/class/score-management/score-management";
+import GradeReviews from "../page/class/grade-reviews/grade-reviews";
 
 export const router = createBrowserRouter([
    {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
          {
             path: "gb/all",
             element: <ScoreManagement />,
+         },
+         {
+            path: "gr/all",
+            element: <GradeReviews />,
          },
       ],
    },

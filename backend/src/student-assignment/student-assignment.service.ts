@@ -33,11 +33,9 @@ export class StudentAssignmentService {
       assignmentClassId: id,
     });
     if (!assignment) return [];
-    const studentAssignments = await this.studentAssignmentModel
-      .find({
-        assignmentId: assignment._id,
-      })
-      .populate('studentId');
+    const studentAssignments = await this.studentAssignmentModel.find({
+      assignmentId: assignment._id,
+    });
     return studentAssignments;
   }
 

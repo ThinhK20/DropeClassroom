@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { GradeReviewsService } from './grade-reviews.service';
+import { GradeReview } from './schemas/grade-review.schema';
+import { CreateGradeReview } from './dto/create-grade-review.dto';
 
 @Controller('grade-reviews')
 export class GradeReviewsController {
@@ -7,7 +9,34 @@ export class GradeReviewsController {
   constructor(private gradeReviewsService: GradeReviewsService) {}
 
   @Get()
-  async getAssignmentAll(): Promise<string> {
-    return 'Hello assignment';
+  async getAllGradeReviews(): Promise<GradeReview[]> {
+    return await this.gradeReviewsService.getAllGradeReviews();
+  }
+
+  @Get('class/:id')
+  async getAllGradeReviewsByClassId(
+    @Param('id') id: string,
+  ): Promise<GradeReview[]> {
+    return await this.gradeReviewsService.getAllGradeReviewsByClassId(id);
+  }
+
+  @Post('create')
+  async createGradeReview(
+    @Body() gradeReview: CreateGradeReview,
+  ): Promise<GradeReview> {
+    try {
+      return await this.gradeReviewsService.createGradeReview(gradeReview);
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+  @Delete(':id')
+  async deleteGradeReview(@Param('id') id: string): Promise<boolean> {
+    try {
+      return await this.gradeReviewsService.deleteGradeReview(id);
+    } catch (ex) {
+      console.error(ex);
+    }
   }
 }
