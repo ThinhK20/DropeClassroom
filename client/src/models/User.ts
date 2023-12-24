@@ -9,6 +9,8 @@ export interface User {
    avatar?: string;
    createdDate: string;
    updatedDate: string;
+   about?: string;
+   address?: string;
 }
 
 export interface SignUpUser {
@@ -19,4 +21,11 @@ export interface SignUpUser {
    isActive?: boolean;
    gender?: string;
    role?: string;
+}
+export interface UpdateUserInfoDto {
+   username: string;
+   about: string;
+   address: string;
+   gender: string;
+   dateOfBirth: Date;
 }

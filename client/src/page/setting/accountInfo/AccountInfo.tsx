@@ -11,7 +11,11 @@ import InputSelect from "../../../components/inputs/inputSelect";
 import InputAreaText from "../../../components/inputs/inputAreaText";
 import InputBoxText from "../../../components/inputs/inputBoxText";
 import { useState } from "react";
-import { User } from "../../../models";
+import { UpdateUserInfoDto, User } from "../../../models";
+import { updateUserApi } from "../../../apis/userApis";
+import { useAppDispatch } from "../../../hooks/hooks";
+import { setUser } from "../../../store/userSlice";
+import { AxiosError } from "axios";
 
 interface Props {
   user: User;
@@ -19,6 +23,7 @@ interface Props {
 
 function AccountInfo({ user }: Props) {
   const [isDisabled, setIsDisabled] = useState(true);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -30,14 +35,23 @@ function AccountInfo({ user }: Props) {
     shouldUnregister: true,
     defaultValues: {
       username: user.username,
-      about: "asdfasd",
+      about: user.about,
+      address: user.address,
       gender: user.gender,
       dateOfBirth: dayjs(user.dateOfBirth),
     },
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
+    const controller = new AbortController();
+    updateUserApi(data as UpdateUserInfoDto, controller.signal).then((res) => {
+      dispatch(setUser(res));
+    }).catch((err: AxiosError) => {
+      console.log(err);
+    }).finally(() => {
+      setIsDisabled(true);
+      controller.abort();
+    });
   };
 
   return (
@@ -154,7 +168,13 @@ function AccountInfo({ user }: Props) {
           className={`text-xl p-2 px-6 rounded-lg  hover:bg-blue-50`}
           onClick={() => {
             setIsDisabled(true);
-            reset;
+            reset({
+              username: user.username,
+              about: user.about,
+              address: user.address,
+              gender: user.gender,
+              dateOfBirth: dayjs(user.dateOfBirth),
+            });
           }}
         >
           Cancel
