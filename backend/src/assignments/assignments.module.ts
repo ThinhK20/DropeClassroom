@@ -10,6 +10,7 @@ import {
   StudentAssignment,
   StudentAssignmentSchema,
 } from 'src/student-assignment/schemas/student-assignment.schema';
+import { ClassroomModule } from 'src/classroom/classroom.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {
       { name: Assignment.name, schema: AssignmentSchema },
       { name: StudentAssignment.name, schema: StudentAssignmentSchema },
     ]),
+    ClassroomModule,
   ],
   controllers: [AssignmentController],
   providers: [AssignmentService],

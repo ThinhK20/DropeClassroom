@@ -122,7 +122,6 @@ export class ClassroomService {
     const existClass = await this.classroomModel.findOne({
       classCode: code.classCode,
     });
-    console.log(existClass);
     if (!existClass) throw new NotFoundException('Classroom not found');
 
     const userClass = await this.userClassroomService.createUserClass({

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { UserClassroomDto } from './dto';
 import { UserClassroom } from './schemas/user-classroom.schema';
@@ -24,5 +32,12 @@ export class UserClassroomController {
     @Query('role') role: ROLE_CLASS,
   ): Promise<UserClassroom[]> {
     return this.userClassroomService.getAllClassWithRole(dto, role);
+  }
+
+  @Get('/:id')
+  async getSpecificUserClassroom(
+    @Param('id') id: string,
+  ): Promise<UserClassroom> {
+    return this.userClassroomService.getUser(id);
   }
 }
