@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
 import { User } from 'src/shared/schemas/user.schema';
+import { Classroom } from 'src/classroom/schemas/classroom.schema';
 
 export type NotificationDocument = HydratedDocument<Notification>;
 
@@ -18,6 +19,13 @@ export class Notification {
     ref: 'Assignment',
   })
   assignmentId: Assignment;
+
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Classroom',
+  })
+  classId: Classroom;
 
   @Prop({ required: true })
   title: string;

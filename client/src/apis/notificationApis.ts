@@ -7,6 +7,7 @@ export const getAllNotifications = async () => {
 export const createNotification = async (submitData: {
   studentId: string;
   assignmentId: string;
+  classId: string;
   title: string;
   content: string;
 }) => {

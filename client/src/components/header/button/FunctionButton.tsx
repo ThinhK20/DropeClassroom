@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import FunctionDropDown from "../../dropDown/FunctionDropDown";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import { getAllNotifications } from "../../../apis/notificationApis";
+import React from "react";
+import { useAppSelector } from "../../../hooks/hooks";
+import { Notification } from "../../../models/Notification";
 
 function FunctionButton() {
   const [isOpenDropDown, setIsOpenDropDown] = useState(false);
@@ -21,6 +25,20 @@ function FunctionButton() {
     };
   }, [isOpenDropDown]);
 
+  const [notifications, setNotifications] = React.useState<Notification[]>([]);
+
+  useEffect(() => {
+    getAllNotifications().then((res) => {
+      setNotifications(res.data);
+    });
+  }, []);
+
+  const currentUserId = useAppSelector((state) => state.users.data?._id);
+
+  const notificationLength = notifications.filter(
+    (notification) => notification.studentId === currentUserId
+  ).length;
+
   return (
     <>
       <button
@@ -29,6 +47,9 @@ function FunctionButton() {
         ref={nodeRef}
       >
         <NotificationsNoneOutlinedIcon />
+        <div className="absolute bottom-auto left-auto z-10 inline-block 0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-neutral-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white">
+          {notificationLength}
+        </div>
       </button>
       <FunctionDropDown isOpen={isOpenDropDown} />
     </>
