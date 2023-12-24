@@ -14,6 +14,9 @@ import { GetUser } from 'src/auth/decorator/user.decorator';
 import { User } from 'src/shared/schemas/user.schema';
 import { GetUserDto, UpdateUserDto } from './dto';
 import { UserResponse } from 'src/shared/types/response.type';
+import { Roles } from 'src/auth/decorator';
+import { Role } from 'src/shared/enums';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller()
 export class UsersController {
@@ -40,13 +43,23 @@ export class UsersController {
   }
 
   // Update User
-  @UseGuards(SessionGuard)
   @Patch('/u')
+  @UseGuards(SessionGuard)
   @HttpCode(HttpStatus.OK)
   async updateUser(
     @GetUser() u: User,
     @Body() update: UpdateUserDto,
   ): Promise<UserResponse> {
     return this.usersService._updateUser(u, update);
+  }
+
+  // Inactive User
+  @Patch('/u/b')
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @HttpCode(HttpStatus.OK)
+  async inActiveUser(@Body('userId') u: string) {
+    this.usersService._inActiveUser(u);
+    return Role.Admin;
   }
 }

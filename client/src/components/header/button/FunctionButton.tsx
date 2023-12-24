@@ -46,9 +46,11 @@ function FunctionButton() {
         onClick={() => setIsOpenDropDown(!isOpenDropDown)}
         ref={nodeRef}
       >
-        <NotificationsNoneOutlinedIcon />
-        <div className="absolute bottom-auto left-auto z-10 inline-block 0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-neutral-700 px-2.5 py-1 text-center align-baseline text-xs font-bold leading-none text-white">
-          {notificationLength}
+        <div className="relative">
+          <NotificationsNoneOutlinedIcon sx={{fontSize: 30}}/>
+          <div className={`${(notificationLength < 1) ? 'hidden' : 'block'} absolute bottom-[15px] right-[7px] z-10 inline-block whitespace-nowrap rounded-full bg-rose-500 transition-all w-[14px] h-[14px]`}>
+            <p className={`m-[0.5px] flex items-center justify-center font-bold leading-none text-white ${(notificationLength > 10) ? 'text-[8px]' : 'text-[12px]'} `}> {notificationLength}</p>
+          </div>
         </div>
       </button>
       <FunctionDropDown isOpen={isOpenDropDown} />

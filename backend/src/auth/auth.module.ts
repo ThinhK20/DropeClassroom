@@ -7,6 +7,7 @@ import { LocalStrategy } from './local.auth';
 import { UsersModule } from 'src/users/users.module';
 import { SessionSerializer } from './session.serializer';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -18,7 +19,13 @@ import { SendgridService } from 'src/sendgrid/sendgrid.service';
       signOptions: { expiresIn: 3600000 }, // 1 hour
     }),
   ],
-  providers: [AuthService, LocalStrategy, SessionSerializer, SendgridService],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    SessionSerializer,
+    SendgridService,
+    RolesGuard,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
