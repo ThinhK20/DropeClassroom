@@ -18,7 +18,6 @@ export default function ScoreTableCell(props: Props) {
    const handleClick = (event: any) => {
       setSubMenuEl(event.currentTarget);
    };
-   console.log(props.assignmentStatus);
 
    const handleClose = () => {
       setSubMenuEl(null);

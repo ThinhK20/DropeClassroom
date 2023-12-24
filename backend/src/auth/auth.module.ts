@@ -15,7 +15,7 @@ import { SendgridService } from 'src/sendgrid/sendgrid.service';
     PassportModule.register({ session: true }),
     JwtModule.register({
       secret: 'secretKey',
-      signOptions: { expiresIn: 36000 },
+      signOptions: { expiresIn: 3600000 }, // 1 hour
     }),
   ],
   providers: [AuthService, LocalStrategy, SessionSerializer, SendgridService],

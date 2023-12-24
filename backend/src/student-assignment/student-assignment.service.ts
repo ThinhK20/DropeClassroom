@@ -107,7 +107,7 @@ export class StudentAssignmentService {
     const mergedData = result1.reduce((acc: any, item) => {
       const existingItem = acc.find(
         (x) =>
-          x.studentId.toString() ===
+          x.studentId?.toString() ===
           item.studentAssignments[0]?.studentId?.toString(),
       );
 
@@ -151,9 +151,7 @@ export class StudentAssignmentService {
   async getAssignmentById(
     id: mongoose.Schema.Types.ObjectId,
   ): Promise<StudentAssignment> {
-    const assignment = await this.studentAssignmentModel
-      .findById(id)
-      .populate('studentId');
+    const assignment = await this.studentAssignmentModel.findById({ _id: id });
     if (!assignment) throw new NotFoundException('Assignment not found');
     return assignment;
   }

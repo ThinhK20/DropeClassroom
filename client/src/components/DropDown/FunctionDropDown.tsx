@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { getAllNotifications } from "../../apis/notificationApis";
 import { Notification } from "../../models/Notification";
 import React from "react";
-
 interface FunctionProps {
   isOpen: boolean;
 }
@@ -21,15 +20,9 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
     });
   }, []);
 
-  console.log(notifications);
-
   const currentUserId = useAppSelector((state) => state.users.data?._id);
 
   const currentUserName = useAppSelector((state) => state.users.data?.username);
-
-  const currentClass = useAppSelector(
-    (state) => state.userClassroom.currentClass?.classId.className
-  );
 
   const NotificationList = () => {
     return (
@@ -50,10 +43,10 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
                 </div>
                 <div className="ms-3 text-sm font-normal">
                   <div className="text-sm font-semibold text-gray-900">
-                    {currentUserName}
+                    {notification.studentId}
                   </div>
                   <div className="text-sm font-normal">
-                    created a new assignment in {currentClass} class
+                    created a new assignment in {notification.classId} class
                   </div>
                   <span className="text-xs font-medium text-blue-600 dark:text-blue-500">
                     a few seconds ago

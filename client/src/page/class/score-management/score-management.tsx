@@ -155,34 +155,36 @@ export default function ScoreManagement() {
                   </TableCell>
                   {renderTableSummaryCell()}
                </TableRow>
-               {groupStudentAssignmentsByStudentId.map((row: any) => (
-                  <TableRow
-                     key={row?.studentId}
-                     sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                     }}
-                  >
-                     <TableCell
-                        component="th"
-                        scope="row"
-                        className="flex items-center"
+               {groupStudentAssignmentsByStudentId.map((row: any) => {
+                  return (
+                     <TableRow
+                        key={row?.studentId}
+                        sx={{
+                           "&:last-child td, &:last-child th": { border: 0 },
+                        }}
                      >
-                        <Typography>Thinh Nguyen</Typography>
-                     </TableCell>
-                     {row.assignments.map((assignment: any, key: number) => {
-                        if (!assignment)
-                           return <ScoreTableCell key={key} score={0} />;
-                        return (
-                           <ScoreTableCell
-                              score={assignment?.averageScore}
-                              assignmentId={assignment._id}
-                              assignmentStatus={assignment?.status}
-                              key={key}
-                           />
-                        );
-                     })}
-                  </TableRow>
-               ))}
+                        <TableCell
+                           component="th"
+                           scope="row"
+                           className="flex items-center"
+                        >
+                           <Typography>Thinh Nguyen</Typography>
+                        </TableCell>
+                        {row.assignments.map((assignment: any, key: number) => {
+                           if (!assignment)
+                              return <ScoreTableCell key={key} score={0} />;
+                           return (
+                              <ScoreTableCell
+                                 score={assignment?.averageScore}
+                                 assignmentId={assignment._id}
+                                 assignmentStatus={assignment?.status}
+                                 key={key}
+                              />
+                           );
+                        })}
+                     </TableRow>
+                  );
+               })}
             </TableBody>
          </Table>
       </TableContainer>

@@ -13,6 +13,8 @@ import { MailController } from './mail/mail.controller';
 import { UserClassroomModule } from './user-classroom/user-classroom.module';
 import { StudentAssignmentModule } from './student-assignment/student-assignment.module';
 import { NotificationModule } from './notification/notification.module';
+import { GradeReviewsModule } from './grade-reviews/grade-reviews.module';
+import { GradeReviewsController } from './grade-reviews/grade-reviews.controller';
 
 @Module({
   imports: [
@@ -29,8 +31,9 @@ import { NotificationModule } from './notification/notification.module';
     UserClassroomModule,
     StudentAssignmentModule,
     NotificationModule,
+    GradeReviewsModule,
   ],
-  controllers: [AppController, MailController],
+  controllers: [AppController, MailController, GradeReviewsController],
   providers: [AppService, SendgridService],
 })
 export class AppModule {}

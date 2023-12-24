@@ -6,7 +6,8 @@ import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
-// import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
+import { ClassroomService } from 'src/classroom/classroom.service';
+import { ROLE_CLASS } from 'src/shared/enums';
 
 @Injectable()
 export class AssignmentService {
@@ -15,13 +16,25 @@ export class AssignmentService {
     private assignmentModel: mongoose.Model<Assignment>,
     @InjectModel(StudentAssignment.name)
     private studentAssignmentsModel: mongoose.Model<StudentAssignment>,
+    private classroomService: ClassroomService,
   ) {}
 
   async createNewAssignment(
     assignment: CreateAssignmentDto,
   ): Promise<Assignment> {
+    const users = (
+      await this.classroomService.getAllUser(assignment.assignmentClassId)
+    ).filter((u) => u.role === ROLE_CLASS.Student);
+
     const res = await this.assignmentModel.create({
       ...assignment,
+    });
+
+    users.forEach(async (user) => {
+      await this.studentAssignmentsModel.create({
+        assignmentId: res._id,
+        studentId: (user as any)._id,
+      });
     });
     return res;
   }

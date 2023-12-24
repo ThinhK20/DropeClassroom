@@ -42,14 +42,31 @@ export const getAllUsersClassApi = async (
   return (await axiosInstance.get(`c/${id}/uic`, { signal: controler })).data;
 };
 
-export const addUserToClassApi = async (id: string, body: ObjectUser, controler: AbortSignal) => {
-  return await axiosInstance.post(`c/${id}/uic`, body, {signal: controler})
-}
+export const addUserToClassApi = async (
+  id: string,
+  body: ObjectUser,
+  controler: AbortSignal
+) => {
+  return await axiosInstance.post(`c/${id}/uic`, body, { signal: controler });
+};
 
-export const deleteUserClassApi = async (id: string, body: {user: string}, controler: AbortSignal) => {
-  return await axiosInstance.post(`c/${id}/rm-uic`, body, {signal: controler})
-} 
+export const deleteUserClassApi = async (
+  id: string,
+  body: { user: string },
+  controler: AbortSignal
+) => {
+  return await axiosInstance.post(`c/${id}/rm-uic`, body, {
+    signal: controler,
+  });
+};
 
-export const userJoinClassByCodeApi = async (body: {classCode: string}, controler: AbortSignal) => {
-  return await axiosInstance.post(`c/uic`, body, {signal: controler});
-} 
+export const userJoinClassByCodeApi = async (
+  body: { classCode: string },
+  controler: AbortSignal
+) => {
+  return await axiosInstance.post(`c/uic`, body, { signal: controler });
+};
+
+export const getClassByIdApi = async (id: string) => {
+  return await axiosInstance.get(`c/${id}`);
+};

@@ -74,13 +74,18 @@ export class UserClassroomService {
   async getAllUser(classId: string): Promise<UserClassroom[]> {
     const lists = await this.userClassroomModel
       .find({ classId: classId })
-      .select('userId role -_id')
+      .select('userId role')
       .populate({
         path: 'userId',
         select: '_id username email',
       });
 
     return lists;
+  }
+
+  // get specific user classroom by user classroom id
+  async getUser(id: string): Promise<UserClassroom> {
+    return await this.userClassroomModel.findById(id);
   }
 
   // invite user in class
