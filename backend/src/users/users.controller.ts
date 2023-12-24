@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import { GetUser } from 'src/auth/decorator/user.decorator';
@@ -32,7 +41,8 @@ export class UsersController {
 
   // Update User
   @UseGuards(SessionGuard)
-  @Patch('/u/nic')
+  @Patch('/u')
+  @HttpCode(HttpStatus.OK)
   async updateUser(
     @GetUser() u: User,
     @Body() update: UpdateUserDto,
