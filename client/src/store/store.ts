@@ -9,6 +9,7 @@ import assignmentSlice from "./assignmentSlice";
 import updateAssignmentSlice from "./updateAssignmentSlice";
 import createAssignmentSlice from "./createAssignmentSlice";
 import gradeReviewsSlice from "./gradeReviewsSlice";
+import studentAssignmentSlice from "./studentAssignmentSlice";
 
 const rootReducer = combineReducers({
    users: userSlice,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
    updateAssignment: updateAssignmentSlice,
    assignment: assignmentSlice,
    gradeReviews: gradeReviewsSlice,
+   studentAssignments: studentAssignmentSlice,
 });
 
 const persistConfig = {
