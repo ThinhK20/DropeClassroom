@@ -30,6 +30,8 @@ function Header({ user, handleToggle }: Props) {
         title: currentClass?.classId.section,
       };
 
+      if(Number(url.id) === 9) return {name: "Admin", title: undefined};
+
     return { name: undefined, title: undefined };
   };
 

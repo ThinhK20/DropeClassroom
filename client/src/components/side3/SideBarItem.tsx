@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SideNavItem } from "../../shared/type/types";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
-import { useMatches } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface SideBarItemProps {
   item: SideNavItem;
@@ -9,7 +9,7 @@ interface SideBarItemProps {
 }
 
 function SideBarItem({ item, children }: SideBarItemProps) {
-  const [url] = useMatches();
+  const navLocaiton = useLocation();
 
   const [subMenuOpen, setSubMenuOpen] = useState(true);
   const [isActive, setIsActive] = useState(false);
@@ -17,11 +17,10 @@ function SideBarItem({ item, children }: SideBarItemProps) {
   const toggleSubMenu = () => {
     setSubMenuOpen(!subMenuOpen);
   };
-
   useEffect(() => {
-    if (url.pathname === item.path) setIsActive(true);
+    if (navLocaiton.pathname === item.path) setIsActive(true);
     else setIsActive(false);
-  }, [url.pathname, item.path]);
+  }, [navLocaiton.pathname, item.path]);
 
   return (
     <div className="py-1">
