@@ -15,6 +15,7 @@ import People from "../page/class/people/people";
 import ScoreManagement from "../page/class/score-management/score-management";
 import GradeReviews from "../page/class/grade-reviews/grade-reviews";
 import Admin from "../page/admin/Admin";
+import Dashboard from "../page/admin/dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -81,7 +82,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/ad/",
-        element: <div>Hello DashBoard</div>,
+        element: <Dashboard />,
       },
       {
         path: "/ad/u",
