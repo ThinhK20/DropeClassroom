@@ -19,3 +19,7 @@ export interface GroupStudentAssignmentsByStudentId {
    studentId: string;
    assignments: StudentAssignment[];
 }
+
+export interface GroupStudentAssignmentsByAssignmentId {
+   [key: string]: StudentAssignment[];
+}
