@@ -1,4 +1,5 @@
 import Widget from "../../../components/Card/Widget";
+import Table from "../../../components/table/Table";
 
 function Dashboard() {
   return (
@@ -8,6 +9,10 @@ function Dashboard() {
         <Widget type="class"/> 
         <Widget type="earning"/>
         <Widget type="balance"/>
+      </div>
+      <div className=" w-full listContainer p-[20px] m-[20px] shadow-[2px_4px_10px_1px_rgba(201,201,201,0.47)]">
+        <div className="listTitle font-[500] text-gray-600 mb-[15px]"> List Users </div>
+        <Table />
       </div>
     </div>
   );

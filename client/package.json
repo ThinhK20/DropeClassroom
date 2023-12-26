@@ -25,6 +25,7 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@mui/styled-engine-sc": "^6.0.0-alpha.6",
+    "@mui/x-data-grid": "^6.18.6",
     "@mui/x-date-pickers": "^6.18.2",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",

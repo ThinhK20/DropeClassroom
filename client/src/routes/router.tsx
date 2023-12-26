@@ -16,6 +16,7 @@ import ScoreManagement from "../page/class/score-management/score-management";
 import GradeReviews from "../page/class/grade-reviews/grade-reviews";
 import Admin from "../page/admin/Admin";
 import Dashboard from "../page/admin/dashboard/Dashboard";
+import Users from "../page/admin/users/Users";
 
 export const router = createBrowserRouter([
   {
@@ -86,7 +87,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/ad/u",
-        element: <div>Hello Users</div>,
+        element: <Users />,
       },
       {
         path: "/ad/cr",
@@ -102,7 +103,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/ad/s",
-        element: <div>Hello Setting</div>,
+        element: <div>Hello Settings</div>,
       },
     ],
   },

@@ -93,8 +93,7 @@ function Widget({ type }: Props) {
           {data?.title}
         </span>
         <span className="counter text-[36px] font-[300]">
-          {" "}
-          {data?.isMoney && "$"} {counter}{" "}
+          {data?.isMoney && "$"} {counter}
         </span>
         <span className="link text-[12px] border-b-[1px] border-gray-600 w-max">
           {data?.link}
@@ -105,7 +104,7 @@ function Widget({ type }: Props) {
           className={`percentage flex items-center text-[14px] text-red-600`}
         >
           <KeyboardArrowUpIcon />
-          20%
+          20 %
         </div>
         {data?.icon}
       </div>
