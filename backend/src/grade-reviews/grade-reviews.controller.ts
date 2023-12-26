@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { GradeReviewsService } from './grade-reviews.service';
 import { GradeReview } from './schemas/grade-review.schema';
 import { CreateGradeReview } from './dto/create-grade-review.dto';
@@ -26,6 +34,15 @@ export class GradeReviewsController {
   ): Promise<GradeReview> {
     try {
       return await this.gradeReviewsService.createGradeReview(gradeReview);
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+  @Put('update')
+  async updateGradeReview(@Body() gradeReview: GradeReview): Promise<boolean> {
+    try {
+      return await this.gradeReviewsService.updateGradeReview(gradeReview);
     } catch (ex) {
       console.error(ex);
     }

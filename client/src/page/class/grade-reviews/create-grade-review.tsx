@@ -16,13 +16,22 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import { useAppSelector } from "../../../hooks/hooks";
 import { useLocation } from "react-router-dom";
-import { CreateGradeReviewType } from "../../../models/GradeReview";
-import { createGradeReviewApi } from "../../../apis/gradeReviewsApis";
+import {
+   CreateGradeReviewType,
+   GradeReview,
+} from "../../../models/GradeReview";
+import {
+   createGradeReviewApi,
+   getAllGradeReviewsByClassIdApi,
+   updateGradeReviewApi,
+} from "../../../apis/gradeReviewsApis";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setGradeReviews } from "../../../store/gradeReviewsSlice";
 
 const Transition = React.forwardRef(function Transition(
    props: TransitionProps & {
@@ -33,7 +42,13 @@ const Transition = React.forwardRef(function Transition(
    return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function CreateGradeReview() {
+interface Props {
+   gradeReview?: GradeReview;
+   isEdit?: boolean;
+   children?: React.ReactElement;
+}
+
+export default function CreateGradeReview(props: Props) {
    const [open, setOpen] = useState(false);
    const location = useLocation();
    const assignments = useAppSelector((state) => state.assignment).assignments;
@@ -45,8 +60,13 @@ export default function CreateGradeReview() {
 
    const handleOpen = () => setOpen(true);
    const handleClose = () => setOpen(false);
+   const dispatch = useDispatch();
 
    const [submitData, setSubmitData] = useState<CreateGradeReviewType>();
+
+   useEffect(() => {
+      setSubmitData(props.gradeReview! as any);
+   }, []);
 
    function getClassId() {
       const inputString = location.pathname;
@@ -73,23 +93,48 @@ export default function CreateGradeReview() {
                (val) => (val.assignmentId as any) === assignmentId?.toString()
             )?._id,
       };
-      createGradeReviewApi(modifiedData as CreateGradeReviewType)
-         .then(() => {
-            toast.success("Request successfully.");
-         })
-         .catch((err) => toast.error(err))
-         .finally(() => {
-            handleClose();
-         });
+      if (props.gradeReview) {
+         updateGradeReviewApi(modifiedData as any)
+            .then(() => {
+               toast.success("Updated successfully");
+               fetchGradeReviewsApi();
+            })
+            .catch((err) => toast.error(err))
+            .finally(() => handleClose());
+      } else {
+         createGradeReviewApi(modifiedData as CreateGradeReviewType)
+            .then(() => {
+               toast.success("Request successfully.");
+               fetchGradeReviewsApi();
+            })
+            .catch((err) => toast.error(err))
+            .finally(() => {
+               handleClose();
+            });
+      }
+   }
+
+   function fetchGradeReviewsApi() {
+      getAllGradeReviewsByClassIdApi(getClassId()).then((res) => {
+         dispatch(setGradeReviews(res.data));
+      });
    }
 
    return (
       <div className="pt-2">
          {groupStudentAssignmentsByStudentId.length > 0 && (
             <Tooltip title="Create a new grade request">
-               <Button variant="outlined" color="primary" onClick={handleOpen}>
-                  Create
-               </Button>
+               {props.children ? (
+                  <div onClick={handleOpen}>{props.children}</div>
+               ) : (
+                  <Button
+                     variant="outlined"
+                     color="primary"
+                     onClick={handleOpen}
+                  >
+                     Create
+                  </Button>
+               )}
             </Tooltip>
          )}
          <Dialog
@@ -119,6 +164,7 @@ export default function CreateGradeReview() {
                      variant="outlined"
                      color="inherit"
                      onClick={handleSubmit}
+                     disabled={!props?.isEdit}
                   >
                      Submit
                   </Button>
@@ -160,6 +206,11 @@ export default function CreateGradeReview() {
                                     onChange={(e) =>
                                        setAssignmentId(e.target.value as string)
                                     }
+                                    defaultValue={
+                                       props.gradeReview?.studentAssignment
+                                          ?.assignmentId?._id
+                                    }
+                                    disabled={!props?.isEdit}
                                     className="flex w-full rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md"
                                  >
                                     {assignments.map((assignment) => (
@@ -186,6 +237,8 @@ export default function CreateGradeReview() {
                                     name="studentExplanation"
                                     className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     minRows={3}
+                                    disabled={!props?.isEdit}
+                                    value={submitData?.studentExplanation}
                                     onChange={(e) =>
                                        setSubmitData({
                                           ...submitData,
@@ -211,8 +264,10 @@ export default function CreateGradeReview() {
                                  <TextField
                                     name="gradeExpectation"
                                     type="number"
+                                    disabled={!props?.isEdit}
                                     inputProps={{ min: 0, max: 100 }}
                                     defaultValue={0}
+                                    value={submitData?.gradeExpectation}
                                     className="block w-fit rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                     onChange={(e) =>
                                        setSubmitData({
@@ -249,7 +304,9 @@ export default function CreateGradeReview() {
                                  </svg>
                                  <div className="flex-1 min-w-0">
                                     <p className="text-sm font-medium text-gray-900 truncate">
-                                       Thinh Nguyen
+                                       {props.gradeReview?.studentAssignment
+                                          ?.studentId?.userId?.username ||
+                                          "Unknown"}
                                     </p>
                                     <p className="text-sm text-gray-500 truncate">
                                        {new Date().toLocaleDateString()}

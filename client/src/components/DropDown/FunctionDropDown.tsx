@@ -22,12 +22,10 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
 
   const currentUserId = useAppSelector((state) => state.users.data?._id);
 
-  const currentUserName = useAppSelector((state) => state.users.data?.username);
-
   const NotificationList = () => {
     return (
       notifications.length > 0 &&
-      notifications.map(
+      notifications.reverse().map(
         (notification: Notification) =>
           notification.studentId === currentUserId && (
             <div
@@ -37,16 +35,16 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
               <div className="flex items-center">
                 <div className="relative inline-block shrink-0">
                   <AvatarCustom
-                    name={currentUserName as string}
+                    name={notification.title as string}
                     classroomAvatar={false}
                   />
                 </div>
                 <div className="ms-3 text-sm font-normal">
                   <div className="text-sm font-semibold text-gray-900">
-                    {notification.studentId}
+                    {notification.title}
                   </div>
                   <div className="text-sm font-normal">
-                    created a new assignment in {notification.classId} class
+                    {notification.content}
                   </div>
                   <span className="text-xs font-medium text-blue-600 dark:text-blue-500">
                     a few seconds ago

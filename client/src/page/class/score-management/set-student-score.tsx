@@ -2,16 +2,23 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
+   getAllStudentAssignmentsByClassId,
    getStudentAssignmentById,
    updateStudentAssignmentApi,
 } from "../../../apis/studentAssignmentApis";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../../hooks/hooks";
+import {
+   setGroupStudentAssignmentsByAssignmentId,
+   setGroupStudentAssignmentsByStudentId,
+} from "../../../store/studentAssignmentSlice";
 
 type Props = {
    id: string;
 };
 
 export default function SetStudentScore(props: Props) {
+   const dispatch = useAppDispatch();
    const [open, setOpen] = useState(false);
    const [student, setStudent] = useState<any>();
    const handleOpen = () => setOpen(true);
@@ -21,10 +28,43 @@ export default function SetStudentScore(props: Props) {
       updateStudentAssignmentApi(student._id, student)
          .then(() => {
             toast.success("Updated successfully.");
+            init();
          })
          .catch((err) => toast.error(err))
          .finally(() => handleClose());
    };
+
+   function getClassId() {
+      const inputString = location.pathname;
+
+      // Find the index of "/c/" and "/gb/"
+      const startIndex = inputString.indexOf("/c/") + 3;
+      const endIndex = inputString.indexOf("/gb/");
+
+      // Extract the substring between the indices
+      const result = inputString.slice(startIndex, endIndex);
+      return result;
+   }
+
+   function init() {
+      const promises = [
+         getAllStudentAssignmentsByClassId(true, getClassId()),
+         getAllStudentAssignmentsByClassId(true, getClassId(), true),
+      ];
+
+      Promise.all(promises)
+         .then(([groupAssignments1, groupAssignments2]) => {
+            dispatch(
+               setGroupStudentAssignmentsByAssignmentId(groupAssignments1.data)
+            );
+            dispatch(
+               setGroupStudentAssignmentsByStudentId(groupAssignments2.data)
+            );
+         })
+         .catch((error) => {
+            console.error("Error fetching data:", error);
+         });
+   }
 
    useEffect(() => {
       getStudentAssignmentById(props.id)

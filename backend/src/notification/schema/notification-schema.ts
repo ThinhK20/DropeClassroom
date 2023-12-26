@@ -14,7 +14,7 @@ export class Notification {
   studentId: User;
 
   @Prop({
-    required: true,
+    required: false,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Assignment',
   })

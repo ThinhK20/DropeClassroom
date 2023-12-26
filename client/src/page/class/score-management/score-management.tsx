@@ -11,28 +11,27 @@ import {
    TableRow,
    Typography,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { StudentAssignment } from "../../../models/StudentAssignment";
 import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
-import { getAssignmentsByClassId } from "../../../apis/assignmentApis";
 import { useLocation } from "react-router-dom";
-import { Assignment } from "../../../models";
 import ExportScoreBoard from "./export-score-board";
 import ScoreTableHead from "./score-table-head";
 import ScoreTableCell from "./score-table-cell";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { setGroupStudentAssignmentsByStudentId } from "../../../store/studentAssignmentSlice";
+import {
+   setGroupStudentAssignmentsByAssignmentId,
+   setGroupStudentAssignmentsByStudentId,
+} from "../../../store/studentAssignmentSlice";
 
 export default function ScoreManagement() {
-   const [groupStudentAssignmentsById, setGroupStudentAssignmentsById] =
-      useState<{
-         [key: string]: StudentAssignment[];
-      }>({});
-
-   const [assignments, setAssignments] = useState<Assignment[]>([]);
-
    const location = useLocation();
    const dispatch = useAppDispatch();
+
+   const assignments = useAppSelector((state) => state.assignment).assignments;
+   const groupStudentAssignmentsByAssignmentId = useAppSelector(
+      (state) => state.studentAssignments
+   ).data.groupStudentAssignmentsByAssignmentId;
    const groupStudentAssignmentsByStudentId = useAppSelector(
       (state) => state.studentAssignments
    ).data.groupStudentAssignmentsByStudentId;
@@ -52,7 +51,10 @@ export default function ScoreManagement() {
    const calculateAverageScores = useMemo(() => {
       const existedGroupIds = [] as string[];
       const averageScores = assignments.map((assignment) => {
-         const group = groupStudentAssignmentsById[assignment._id.toString()];
+         const group =
+            groupStudentAssignmentsByAssignmentId?.[
+               assignment._id.toString() as string
+            ];
          // Calculate total score
          if (group) {
             const totalScore = group.reduce(
@@ -82,7 +84,7 @@ export default function ScoreManagement() {
          }));
 
       return [...averageScores, ...otherGroups];
-   }, [assignments, groupStudentAssignmentsById]);
+   }, [assignments, groupStudentAssignmentsByAssignmentId]);
 
    useEffect(() => {
       init();
@@ -92,16 +94,16 @@ export default function ScoreManagement() {
       const promises = [
          getAllStudentAssignmentsByClassId(true, getClassId()),
          getAllStudentAssignmentsByClassId(true, getClassId(), true),
-         getAssignmentsByClassId(getClassId()),
       ];
 
       Promise.all(promises)
-         .then(([groupAssignments1, groupAssignments2, assignments]) => {
-            setGroupStudentAssignmentsById(groupAssignments1.data);
+         .then(([groupAssignments1, groupAssignments2]) => {
+            dispatch(
+               setGroupStudentAssignmentsByAssignmentId(groupAssignments1.data)
+            );
             dispatch(
                setGroupStudentAssignmentsByStudentId(groupAssignments2.data)
             );
-            setAssignments(assignments.data);
          })
          .catch((error) => {
             console.error("Error fetching data:", error);
