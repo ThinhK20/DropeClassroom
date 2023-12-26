@@ -7,11 +7,10 @@ import { Classroom } from 'src/classroom/schemas/classroom.schema';
 export class NotificationDto {
   readonly _id: mongoose.Schema.Types.ObjectId;
 
-  @IsNotEmpty()
-  readonly studentId: User;
+  readonly assignmentId: Assignment;
 
   @IsNotEmpty()
-  readonly assignmentId: Assignment;
+  readonly studentId: User;
 
   @IsNotEmpty()
   readonly classId: Classroom;
