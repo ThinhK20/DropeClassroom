@@ -13,6 +13,9 @@ import { getAllGradeReviewsByClassIdApi } from "../../../apis/gradeReviewsApis";
 import { useLocation } from "react-router-dom";
 import { setGradeReviews } from "../../../store/gradeReviewsSlice";
 import CreateGradeReview from "./create-grade-review";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import DeleteGradeReview from "./delete-grade-review";
 
 export default function GradeReviews() {
    const dispatch = useAppDispatch();
@@ -39,7 +42,9 @@ export default function GradeReviews() {
 
    return (
       <Paper sx={{ width: "100%", paddingTop: "50px" }}>
-         <CreateGradeReview />
+         <div className="ml-4">
+            <CreateGradeReview isEdit={true} />
+         </div>
          <TableContainer>
             <Table>
                <TableHead>
@@ -50,6 +55,7 @@ export default function GradeReviews() {
                      <TableCell>Grade Expectation</TableCell>
                      <TableCell>Student Explanation</TableCell>
                      <TableCell>Status</TableCell>
+                     <TableCell></TableCell>
                   </TableRow>
                </TableHead>
                <TableBody>
@@ -69,9 +75,42 @@ export default function GradeReviews() {
                            }
                         </TableCell>
                         <TableCell>{gradeReview.gradeExpectation}</TableCell>
-                        <TableCell>{gradeReview.studentExplanation}</TableCell>
+                        <TableCell className="max-w-[200px]">
+                           {gradeReview.studentExplanation}
+                        </TableCell>
                         <TableCell>
                            {gradeReview.studentAssignment.status}
+                        </TableCell>
+                        <TableCell>
+                           <div className="flex items-center gap-4">
+                              <div className="cursor-pointer">
+                                 <CreateGradeReview
+                                    gradeReview={gradeReview}
+                                    isEdit={false}
+                                 >
+                                    <FontAwesomeIcon icon={faEye} />
+                                 </CreateGradeReview>
+                              </div>
+                              <div className="cursor-pointer">
+                                 <CreateGradeReview
+                                    gradeReview={gradeReview}
+                                    isEdit={true}
+                                 >
+                                    <FontAwesomeIcon
+                                       icon={faPencil}
+                                       className="hover:opacity-75"
+                                    />
+                                 </CreateGradeReview>
+                              </div>
+                              <div className="cursor-pointer">
+                                 <DeleteGradeReview gradeReview={gradeReview}>
+                                    <FontAwesomeIcon
+                                       icon={faTrash}
+                                       className="hover:opacity-75"
+                                    />
+                                 </DeleteGradeReview>
+                              </div>
+                           </div>
                         </TableCell>
                      </TableRow>
                   ))}
