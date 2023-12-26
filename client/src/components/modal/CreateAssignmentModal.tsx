@@ -9,10 +9,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import AddIcon from "@mui/icons-material/Add";
 import { TransitionProps } from "@mui/material/transitions";
-import { Assignment } from "../../models";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
-import { useNavigate } from "react-router-dom";
 import { createNotification } from "../../apis/notificationApis";
 
 const Transition = React.forwardRef(function Transition(

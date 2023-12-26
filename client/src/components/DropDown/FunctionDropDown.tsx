@@ -22,8 +22,6 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
 
   const currentUserId = useAppSelector((state) => state.users.data?._id);
 
-  const currentUserName = useAppSelector((state) => state.users.data?.username);
-
   const NotificationList = () => {
     return (
       notifications.length > 0 &&
