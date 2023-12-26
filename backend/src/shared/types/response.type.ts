@@ -14,7 +14,7 @@ export type userClassResponse<T> = {
 };
 
 export type UserResponse = {
-  _id: string;
+  _id: mongoose.Schema.Types.ObjectId;
 
   username: string;
 

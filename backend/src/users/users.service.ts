@@ -90,7 +90,7 @@ export class UsersService {
     if (!res) throw new NotFoundException('User not found');
 
     return {
-      _id: res._id.toString(),
+      _id: res._id,
       username: res.username,
       email: res.email,
       dateOfBirth: res.dateOfBirth,
@@ -111,5 +111,23 @@ export class UsersService {
     } catch (err) {
       throw new BadRequestException(err);
     }
+  }
+
+  // Active User
+  async _activeUser(userId: string) {
+    try {
+      await this.userModel.findByIdAndUpdate(userId, { isActive: true });
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  // Get All user filter me
+  async _getAllUser(ad: User): Promise<UserResponse[]> {
+    const res = await this.userModel
+      .find({ _id: { $ne: ad._id } })
+      .select('-__v -password');
+    if (!res) return [];
+    return res;
   }
 }
