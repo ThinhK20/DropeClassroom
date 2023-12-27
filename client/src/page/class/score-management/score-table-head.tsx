@@ -14,6 +14,8 @@ import { updateAssignmentStatusApi } from "../../../apis/assignmentApis";
 import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 import { toast } from "react-toastify";
 import ViewAssigmentModal from "../../../components/modal/ViewAssignmentModal";
+import { useDispatch } from "react-redux";
+import { setAssignments } from "../../../store/assignmentSlice";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -23,6 +25,7 @@ export default function ScoreTableHead(props: Props) {
    const [subMenuEl, setSubMenuEl] = useState(null);
    // const [openMarkFinishConfirm, setOpenMarkFinishConfirm] = useState(false);
    const open = Boolean(subMenuEl);
+   const dispatch = useDispatch();
    const handleClick = (event: any) => {
       setSubMenuEl(event.currentTarget);
    };
@@ -31,12 +34,48 @@ export default function ScoreTableHead(props: Props) {
       setSubMenuEl(null);
    };
 
+   function getClassId() {
+      const inputString = location.pathname;
+
+      // Find the index of "/c/" and "/gb/"
+      const startIndex = inputString.indexOf("/c/") + 3;
+      const endIndex = inputString.indexOf("/gb/");
+
+      // Extract the substring between the indices
+      const result = inputString.slice(startIndex, endIndex);
+      return result;
+   }
+
+   const getAllAssignments = async () => {
+      await fetch("http://localhost:8000/assignment", {
+         method: "GET",
+         headers: {
+            "Content-Type": "application/json",
+         },
+      })
+         .then((res) => res.json())
+         .then((data: Assignment[]) => {
+            dispatch(
+               setAssignments(
+                  data.filter(
+                     (assignment) =>
+                        assignment.assignmentClassId === getClassId()
+                  )
+               )
+            );
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
+
    function markAssignmentToFinish() {
       updateAssignmentStatusApi(
          props.assignment?._id?.toString() as string,
          AssignmentStatusEnum.Completed
       )
          .then(() => {
+            getAllAssignments();
             toast.success(
                `Mark assignment ${props.assignment?.assignmentName} as completed successfully.`
             );

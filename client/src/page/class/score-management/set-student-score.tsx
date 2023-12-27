@@ -25,7 +25,6 @@ export default function SetStudentScore(props: Props) {
    const handleClose = () => setOpen(false);
 
    const handleSubmit = () => {
-      console.log("id: ", student._id);
       updateStudentAssignmentApi(student._id, student)
          .then(() => {
             toast.success("Updated successfully.");
@@ -70,7 +69,6 @@ export default function SetStudentScore(props: Props) {
    useEffect(() => {
       getStudentAssignmentById(props.id)
          .then((res) => {
-            console.log("Res data:", res.data);
             setStudent(res.data);
          })
          .catch((err) => console.log("Error: ", err));

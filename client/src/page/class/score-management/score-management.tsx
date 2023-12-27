@@ -92,7 +92,6 @@ export default function ScoreManagement() {
 
    useEffect(() => {
       init();
-      getAllAssignments();
    }, []);
 
    async function getAllUsers() {
@@ -138,6 +137,8 @@ export default function ScoreManagement() {
          getAllStudentAssignmentsByClassId(true, getClassId()),
          getAllStudentAssignmentsByClassId(true, getClassId(), true),
       ];
+
+      getAllAssignments();
 
       Promise.all(promises)
          .then(([groupAssignments1, groupAssignments2]) => {
