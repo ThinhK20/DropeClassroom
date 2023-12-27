@@ -246,7 +246,7 @@ export default function CreateAssignmentModal(props: {
                     </div>
                   </div>
 
-                  <div className="col-span-full">
+                  {/* <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
@@ -287,7 +287,7 @@ export default function CreateAssignmentModal(props: {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
