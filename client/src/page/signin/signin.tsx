@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -14,7 +15,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Alert } from "@mui/material";
 import { validateEmail } from "../../libs/utils";
-import { loginApi } from "../../apis/authApis";
+import { loginApi, loginByGoogleApi } from "../../apis/authApis";
 import { AxiosError } from "axios";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setLogin } from "../../store/userSlice";
@@ -55,6 +56,24 @@ export default function SignIn() {
             setErrorMsg((ex.response?.data as any)?.message as string);
          });
    };
+
+   const handleLoginByGoogle = () => {
+      window.location.href = loginByGoogleApi();
+   };
+
+   React.useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search) as any;
+      if (urlParams.has("authResult")) {
+         if (urlParams.has("authResult")) {
+            let authResult = JSON.parse(
+               decodeURIComponent(urlParams.get("authResult"))
+            );
+            authResult = { ...authResult, isActive: true };
+            dispatch(setLogin(authResult));
+            navigate("/");
+         }
+      }
+   }, []);
 
    return (
       <ThemeProvider theme={defaultTheme}>
@@ -108,6 +127,26 @@ export default function SignIn() {
                      sx={{ mt: 3, mb: 2 }}
                   >
                      Sign In
+                  </Button>
+                  <Typography component="h2" className="text-center text-sm">
+                     or
+                  </Typography>
+                  <Button
+                     type="button"
+                     fullWidth
+                     variant="contained"
+                     color="inherit"
+                     className="bg-white"
+                     sx={{ mb: 2 }}
+                     onClick={handleLoginByGoogle}
+                  >
+                     <img
+                        className="w-6 h-6 mr-2"
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        loading="lazy"
+                        alt="google logo"
+                     />
+                     <span>Login with Google</span>
                   </Button>
                   <Grid container>
                      <Grid item xs>
