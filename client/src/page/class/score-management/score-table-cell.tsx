@@ -5,11 +5,11 @@ import SetStudentScore from "./set-student-score";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
+import { StudentAssignment } from "../../../models/StudentAssignment";
 
 interface Props {
    score: number;
-   assignmentId?: string;
-   assignmentStatus?: AssignmentStatusEnum;
+   studentAssignment?: StudentAssignment;
 }
 
 export default function ScoreTableCell(props: Props) {
@@ -61,12 +61,15 @@ export default function ScoreTableCell(props: Props) {
                      },
                   }}
                >
-                  {props.assignmentStatus !==
+                  {props.studentAssignment?.status !==
                      AssignmentStatusEnum.Completed && (
                      <MenuItem>
-                        <SetStudentScore id={props.assignmentId as string} />
+                        <SetStudentScore
+                           id={props.studentAssignment?.assignmentId as any}
+                        />
                      </MenuItem>
                   )}
+
                   <MenuItem>View</MenuItem>
                </Menu>
             </div>

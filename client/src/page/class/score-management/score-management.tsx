@@ -24,7 +24,8 @@ import {
    setGroupStudentAssignmentsByStudentId,
 } from "../../../store/studentAssignmentSlice";
 import { getUserClassroomApi } from "../../../apis/userClassroomApis";
-import { User, UserClassRoom } from "../../../models";
+import { Assignment, User, UserClassRoom } from "../../../models";
+import { setAssignments } from "../../../store/assignmentSlice";
 
 export default function ScoreManagement() {
    const location = useLocation();
@@ -91,6 +92,7 @@ export default function ScoreManagement() {
 
    useEffect(() => {
       init();
+      getAllAssignments();
    }, []);
 
    async function getAllUsers() {
@@ -107,6 +109,29 @@ export default function ScoreManagement() {
    useEffect(() => {
       getAllUsers().then((value) => setUsers(value as any));
    }, [groupStudentAssignmentsByStudentId]);
+
+   const getAllAssignments = async () => {
+      await fetch("http://localhost:8000/assignment", {
+         method: "GET",
+         headers: {
+            "Content-Type": "application/json",
+         },
+      })
+         .then((res) => res.json())
+         .then((data: Assignment[]) => {
+            dispatch(
+               setAssignments(
+                  data.filter(
+                     (assignment) =>
+                        assignment.assignmentClassId === getClassId()
+                  )
+               )
+            );
+         })
+         .catch((err) => {
+            console.log(err);
+         });
+   };
 
    function init() {
       const promises = [
@@ -206,8 +231,7 @@ export default function ScoreManagement() {
                            return (
                               <ScoreTableCell
                                  score={assignment?.averageScore}
-                                 assignmentId={assignment._id}
-                                 assignmentStatus={assignment?.status}
+                                 studentAssignment={assignment}
                                  key={key}
                               />
                            );

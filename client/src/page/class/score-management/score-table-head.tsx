@@ -13,6 +13,7 @@ import { useState } from "react";
 import { updateAssignmentStatusApi } from "../../../apis/assignmentApis";
 import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 import { toast } from "react-toastify";
+import ViewAssigmentModal from "../../../components/modal/ViewAssignmentModal";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -94,7 +95,15 @@ export default function ScoreTableHead(props: Props) {
                         Mark to finish
                      </MenuItem>
                   )}
-                  <MenuItem>View</MenuItem>
+                  <ViewAssigmentModal
+                     assignment={props.assignment as any}
+                     isOpen={true}
+                     onClose={() => {
+                        // setShowModal(false);
+                     }}
+                     title="View"
+                     role={""}
+                  />
                </Menu>
             </div>
          </div>

@@ -34,6 +34,7 @@ export default function ViewAssigmentModal(props: {
    onClose: () => void;
    assignment: Assignment;
    role?: string;
+   title?: string;
 }) {
    const [open, setOpen] = React.useState(false);
    const handleOpen = () => setOpen(true);
@@ -41,15 +42,26 @@ export default function ViewAssigmentModal(props: {
 
    return (
       <React.Fragment>
-         <Button
-            variant="outlined"
-            onClick={handleOpen}
-            style={{
-               border: "0px solid #3f51b5",
-            }}
-         >
-            {props.assignment.assignmentName}
-         </Button>
+         {props.title ? (
+            <Button
+               variant="text"
+               color="inherit"
+               className="w-fit text-gray-600"
+               onClick={handleOpen}
+            >
+               {props.title}
+            </Button>
+         ) : (
+            <Button
+               variant="outlined"
+               onClick={handleOpen}
+               style={{
+                  border: "0px solid #3f51b5",
+               }}
+            >
+               {props.assignment.assignmentName}
+            </Button>
+         )}
          <Dialog
             fullScreen
             open={open}
@@ -109,21 +121,21 @@ export default function ViewAssigmentModal(props: {
                      <span className="medium-32 text-blue-600">
                         {props.assignment.assignmentName}
                      </span>
-                     <span className="text-gray-400 ml-3">
+                     <span className="text-black ml-3">
                         {props.assignment.assignmentDueDate}
                      </span>
                   </div>
                   <div className="my-5">
-                     <span className="text-gray-400 ml-3">
+                     <span className="text-black ml-3 font-bold">
                         {props.assignment.assignmentCreatedBy}
                      </span>
                   </div>
                   <div className="my-3">
-                     <span className="text-gray-400 ml-3">
-                        {props.assignment.assignmentGrade} marks
+                     <span className="text-green-600 ml-3">
+                        Maximum: {props.assignment.assignmentGrade} marks
                      </span>
                   </div>
-                  <span className="text-gray-400 ml-3">
+                  <span className="text-black ml-3">
                      {props.assignment.assignmentDescription}
                   </span>
                </div>

@@ -70,8 +70,9 @@ export class GradeReviewsService {
         status: AssignmentStatus.Completed,
       },
     );
-    gradeReview.status = AssignmentStatus.Completed;
-    await this.gradeReviewModel.findOneAndUpdate(gradeReview);
+    await this.gradeReviewModel.findByIdAndUpdate(gradeReview._id, {
+      status: AssignmentStatus.Completed,
+    });
 
     return res ? true : false;
   }
