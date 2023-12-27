@@ -186,14 +186,15 @@ export default function CreateGradeReview(props: Props) {
                   >
                      Request Grade Review
                   </Typography>
-                  <Button
-                     variant="outlined"
-                     color="inherit"
-                     onClick={handleSubmit}
-                     disabled={!props?.isEdit}
-                  >
-                     Submit
-                  </Button>
+                  {props.isEdit && (
+                     <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={handleSubmit}
+                     >
+                        Submit
+                     </Button>
+                  )}
                   {props.gradeReview?.status !==
                      AssignmentStatusEnum.Completed && (
                      <Button

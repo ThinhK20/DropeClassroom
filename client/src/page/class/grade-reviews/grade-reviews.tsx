@@ -1,4 +1,5 @@
 import {
+   Chip,
    Paper,
    Table,
    TableBody,
@@ -79,7 +80,32 @@ export default function GradeReviews() {
                         <TableCell className="max-w-[200px]">
                            {gradeReview.studentExplanation}
                         </TableCell>
-                        <TableCell>{gradeReview.status}</TableCell>
+                        <TableCell>
+                           {gradeReview.status ===
+                              AssignmentStatusEnum.Completed && (
+                              <Chip
+                                 label={gradeReview.status}
+                                 color="success"
+                                 variant="filled"
+                              />
+                           )}
+                           {gradeReview.status ===
+                              AssignmentStatusEnum.Pending && (
+                              <Chip
+                                 label={gradeReview.status}
+                                 color="warning"
+                                 variant="filled"
+                              />
+                           )}
+                           {gradeReview.status ===
+                              AssignmentStatusEnum.Dismissed && (
+                              <Chip
+                                 label={gradeReview.status}
+                                 color="error"
+                                 variant="filled"
+                              />
+                           )}
+                        </TableCell>
                         <TableCell>
                            <div className="flex items-center gap-4">
                               <div className="cursor-pointer">

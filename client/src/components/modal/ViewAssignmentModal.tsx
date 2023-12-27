@@ -46,7 +46,7 @@ export default function ViewAssigmentModal(props: {
             <Button
                variant="text"
                color="inherit"
-               className="w-fit text-gray-600"
+               className="w-fit text-gray-400"
                onClick={handleOpen}
             >
                {props.title}
