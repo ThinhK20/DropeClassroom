@@ -17,6 +17,7 @@ import GradeReviews from "../page/class/grade-reviews/grade-reviews";
 import Admin from "../page/admin/Admin";
 import Dashboard from "../page/admin/dashboard/Dashboard";
 import Users from "../page/admin/users/Users";
+import Classrooms from "../page/admin/classrooms/Classrooms";
 
 export const router = createBrowserRouter([
   {
@@ -91,7 +92,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/ad/cr",
-        element: <div>Hello Classrooms</div>,
+        element: <Classrooms />,
       },
       {
         path: "/ad/stats",

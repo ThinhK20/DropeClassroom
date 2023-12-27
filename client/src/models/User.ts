@@ -2,7 +2,7 @@ export interface User {
   _id: string;
   username: string;
   email: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   isActive: boolean;
   gender: string;
   role: string;
@@ -46,9 +46,9 @@ export interface UserResponse {
 
   role: string;
 
-  createdDate: string;
+  // createdAt: string;
 
-  updatedDate: string;
+  // updatedAt: string;
 
   address: string;
 

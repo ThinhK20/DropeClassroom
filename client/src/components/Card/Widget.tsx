@@ -6,12 +6,11 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 
 interface Props {
   type: string;
+  counter?: number;
 }
 
-function Widget({ type }: Props) {
+function Widget({ type, counter = 100 }: Props) {
   let data;
-
-  const counter = 100;
 
   switch (type) {
     case "user":
