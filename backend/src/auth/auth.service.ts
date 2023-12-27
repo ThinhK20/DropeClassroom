@@ -90,15 +90,16 @@ export class AuthService {
     return false;
   }
 
-  generateRenewPasswordLink(
-    userId: string,
-    newPassword: string,
-    token: string,
-  ) {
-    return `http://localhost:8000/auth/reset-password?token=${token}&id=${userId}&password=${newPassword}`;
+  generateRenewPasswordLink(userId: string, token: string) {
+    return `${process.env.CLIENT_URL}/forgot-password?token=${token}&id=${userId}`;
   }
 
   generateActivateAccountLink(userId: string) {
-    return `http://localhost:8000/auth/active-account?id=${userId}`;
+    return `${process.env.BACKEND_URL}/auth/active-account?id=${userId}`;
+  }
+
+  googleLogin(req: any) {
+    if (!req.user) return 'Invalid google user';
+    return req.user;
   }
 }

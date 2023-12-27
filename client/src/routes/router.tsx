@@ -18,94 +18,99 @@ import Admin from "../page/admin/Admin";
 import Dashboard from "../page/admin/dashboard/Dashboard";
 import Users from "../page/admin/users/Users";
 import Classrooms from "../page/admin/classrooms/Classrooms";
+import ForgotPassword from "../page/forgot-password/forgot-password";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "/h",
-    element: <Home />,
-  },
-  {
-    path: "/schedule",
-    element: <Schedule />,
-  },
-  {
-    path: "/h/archived",
-    element: <Archived />,
-  },
-  {
-    path: "/s",
-    element: <Setting />,
-  },
-  {
-    path: "/c/:id",
-    element: <ClassRoom />,
-    children: [
-      {
-        path: "/c/:id",
-        element: <Stream />,
-      },
-      {
-        path: "w/t/all",
-        element: <ListAssignments />,
-      },
-      {
-        path: "uic/all",
-        element: <People />,
-      },
-      {
-        path: "gb/all",
-        element: <ScoreManagement />,
-      },
-      {
-        path: "gr/all",
-        element: <GradeReviews />,
-      },
-    ],
-  },
-  {
-    path: "/signin",
-    element: <SignIn />,
-  },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
-  {
-    path: "/testing",
-    element: <ExcelTable />,
-  },
-  {
-    path: "/ad",
-    element: <Admin />,
-    children: [
-      {
-        path: "/ad/",
-        element: <Dashboard />,
-      },
-      {
-        path: "/ad/u",
-        element: <Users />,
-      },
-      {
-        path: "/ad/cr",
-        element: <Classrooms />,
-      },
-      {
-        path: "/ad/stats",
-        element: <div>stats</div>,
-      },
-      {
-        path: "/ad/notifi",
-        element: <div>Hello Notifications</div>,
-      },
-      {
-        path: "/ad/s",
-        element: <div>Hello Settings</div>,
-      },
-    ],
-  },
+   {
+      path: "/",
+      element: <App />,
+   },
+   {
+      path: "/h",
+      element: <Home />,
+   },
+   {
+      path: "/schedule",
+      element: <Schedule />,
+   },
+   {
+      path: "/h/archived",
+      element: <Archived />,
+   },
+   {
+      path: "/s",
+      element: <Setting />,
+   },
+   {
+      path: "/c/:id",
+      element: <ClassRoom />,
+      children: [
+         {
+            path: "/c/:id",
+            element: <Stream />,
+         },
+         {
+            path: "w/t/all",
+            element: <ListAssignments />,
+         },
+         {
+            path: "uic/all",
+            element: <People />,
+         },
+         {
+            path: "gb/all",
+            element: <ScoreManagement />,
+         },
+         {
+            path: "gr/all",
+            element: <GradeReviews />,
+         },
+      ],
+   },
+   {
+      path: "/signin",
+      element: <SignIn />,
+   },
+   {
+      path: "/signup",
+      element: <SignUp />,
+   },
+   {
+      path: "/forgot-password",
+      element: <ForgotPassword />,
+   },
+   {
+      path: "/testing",
+      element: <ExcelTable />,
+   },
+   {
+      path: "/ad",
+      element: <Admin />,
+      children: [
+         {
+            path: "/ad/",
+            element: <Dashboard />,
+         },
+         {
+            path: "/ad/u",
+            element: <Users />,
+         },
+         {
+            path: "/ad/cr",
+            element: <Classrooms />,
+         },
+         {
+            path: "/ad/stats",
+            element: <div>stats</div>,
+         },
+         {
+            path: "/ad/notifi",
+            element: <div>Hello Notifications</div>,
+         },
+         {
+            path: "/ad/s",
+            element: <div>Hello Settings</div>,
+         },
+      ],
+   },
 ]);

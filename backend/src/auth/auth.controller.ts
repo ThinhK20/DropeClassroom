@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Request,
@@ -7,14 +8,15 @@ import {
   Body,
   NotFoundException,
   Query,
-  BadRequestException,
+  Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/localauth.guard';
 import { SessionGuard } from './guards/session.guard';
-import { User } from 'src/shared/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/shared/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -56,23 +58,20 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(
-    @Body() body: { email: string; oldPassword: string; newPassword: string },
-  ) {
+  async forgotPassword(@Body() body: { email: string }) {
     const user = await this.userService.getUserByQuery({ email: body.email });
     if (!user) throw new NotFoundException('User does not exists.');
-    if (!this.authService.validatePassword(body.oldPassword, user.password))
-      throw new BadRequestException('Password incorrect.');
     const token = await this.authService.initiatePasswordReset(user.email);
     const renewPasswordLink = await this.authService.generateRenewPasswordLink(
       user._id.toString(),
-      body.newPassword,
       token,
     );
     await this.sendgridService.sendRenewPasswordEmail(
       user.email,
       renewPasswordLink,
     );
+
+    return "We've sent an email to renew password for you.";
   }
 
   @Get('reset-password')
@@ -96,5 +95,22 @@ export class AuthController {
       throw new NotFoundException('Not found your account. Please try again !');
     await this.userService.activeUser(userId);
     return 'Your account has been successfully activated. You can now continue to use our services. Thanks for choosing Drope Classroom.';
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Request() req) {}
+
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Request() req, @Response() res) {
+    const redirectUrl =
+      req.query.redirect || `${process.env.CLIENT_URL}/signin`;
+    const result = this.authService.googleLogin(req);
+    const redirectWithAuthResult = `${redirectUrl}?authResult=${encodeURIComponent(
+      JSON.stringify(result),
+    )}`;
+
+    return res.redirect(redirectWithAuthResult);
   }
 }

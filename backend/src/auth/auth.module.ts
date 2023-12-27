@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { SessionSerializer } from './session.serializer';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
 import { RolesGuard } from './guards/roles.guard';
+import { GoogleStrategy } from './google.auth';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { RolesGuard } from './guards/roles.guard';
     SessionSerializer,
     SendgridService,
     RolesGuard,
+    GoogleStrategy,
   ],
   controllers: [AuthController],
 })
