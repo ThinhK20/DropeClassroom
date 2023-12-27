@@ -3,12 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { GradeReview } from './schemas/grade-review.schema';
 import { CreateGradeReview } from './dto/create-grade-review.dto';
+import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
+import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
 
 @Injectable()
 export class GradeReviewsService {
   constructor(
     @InjectModel(GradeReview.name)
     private gradeReviewModel: mongoose.Model<GradeReview>,
+    @InjectModel(StudentAssignment.name)
+    private studentAssignmentModel: mongoose.Model<StudentAssignment>,
   ) {}
 
   async getAllGradeReviews(): Promise<GradeReview[]> {
@@ -53,5 +57,22 @@ export class GradeReviewsService {
 
   async deleteGradeReview(id: string): Promise<boolean> {
     return await this.gradeReviewModel.findByIdAndDelete(id);
+  }
+
+  async acceptGradeReview(gradeReview: GradeReview): Promise<boolean> {
+    const gradeReviewEntity = await this.gradeReviewModel.findById(
+      gradeReview._id,
+    );
+    const res = await this.studentAssignmentModel.findByIdAndUpdate(
+      gradeReviewEntity.studentAssignment,
+      {
+        grade: gradeReviewEntity.gradeExpectation,
+        status: AssignmentStatus.Completed,
+      },
+    );
+    gradeReview.status = AssignmentStatus.Completed;
+    await this.gradeReviewModel.findOneAndUpdate(gradeReview);
+
+    return res ? true : false;
   }
 }

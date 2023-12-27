@@ -1,5 +1,5 @@
 import { axiosInstance } from "./axiosInterceptor";
 
-export const getUserClassroom = async (id: string) => {
+export const getUserClassroomApi = async (id: string) => {
    return await axiosInstance.get(`/uic/${id}`);
 };

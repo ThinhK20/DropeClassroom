@@ -68,7 +68,6 @@ export default function ScoreTableCell(props: Props) {
                      </MenuItem>
                   )}
                   <MenuItem>View</MenuItem>
-                  <MenuItem>Accept reasons</MenuItem>
                </Menu>
             </div>
          </div>

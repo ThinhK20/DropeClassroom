@@ -18,4 +18,5 @@ export interface UserClassRoom {
    classId?: string | Classroom;
    userId?: User;
    role?: string;
+   _id?: string;
 }

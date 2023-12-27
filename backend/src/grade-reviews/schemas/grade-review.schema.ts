@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
 import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
@@ -28,6 +29,12 @@ export class GradeReview {
 
   @Prop({ default: '' })
   studentExplanation: string;
+
+  @Prop({
+    enum: AssignmentStatus,
+    default: AssignmentStatus.Pending,
+  })
+  status: AssignmentStatus;
 }
 
 export const GradeReviewSchema = SchemaFactory.createForClass(GradeReview);

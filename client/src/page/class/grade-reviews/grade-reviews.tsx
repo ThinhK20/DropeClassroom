@@ -16,6 +16,7 @@ import CreateGradeReview from "./create-grade-review";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import DeleteGradeReview from "./delete-grade-review";
+import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 
 export default function GradeReviews() {
    const dispatch = useAppDispatch();
@@ -78,9 +79,7 @@ export default function GradeReviews() {
                         <TableCell className="max-w-[200px]">
                            {gradeReview.studentExplanation}
                         </TableCell>
-                        <TableCell>
-                           {gradeReview.studentAssignment.status}
-                        </TableCell>
+                        <TableCell>{gradeReview.status}</TableCell>
                         <TableCell>
                            <div className="flex items-center gap-4">
                               <div className="cursor-pointer">
@@ -92,23 +91,31 @@ export default function GradeReviews() {
                                  </CreateGradeReview>
                               </div>
                               <div className="cursor-pointer">
-                                 <CreateGradeReview
-                                    gradeReview={gradeReview}
-                                    isEdit={true}
-                                 >
-                                    <FontAwesomeIcon
-                                       icon={faPencil}
-                                       className="hover:opacity-75"
-                                    />
-                                 </CreateGradeReview>
+                                 {gradeReview.status !==
+                                    AssignmentStatusEnum.Completed && (
+                                    <CreateGradeReview
+                                       gradeReview={gradeReview}
+                                       isEdit={true}
+                                    >
+                                       <FontAwesomeIcon
+                                          icon={faPencil}
+                                          className="hover:opacity-75"
+                                       />
+                                    </CreateGradeReview>
+                                 )}
                               </div>
                               <div className="cursor-pointer">
-                                 <DeleteGradeReview gradeReview={gradeReview}>
-                                    <FontAwesomeIcon
-                                       icon={faTrash}
-                                       className="hover:opacity-75"
-                                    />
-                                 </DeleteGradeReview>
+                                 {gradeReview.status !==
+                                    AssignmentStatusEnum.Completed && (
+                                    <DeleteGradeReview
+                                       gradeReview={gradeReview}
+                                    >
+                                       <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="hover:opacity-75"
+                                       />
+                                    </DeleteGradeReview>
+                                 )}
                               </div>
                            </div>
                         </TableCell>

@@ -25,6 +25,7 @@ import {
    GradeReview,
 } from "../../../models/GradeReview";
 import {
+   acceptGradeReviewApi,
    createGradeReviewApi,
    getAllGradeReviewsByClassIdApi,
    updateGradeReviewApi,
@@ -32,6 +33,7 @@ import {
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setGradeReviews } from "../../../store/gradeReviewsSlice";
+import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 
 const Transition = React.forwardRef(function Transition(
    props: TransitionProps & {
@@ -66,6 +68,7 @@ export default function CreateGradeReview(props: Props) {
 
    useEffect(() => {
       setSubmitData(props.gradeReview! as any);
+      setAssignmentId(props.gradeReview?.studentAssignment as any);
    }, []);
 
    function getClassId() {
@@ -120,6 +123,29 @@ export default function CreateGradeReview(props: Props) {
       });
    }
 
+   function handleAccept() {
+      if (!submitData) {
+         console.error("Accept grade review is empty.");
+      }
+
+      const modifiedData = {
+         ...submitData,
+         classId: getClassId(),
+         studentAssignment:
+            groupStudentAssignmentsByStudentId[0].assignments.find(
+               (val) => (val.assignmentId as any) === assignmentId?.toString()
+            )?._id,
+      };
+
+      acceptGradeReviewApi(modifiedData as any)
+         .then(() => {
+            toast.success("Request successfully.");
+            fetchGradeReviewsApi();
+         })
+         .catch((err) => toast.error(err))
+         .finally(() => handleClose());
+   }
+
    return (
       <div className="pt-2">
          {groupStudentAssignmentsByStudentId.length > 0 && (
@@ -168,6 +194,17 @@ export default function CreateGradeReview(props: Props) {
                   >
                      Submit
                   </Button>
+                  {props.gradeReview?.status !==
+                     AssignmentStatusEnum.Completed && (
+                     <Button
+                        variant="outlined"
+                        color="inherit"
+                        style={{ marginLeft: "20px" }}
+                        onClick={handleAccept}
+                     >
+                        Accept
+                     </Button>
+                  )}
                   <Button
                      autoFocus
                      style={{ marginLeft: "20px" }}

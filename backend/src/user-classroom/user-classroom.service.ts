@@ -85,7 +85,8 @@ export class UserClassroomService {
 
   // get specific user classroom by user classroom id
   async getUser(id: string): Promise<UserClassroom> {
-    return await this.userClassroomModel.findById(id);
+    const user = await this.userClassroomModel.findById(id).populate('userId');
+    return user;
   }
 
   // invite user in class

@@ -24,3 +24,7 @@ export const updateGradeReviewApi = async (submitData: GradeReview) => {
 export const deleteGradeReviewApi = async (id: string) => {
    return await axiosInstance.delete(`${API_URL}/${id}`);
 };
+
+export const acceptGradeReviewApi = async (submitData: GradeReview) => {
+   return await axiosInstance.post(`${API_URL}/accept`, submitData);
+};

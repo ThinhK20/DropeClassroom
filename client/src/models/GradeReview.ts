@@ -6,6 +6,7 @@ export interface GradeReview {
    studentAssignment: StudentAssignment;
    gradeExpectation: number;
    studentExplanation: string;
+   status?: string;
 }
 
 export interface CreateGradeReviewType {
@@ -13,4 +14,5 @@ export interface CreateGradeReviewType {
    studentExplanation: string;
    classId: string;
    studentAssignment: string;
+   status?: string;
 }

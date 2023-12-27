@@ -56,4 +56,13 @@ export class GradeReviewsController {
       console.error(ex);
     }
   }
+
+  @Post('accept')
+  async acceptGradeReview(@Body() gradeReview: GradeReview): Promise<boolean> {
+    try {
+      return await this.gradeReviewsService.acceptGradeReview(gradeReview);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
 }

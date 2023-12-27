@@ -11,7 +11,7 @@ import {
    TableRow,
    Typography,
 } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StudentAssignment } from "../../../models/StudentAssignment";
 import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
 import { useLocation } from "react-router-dom";
@@ -23,10 +23,13 @@ import {
    setGroupStudentAssignmentsByAssignmentId,
    setGroupStudentAssignmentsByStudentId,
 } from "../../../store/studentAssignmentSlice";
+import { getUserClassroomApi } from "../../../apis/userClassroomApis";
+import { User, UserClassRoom } from "../../../models";
 
 export default function ScoreManagement() {
    const location = useLocation();
    const dispatch = useAppDispatch();
+   const [users, setUsers] = useState<(User & { studentId: string })[]>([]);
 
    const assignments = useAppSelector((state) => state.assignment).assignments;
    const groupStudentAssignmentsByAssignmentId = useAppSelector(
@@ -89,6 +92,21 @@ export default function ScoreManagement() {
    useEffect(() => {
       init();
    }, []);
+
+   async function getAllUsers() {
+      if (groupStudentAssignmentsByStudentId?.length <= 0) return;
+      return Promise.all(
+         groupStudentAssignmentsByStudentId.map(async (value) => {
+            const data = (await getUserClassroomApi(value.studentId))
+               .data as UserClassRoom;
+            return { ...data.userId, studentId: data._id };
+         })
+      );
+   }
+
+   useEffect(() => {
+      getAllUsers().then((value) => setUsers(value as any));
+   }, [groupStudentAssignmentsByStudentId]);
 
    function init() {
       const promises = [
@@ -174,7 +192,13 @@ export default function ScoreManagement() {
                            scope="row"
                            className="flex items-center"
                         >
-                           <Typography>Thinh Nguyen</Typography>
+                           <Typography>
+                              {
+                                 users.find(
+                                    (user) => user.studentId === row.studentId
+                                 )?.username
+                              }
+                           </Typography>
                         </TableCell>
                         {row.assignments.map((assignment: any, key: number) => {
                            if (!assignment)
