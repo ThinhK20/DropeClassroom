@@ -54,27 +54,27 @@ export class UsersController {
   }
 
   // Inactive User
-  @Patch('/u/b')
   @Roles(Role.Admin)
   @UseGuards(SessionGuard, RolesGuard)
-  @HttpCode(HttpStatus.OK)
+  @Patch('/u/b')
   async inActiveUser(@Body('userId') u: string) {
     this.usersService._inActiveUser(u);
     return Role.Admin;
   }
 
   // Active User
-  @Patch('/u/nb')
   @Roles(Role.Admin)
   @UseGuards(SessionGuard, RolesGuard)
   @HttpCode(HttpStatus.OK)
+  @Patch('/u/nb')
   async activeUser(@Body('userId') u: string) {
     this.usersService._activeUser(u);
     return Role.Admin;
   }
 
   // Get all user
-  @UseGuards(SessionGuard)
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
   @Get('/u/all')
   async getAllUser(@GetUser() u: User): Promise<UserResponse[]> {
     return this.usersService._getAllUser(u);

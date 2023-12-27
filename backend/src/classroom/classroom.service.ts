@@ -177,4 +177,16 @@ export class ClassroomService {
 
     return await this.userClassroomService.deleteUserClass(deleteUser, classId);
   }
+
+  // admin get all class
+  async getAllClasses(): Promise<Classroom[]> {
+    return await this.classroomModel
+      .find()
+      .populate({
+        path: 'owner',
+        select:
+          '-password -resetToken -resetTokenExpirationDate -createdDate -updatedDate -__v',
+      })
+      .select('-__v');
+  }
 }

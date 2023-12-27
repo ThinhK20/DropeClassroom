@@ -16,7 +16,7 @@ import {
   JoinClassDto,
   UpdateClassDto,
 } from './dto';
-import { GetUser } from 'src/auth/decorator';
+import { GetUser, Roles } from 'src/auth/decorator';
 import { User } from 'src/shared/schemas/user.schema';
 import { SessionGuard } from 'src/auth/guards/session.guard';
 import {
@@ -24,6 +24,8 @@ import {
   userClassResponse,
 } from 'src/shared/types/response.type';
 import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from 'src/shared/enums';
 
 @Controller('c')
 export class ClassroomController {
@@ -114,6 +116,14 @@ export class ClassroomController {
     @Body('user') u: string,
   ): Promise<UserClassroom> {
     return this.classroomService.deleteUserClass(owner, u, id);
+  }
+
+  // get all class by admin
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Get('ad/all')
+  async getAllClassByAdmin(): Promise<Classroom[]> {
+    return this.classroomService.getAllClasses();
   }
 }
 
