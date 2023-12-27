@@ -65,7 +65,7 @@ export default function ScoreTableCell(props: Props) {
                      AssignmentStatusEnum.Completed && (
                      <MenuItem>
                         <SetStudentScore
-                           id={props.studentAssignment?.assignmentId as any}
+                           id={props.studentAssignment?._id as any}
                         />
                      </MenuItem>
                   )}
