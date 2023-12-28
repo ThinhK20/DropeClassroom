@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
@@ -25,7 +27,7 @@ import {
 } from 'src/shared/types/response.type';
 import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Role } from 'src/shared/enums';
+import { ROLE_CLASS, Role } from 'src/shared/enums';
 
 @Controller('c')
 export class ClassroomController {
@@ -124,6 +126,33 @@ export class ClassroomController {
   @Get('ad/all')
   async getAllClassByAdmin(): Promise<Classroom[]> {
     return this.classroomService.getAllClasses();
+  }
+
+  @UseGuards(SessionGuard)
+  @Get(':id/v1')
+  async joinClassByLink_v1(
+    @Param('id') id: string,
+    @Query('cjc') cjc: string,
+  ): Promise<string> {
+    const isValidFormat = /^[a-zA-Z0-9]{6}$/.test(cjc as string);
+
+    if (!isValidFormat) return 'Pending';
+
+    return this.classroomService._joinClassByLink_v1(id, cjc)
+      ? 'isAccepting'
+      : 'Pending';
+  }
+
+  @UseGuards(SessionGuard)
+  @Post(':id/v2')
+  async joinClassByLink_v2(
+    @GetUser() u: User,
+    @Param('id') id: string,
+    @Query('cjc') cjc: string,
+    @Query('role') role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    if (!cjc || !role) throw new BadRequestException('role or cjc not right');
+    return this.classroomService._joinClassByLink_v2(u, id, cjc, role);
   }
 }
 

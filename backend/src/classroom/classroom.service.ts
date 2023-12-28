@@ -189,4 +189,32 @@ export class ClassroomService {
       })
       .select('-__v');
   }
+
+  // if class code is right with class id
+  async _joinClassByLink_v1(id: string, cjc: string): Promise<boolean> {
+    const existClass = await this.classroomModel.findById(id);
+    if (!existClass) return false;
+    if (existClass.classCode !== cjc) return false;
+    return true;
+  }
+
+  async _joinClassByLink_v2(
+    u: User,
+    id: string,
+    cjc: string,
+    role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    const existClass = await this.classroomModel.findById(id);
+    if (!existClass) throw new BadRequestException('id not found');
+    if (existClass.classCode !== cjc)
+      throw new BadRequestException('class code not right');
+
+    const res = await this.userClassroomService.createUserClass({
+      classId: existClass,
+      userId: u,
+      role: role,
+    });
+
+    return res;
+  }
 }

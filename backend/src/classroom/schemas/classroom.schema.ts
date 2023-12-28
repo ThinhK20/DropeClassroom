@@ -36,6 +36,14 @@ export class Classroom {
   @Prop({ required: true, default: true })
   isActive: boolean;
 
+  @Prop({
+    required: true,
+    default: function () {
+      return `c/${this._id}?cjc=${this.classCode}`;
+    },
+  })
+  inviteLink: string;
+
   // asignment
 
   // notification
