@@ -102,7 +102,6 @@ function People() {
 
   useEffect(() => {
     if (!isFetch) {
-      console.log("get here 1");
       if (!currentClass) return;
       const controller = new AbortController();
       getAllUsersClassApi(currentClass.classId._id, controller.signal)
@@ -169,7 +168,7 @@ function People() {
           )}
         </div>
 
-        {listUser.map((u, idx) => {
+        {(listUser.length > 0) ? listUser.map((u, idx) => {
           if (u.role === "teacher")
             return (
               <PeopleBox
@@ -180,7 +179,7 @@ function People() {
               />
             );
           else return <></>;
-        })}
+        }) : <></>}
       </div>
 
       <div className="w-full flex justify-between items-center border-b-2 border-blue-600 mt-10">
@@ -201,7 +200,7 @@ function People() {
       </div>
 
       <div className="w-full divide-y flex flex-col">
-        {listUser.map((u, idx) => {
+        {(listUser.length > 0) ? listUser.map((u, idx) => {
           if (u.role === "student")
             return (
               <PeopleBox
@@ -212,7 +211,7 @@ function People() {
               />
             );
           else return <></>;
-        })}
+        }) : <></>}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import SideBarButton from "./button/SideBarButton";
 import CurrentClassHeading from "./HeaderHeading";
 import FunctionButton from "./button/FunctionButton";
 import AvatarButton from "./button/AvatarButton";
-import { useMatches } from "react-router-dom";
+import { useLocation, useMatches } from "react-router-dom";
 import { HeadingName } from "../../shared/type/types";
 import { useAppSelector } from "../../hooks/hooks";
 
@@ -16,6 +16,7 @@ interface Props {
 
 function Header({ user, handleToggle }: Props) {
   const [url] = useMatches();
+  const location = useLocation();
   const currentClass = useAppSelector(
     (state) => state.userClassroom.currentClass
   );
@@ -26,11 +27,17 @@ function Header({ user, handleToggle }: Props) {
     if (Number(url.id) === 4) return { name: "Setting", title: undefined };
     if (Number(url.id) === 5)
       return {
-        name: currentClass?.classId.className,
-        title: currentClass?.classId.section,
+        name:
+          location.search !== "" && !currentClass
+            ? "Join My Class"
+            : currentClass?.classId.className,
+        title:
+          location.search !== "" && !currentClass
+            ? ""
+            : currentClass?.classId.section,
       };
 
-      if(Number(url.id) === 9) return {name: "Admin", title: undefined};
+    if (Number(url.id) === 9) return { name: "Admin", title: undefined };
 
     return { name: undefined, title: undefined };
   };
@@ -53,8 +60,7 @@ function Header({ user, handleToggle }: Props) {
       {/* Half Right */}
       <div className="w-1/2 flex items-center justify-end gap-1 md:gap-5">
         {/* create class */}
-        {(Number(url.id) === 1) && <PlusButton />}
-        
+        {Number(url.id) === 1 && <PlusButton />}
 
         {/* other funciton */}
         <FunctionButton />

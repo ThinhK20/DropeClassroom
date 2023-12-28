@@ -7,8 +7,8 @@ export interface User {
   gender: string;
   role: string;
   avatar?: string;
-  createdDate: string;
-  updatedDate: string;
+  createdDate?: string;
+  updatedDate?: string;
   about?: string;
   address?: string;
 }

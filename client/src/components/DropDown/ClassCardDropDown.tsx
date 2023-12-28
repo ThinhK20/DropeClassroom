@@ -45,11 +45,23 @@ function ClassCardDropDown({ userClass }: Props) {
           <ul className="flex flex-col py-2">
             {userClass.role === "owner" && (
               <>
-                <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
+                <li
+                  className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      import.meta.env.VITE_API_URL +'/'+
+                        userClass.classId.inviteLink
+                    );
+                  }}
+                >
                   Copy URL Invitation
                 </li>
-                <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
-                    onClick={() =>{setUpdate(!isUpdate); setIsDropDown(!isDropDown);}}
+                <li
+                  className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
+                  onClick={() => {
+                    setUpdate(!isUpdate);
+                    setIsDropDown(!isDropDown);
+                  }}
                 >
                   Adjusting
                 </li>
@@ -80,9 +92,11 @@ function ClassCardDropDown({ userClass }: Props) {
         </div>
       </div>
 
-      <UpdateClassModal isOpen={isUpdate} 
-                        currentClass={userClass} 
-                        handleClose={() => setUpdate(!isUpdate)}/>
+      <UpdateClassModal
+        isOpen={isUpdate}
+        currentClass={userClass}
+        handleClose={() => setUpdate(!isUpdate)}
+      />
     </>
   );
 }

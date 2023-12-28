@@ -1,4 +1,4 @@
-import { UserResponse } from "./User";
+import { User } from "./User";
 
 export interface Classroom {
   _id: string;
@@ -8,10 +8,11 @@ export interface Classroom {
   room?: string;
   coverImage: string;
   classCode: string;
-  owner: UserResponse;
+  owner: User;
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  inviteLink: string;
 }
 
 export interface CreateClassroom {

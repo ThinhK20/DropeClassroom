@@ -3,6 +3,9 @@ import { Classroom, User } from ".";
 export interface ObjectUserClassRoom {
    classId: Classroom;
    role: "teacher" | "student" | "owner";
+   studentId?: string;
+   isActiveStudentId?: boolean;
+   isActive?: boolean;
 }
 
 export interface ObjectUser {

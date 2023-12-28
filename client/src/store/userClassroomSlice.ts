@@ -14,6 +14,7 @@ import {
 import {
   createClassApi,
   getAllClassesApi,
+  joinClassByLink_v2Api,
   updateClassApi,
   userJoinClassByCodeApi,
 } from "../apis/classroomApis";
@@ -67,12 +68,34 @@ export const updateUserClass = createAsyncThunk(
 
 export const userJoinClassByCode = createAsyncThunk(
   "userClassoom/joinClassByCode",
-  async (body: {classCode: string}, thunkAPI): Promise<ObjectUserClassRoom> => {
+  async (
+    body: { classCode: string },
+    thunkAPI
+  ): Promise<ObjectUserClassRoom> => {
     const res = await userJoinClassByCodeApi(body, thunkAPI.signal);
 
     return res.data;
   }
-)
+);
+
+export const userJoinClassByLink = createAsyncThunk(
+  "userClassoom/userJoinClassByLink",
+  async (
+    body: {
+      pathName: string;
+      classCode: string;
+      role: "teacher" | "student";
+    },
+    thunkAPI
+  ): Promise<ObjectUserClassRoom> => {
+    const res = await joinClassByLink_v2Api(
+      `${body.pathName}/v2/?cjc=${body.classCode}&role=${body.role}`,
+      thunkAPI.signal
+    );
+    console.log(res);
+    return res.data;
+  }
+);
 
 const UserClassroomSlice = createSlice({
   initialState,
@@ -81,6 +104,18 @@ const UserClassroomSlice = createSlice({
     setCurrentClass(state, action: PayloadAction<ObjectUserClassRoom>) {
       if (state.currentClass !== action.payload)
         state.currentClass = action.payload;
+    },
+    setCheckParam(state, action: PayloadAction<string>) {
+      const classes = [
+        ...state.classes.erolled_class,
+        ...state.classes.owner_class,
+        ...state.classes.teaching_class,
+      ];
+
+      const cl = classes.findIndex((c) => c.classId._id === action.payload);
+      if (cl === -1) state.currentClass = null;
+
+      state.currentClass = classes[cl];
     },
   },
   extraReducers(builder) {
@@ -96,15 +131,25 @@ const UserClassroomSlice = createSlice({
         // console.log('update class', action.payload._id);
         state.classes.owner_class.find((c, index) => {
           console.log(c.classId._id);
-          if(c.classId._id === action.payload._id) {
+          if (c.classId._id === action.payload._id) {
             state.classes.owner_class[index].classId = action.payload;
             return true;
           }
           return false;
-        })
+        });
       })
       .addCase(userJoinClassByCode.fulfilled, (state, action) => {
         state.classes.erolled_class.push(action.payload);
+      })
+      .addCase(userJoinClassByLink.fulfilled, (state, action) => {
+        if (action.payload.role === "student") {
+          state.classes.erolled_class.push(action.payload);
+        }
+        if (action.payload.role === "teacher") {
+          state.classes.teaching_class.push(action.payload);
+        }
+
+        state.currentClass = action.payload;
       })
       .addMatcher(
         (action) => action.type.includes("cancel"),
@@ -118,5 +163,5 @@ const UserClassroomSlice = createSlice({
   },
 });
 
-export const { setCurrentClass } = UserClassroomSlice.actions;
+export const { setCurrentClass, setCheckParam } = UserClassroomSlice.actions;
 export default UserClassroomSlice.reducer;

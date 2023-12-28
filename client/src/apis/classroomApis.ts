@@ -70,3 +70,17 @@ export const userJoinClassByCodeApi = async (
 export const getClassByIdApi = async (id: string) => {
   return await axiosInstance.get(`c/${id}`);
 };
+
+export const joinClassByLink_v1Api = async (
+  path: string,
+  controler: AbortSignal
+): Promise<string> => {
+  return (await axiosInstance.get(path, { signal: controler })).data;
+};
+
+export const joinClassByLink_v2Api = async (
+  path: string,
+  controler: AbortSignal
+) => {
+  return await axiosInstance.post(path, { signal: controler });
+};
