@@ -14,6 +14,7 @@ import { ClassroomService } from './classroom.service';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
 import {
   AddUserClassroomDto,
+  inviteListUserDto,
   CreateClassDto,
   JoinClassDto,
   UpdateClassDto,
@@ -128,31 +129,43 @@ export class ClassroomController {
     return this.classroomService.getAllClasses();
   }
 
+  // Join class by link
   @UseGuards(SessionGuard)
   @Get(':id/v1')
   async joinClassByLink_v1(
-    @Param('id') id: string,
-    @Query('cjc') cjc: string,
-  ): Promise<string> {
-    const isValidFormat = /^[a-zA-Z0-9]{6}$/.test(cjc as string);
-
-    if (!isValidFormat) return 'Pending';
-
-    return this.classroomService._joinClassByLink_v1(id, cjc)
-      ? 'isAccepting'
-      : 'Pending';
-  }
-
-  @UseGuards(SessionGuard)
-  @Post(':id/v2')
-  async joinClassByLink_v2(
     @GetUser() u: User,
     @Param('id') id: string,
     @Query('cjc') cjc: string,
     @Query('role') role: ROLE_CLASS,
   ): Promise<UserClassroom> {
-    if (!cjc || !role) throw new BadRequestException('role or cjc not right');
-    return this.classroomService._joinClassByLink_v2(u, id, cjc, role);
+    const isValidFormat = /^[a-zA-Z0-9]{6}$/.test(cjc as string);
+
+    if (!isValidFormat) throw new BadRequestException('cjc not valid');
+
+    return this.classroomService._joinClassByLink_v1(u, id, cjc, role);
+  }
+
+  // Invite class
+  @UseGuards(SessionGuard)
+  @Post(':id/invite')
+  async inviteUser(
+    @GetUser() owner: User,
+    @Body() dto: inviteListUserDto[],
+    @Param('id') id: string,
+  ): Promise<UserClassroom[]> {
+    return this.classroomService.inviteUserClass(owner, dto, id);
+  }
+
+  // Accept invite
+  @UseGuards(SessionGuard)
+  @Post(':id/accept')
+  async accpetUser(
+    @GetUser() owner: User,
+    @Param('id') id: string,
+    @Query('cjc') cjc: string,
+    @Query('role') role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    return this.classroomService.acceptInviteUserClass(owner, id, cjc, role);
   }
 }
 

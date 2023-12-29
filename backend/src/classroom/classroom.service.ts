@@ -15,7 +15,12 @@ import {
   getAllClassResponse,
   userClassResponse,
 } from 'src/shared/types/response.type';
-import { AddUserClassroomDto, JoinClassDto, UpdateClassDto } from './dto';
+import {
+  AddUserClassroomDto,
+  inviteListUserDto,
+  JoinClassDto,
+  UpdateClassDto,
+} from './dto';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -191,11 +196,26 @@ export class ClassroomService {
   }
 
   // if class code is right with class id
-  async _joinClassByLink_v1(id: string, cjc: string): Promise<boolean> {
-    const existClass = await this.classroomModel.findById(id);
-    if (!existClass) return false;
-    if (existClass.classCode !== cjc) return false;
-    return true;
+  async _joinClassByLink_v1(
+    u: User,
+    id: string,
+    cjc: string,
+    role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    const existClass = await this.classroomModel.findOne({
+      _id: id,
+      classCode: cjc,
+    });
+    if (!existClass) throw new NotFoundException('not found class');
+
+    const res = await this.userClassroomService._createUserClass({
+      classId: existClass,
+      userId: u,
+      role: role,
+      isActive: false,
+    });
+
+    return res;
   }
 
   async _joinClassByLink_v2(
@@ -209,12 +229,42 @@ export class ClassroomService {
     if (existClass.classCode !== cjc)
       throw new BadRequestException('class code not right');
 
-    const res = await this.userClassroomService.createUserClass({
-      classId: existClass,
-      userId: u,
-      role: role,
-    });
+    const res = await this.userClassroomService.accpetInvite(
+      u,
+      existClass._id.toString(),
+      role,
+    );
 
     return res;
+  }
+
+  // invite user
+  async inviteUserClass(
+    owner: User,
+    dto: inviteListUserDto[],
+    classId: string,
+  ): Promise<UserClassroom[]> {
+    const classroom = await this.classroomModel.findOne({ _id: classId });
+    if (!classroom) throw new NotFoundException('Class room not found');
+    if (classroom.owner._id.toString() !== owner._id.toString())
+      throw new BadRequestException('user is not owner');
+
+    return await this.userClassroomService.inviteUserClass(dto);
+  }
+
+  // user accept invite
+  async acceptInviteUserClass(
+    u: User,
+    classId: string,
+    cjc: string,
+    role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    const classroom = await this.classroomModel.findOne({
+      _id: classId,
+      classCode: cjc,
+    });
+    if (!classroom) throw new NotFoundException('Class room not found');
+
+    return await this.userClassroomService.accpetInvite(u, classId, role);
   }
 }

@@ -1,9 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserClassroom } from './schemas/user-classroom.schema';
 import mongoose from 'mongoose';
 
-import { UserClassroomDto } from './dto/user-classroom.dto';
+import { UserClassroomDto, UserClassroomDtos } from './dto/user-classroom.dto';
 import { User } from 'src/shared/schemas/user.schema';
 import { ROLE_CLASS } from 'src/shared/enums';
 
@@ -74,7 +78,7 @@ export class UserClassroomService {
   async getAllUser(classId: string): Promise<UserClassroom[]> {
     const lists = await this.userClassroomModel
       .find({ classId: classId })
-      .select('userId role')
+      .select('-__v')
       .populate({
         path: 'userId',
         select: '_id username email',
@@ -90,4 +94,88 @@ export class UserClassroomService {
   }
 
   // invite user in class
+  async inviteUserClass(dto: UserClassroomDtos[]): Promise<UserClassroom[]> {
+    try {
+      if (dto.length < 1) throw new BadRequestException('no user');
+      const res = await this.userClassroomModel.create(dto);
+      const populate = await Promise.all(
+        res.map(async (doc) => {
+          return await doc.populate({
+            path: 'classId',
+            select: '-createdAt -updatedAt -__v',
+            populate: {
+              path: 'owner',
+              select: '_id username email',
+            },
+          });
+        }),
+      );
+
+      return populate;
+    } catch (err) {
+      throw new Error('Error creating instance: ' + err.message);
+    }
+  }
+
+  // user accept or inactive user
+  async accpetInvite(
+    u: User,
+    classId: string,
+    role: ROLE_CLASS,
+  ): Promise<UserClassroom> {
+    const res = await this.userClassroomModel
+      .findOneAndUpdate(
+        {
+          userId: u,
+          classId: classId,
+          role: role,
+        },
+        { $set: { isActive: true } },
+        { new: true },
+      )
+      .populate({
+        path: 'classId',
+        select: '-createdAt -updatedAt -__v',
+        populate: {
+          path: 'owner',
+          select: '_id username email',
+        },
+      });
+
+    if (!res) throw new NotFoundException('user not found');
+
+    return res;
+  }
+
+  // create user in class room with role
+  async _createUserClass(dto: UserClassroomDtos): Promise<UserClassroom> {
+    try {
+      const existClass = await this.userClassroomModel
+        .findOne({
+          userId: dto.userId,
+          classId: dto.classId,
+        })
+        .populate({
+          path: 'classId',
+          select: '-createdAt -updatedAt -__v',
+          populate: {
+            path: 'owner',
+            select: '_id username email',
+          },
+        });
+
+      if (existClass) return existClass;
+
+      return (await this.userClassroomModel.create(dto)).populate({
+        path: 'classId',
+        select: '-createdAt -updatedAt -__v',
+        populate: {
+          path: 'owner',
+          select: '_id username email',
+        },
+      });
+    } catch (err) {
+      throw new Error('Error creating instance: ' + err.message);
+    }
+  }
 }

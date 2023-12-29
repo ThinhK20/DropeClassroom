@@ -70,11 +70,11 @@ export class UsersService {
 
   // valid user objectId
   async getAllUserNotIn(users: GetUserDto): Promise<User[]> {
-    const userIds = users.users.map((user) => user.userId._id);
+    // const userIds = users.users.map((user) => user.userId._id);
 
     const res = this.userModel.find({
       _id: {
-        $nin: [...userIds],
+        $nin: [...users.users],
       },
     });
 
