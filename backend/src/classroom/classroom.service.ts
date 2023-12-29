@@ -21,6 +21,7 @@ import {
   JoinClassDto,
   UpdateClassDto,
 } from './dto';
+import { SendgridService } from 'src/sendgrid/sendgrid.service';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -28,6 +29,7 @@ export class ClassroomService {
     @InjectModel(Classroom.name)
     private classroomModel: mongoose.Model<Classroom>,
     private readonly userClassroomService: UserClassroomService,
+    private readonly sendgridService: SendgridService,
   ) {}
 
   // Create new class
@@ -249,7 +251,18 @@ export class ClassroomService {
     if (classroom.owner._id.toString() !== owner._id.toString())
       throw new BadRequestException('user is not owner');
 
-    return await this.userClassroomService.inviteUserClass(dto);
+    const res = await this.userClassroomService.inviteUserClass(dto);
+
+    const emailPromises = dto.map((user) => {
+      return this.sendgridService.sendInviteJoinClassEmail(
+        user,
+        `${process.env.CLIENT_URL}/c/${user.classId._id}?cjc=${user.classId.classCode}&role=${user.role}`,
+      );
+    });
+
+    await Promise.all(emailPromises);
+
+    return res;
   }
 
   // user accept invite

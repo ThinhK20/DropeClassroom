@@ -12,6 +12,7 @@ import {
 } from 'src/user-classroom/schemas/user-classroom.schema';
 import { UserClassroomModule } from 'src/user-classroom/user-classroom.module';
 import { ClassroomRepository } from './repositories/classroom.repository';
+import { SendgridService } from 'src/sendgrid/sendgrid.service';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ClassroomRepository } from './repositories/classroom.repository';
     UserClassroomModule,
   ],
   controllers: [ClassroomController],
-  providers: [ClassroomService, ClassroomRepository],
+  providers: [ClassroomService, ClassroomRepository, SendgridService],
   exports: [ClassroomService],
 })
 export class ClassroomModule {}
