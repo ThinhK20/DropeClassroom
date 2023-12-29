@@ -1,16 +1,16 @@
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { User } from "../../models";
-import AvatarCustom from "../avatar/AvatarCustom";
 import InvitePeopleModal from "../modal/InvitePeopleModal";
 
 interface Props {
   userNotIn: User[];
-  role: "teacher" | "student" | "owner";
-  addPeople: (u: User, role: "teacher" | "student" | "owner") => void;
+  label?: string;
+  role: "teacher" | "student";
+  handleInvite: (u: User[], role: "teacher" | "student") => void
 }
 
-function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
+function AddPeopleDropDown({ userNotIn, label = "Teacher", role, handleInvite }: Props) {
   const nodeRef = useRef<HTMLButtonElement>(null);
   const [isDropDown, setIsDropDown] = useState(false);
 
@@ -24,39 +24,13 @@ function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
         <PersonAddAltOutlinedIcon />
       </button>
 
-      {/* <div
-        className={`absolute transition duration-200 ${
-          isDropDown ? "block opacity-100" : "hidden opacity-0"
-        } bg-white z-[99] border rounded shadow-lg top-8 right-8 overflow-y-auto hide-scrollbar max-h-56 `}
-      >
-        {userNotIn.length > 0 && (
-          <ul className={`flex flex-col py-2 divide-y-2`}>
-            {userNotIn.map((u, idx) => {
-              return (
-                <li
-                  className="flex items-center py-2 px-4 hover:bg-gray-500/20 space-x-6 cursor-pointer"
-                  key={idx}
-                  onClick={() => addPeople(u, role)}
-                >
-                  <AvatarCustom
-                    name={u.username}
-                    classroomAvatar={false}
-                    height={38}
-                    width={38}
-                    fontSize={20}
-                  />
-                  <div className="whitespace-nowrap">{u.email}</div>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div> */}
-
       <InvitePeopleModal
         isOpen={isDropDown}
         userNotIn={userNotIn}
+        label={label}
         handleClose={() => setIsDropDown(!isDropDown)}
+        type={role}
+        handleInvite={handleInvite}
       />
     </div>
   );

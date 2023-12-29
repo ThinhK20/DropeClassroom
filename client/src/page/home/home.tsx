@@ -26,7 +26,7 @@ export default function Home() {
     return () => {
       promise.abort();
     };
-  }, [dispatch]);
+  }, []);
 
   return (
     <>

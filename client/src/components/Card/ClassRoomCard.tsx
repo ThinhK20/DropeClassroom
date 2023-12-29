@@ -45,7 +45,7 @@ function ClassRoomCard({ classroom }: ClassroomCardProps) {
           {classroom.role !== "owner" && (
             <div className="overflow-hidden w-full pl-4 text-white pb-1 hover:underline-offset-1 hover:underline cursor-pointer">
               <p className="text-2xl md:text-lg lg:text-sm xl:text-xl">
-                {classroom.classId.owner.username}
+                {classroom.classId?.owner.username}
               </p>
             </div>
           )}

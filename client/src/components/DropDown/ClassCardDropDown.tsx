@@ -96,6 +96,7 @@ function ClassCardDropDown({ userClass }: Props) {
         isOpen={isUpdate}
         currentClass={userClass}
         handleClose={() => setUpdate(!isUpdate)}
+        
       />
     </>
   );

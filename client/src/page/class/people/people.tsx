@@ -1,10 +1,14 @@
-import { ObjectUser, ObjectUserClassRoom, User } from "../../../models";
+import {
+  ObjectUserClassRoom,
+  User,
+  listInviteUser,
+} from "../../../models";
 import AddPeopleDropDown from "../../../components/dropDown/AddPeopleDropDown";
 import { useAppSelector } from "../../../hooks/hooks";
 import {
-  addUserToClassApi,
   deleteUserClassApi,
   getAllUsersClassApi,
+  inviteUsersApi,
 } from "../../../apis/classroomApis";
 import PeopleBox from "../../../components/box/PeopleBox";
 import { useEffect, useMemo, useState } from "react";
@@ -49,35 +53,29 @@ function People() {
     setListUserNotIn([...listUserNotIn, u.userId]);
   };
 
-  const addPeople2Class = (u: User, role: "teacher" | "student" | "owner") => {
+  const invitePeople2Class = (u: User[], role: "teacher" | "student") => {
     if (!currentClass) return;
-
-    const updateList = listUserNotIn.filter(
-      (user) => user._id.toString() !== u._id.toString()
-    );
-    const controller = new AbortController();
-    addUserToClassApi(
-      currentClass?.classId._id as string,
-      {
+    const updateListNotIn = listUserNotIn.filter((user) => !u.includes(user));
+    const body: listInviteUser[] = u.map((u) => {
+      return {
+        classId: currentClass.classId,
         userId: u,
         role: role,
-      },
-      controller.signal
-    )
+        isActive: false
+      };
+    });
+
+    const controller = new AbortController();
+    inviteUsersApi(currentClass.classId._id, body, controller.signal)
       .then((data) => {
-        console.log(data);
+        console.log(data.data);
+        setListUserNotIn(updateListNotIn);
+        setListUser([...listUser, ...data.data]);
+        controller.abort();
       })
       .catch((err: AxiosError) => {
         console.log(err);
-        controller.abort();
-        return;
-      })
-      .finally(() => {
-        controller.abort();
       });
-
-    setListUserNotIn(updateList);
-    setListUser([...listUser, { userId: u, role }]);
   };
 
   const countStudent = useMemo((): number => {
@@ -96,21 +94,24 @@ function People() {
       getAllUsersClassApi(currentClass.classId._id, controller.signal)
         .then((data) => {
           setListUser(data);
-          // const userIds = data.map((u) => u.userId);
+          const userIds = data.map((u) => u.userId);
 
-          // const controller_post = new AbortController();
-          // getAllUsersNotInClassApi({ users: [...userIds] }, controller_post.signal)
-          //   .then((data) => {
-          //     setListUserNotIn(data);
-          //     console.log(data);
-          //   })
-          //   .catch((err: AxiosError) => {
-          //     setIsFetch(true);
-          //     console.log(err);
-          //   })
-          //   .finally(() => {
-          //     controller_post.abort();
-          //   });
+          const controller_post = new AbortController();
+          getAllUsersNotInClassApi(
+            { users: [...userIds] },
+            controller_post.signal
+          )
+            .then((data) => {
+              setListUserNotIn(data);
+              console.log(data);
+            })
+            .catch((err: AxiosError) => {
+              setIsFetch(true);
+              console.log(err);
+            })
+            .finally(() => {
+              controller_post.abort();
+            });
           setIsFetch(true);
         })
         .catch((err: AxiosError) => {
@@ -122,7 +123,7 @@ function People() {
           setIsFetch(true);
         });
     }
-  }, [isFetch]);
+  }, []);
 
   if (!currentClass) return <></>;
 
@@ -135,7 +136,8 @@ function People() {
           <AddPeopleDropDown
             userNotIn={listUserNotIn}
             role="teacher"
-            addPeople={addPeople2Class}
+            label="Teacher"
+            handleInvite={invitePeople2Class}
           />
         )}
       </div>
@@ -188,7 +190,8 @@ function People() {
             <AddPeopleDropDown
               userNotIn={listUserNotIn}
               role="student"
-              addPeople={addPeople2Class}
+              label="Student"
+              handleInvite={invitePeople2Class}
             />
           )}
         </div>

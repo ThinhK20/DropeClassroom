@@ -16,12 +16,14 @@ function PeopleBox({ currentRole, user, removePeople }: Props) {
           <AvatarCustom
             name={user.userId.username}
             classroomAvatar={false}
-            url={!user.isActive ? '/src/assets/noavatar.png': ''}
+            url={!user.isActive ? "/src/assets/noavatar.png" : ""}
             height={38}
             width={38}
             fontSize={20}
           />
-          <div className={`${!user.isActive ? 'text-gray-500': ''}`}>{user.userId.username}</div>
+          <div className={`${!user.isActive ? "text-gray-500" : ""}`}>
+            {user.userId.username} { !user.isActive && `( invited )`}
+          </div>
         </div>
         <div className="flex items-center py-2">
           <button

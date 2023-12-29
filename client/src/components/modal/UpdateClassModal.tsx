@@ -98,6 +98,7 @@ function UpdateClassModal({
       body={bodyContent}
       labelSubmit="Update"
       onSubmit={handleSubmit(onSubmit)}
+      width="600px"
     />
   );
 }

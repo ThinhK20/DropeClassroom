@@ -35,19 +35,6 @@ function Modal({
 
   const nodeRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleClickOut(this: Document, ev: MouseEvent) {
-      if (nodeRef.current && !nodeRef.current.contains(ev.target as Node)) {
-        handleClose();
-      }
-    }
-
-    if (showModal) document.addEventListener("click", handleClickOut);
-
-    return () => {
-      document.removeEventListener("click", handleClickOut);
-    };
-  });
 
   // disable scroll on modal load
   useEffect(() => {
@@ -56,19 +43,6 @@ function Modal({
 
     return () => {
       document.body.style.overflow = "unset";
-    };
-  });
-
-  // close modal on click out screen
-  useEffect(() => {
-    const closeOnEscapeKey = (e: KeyboardEvent) => {
-      e.key === "Escape" ? handleClose() : null;
-    };
-
-    document.body.addEventListener("keydown", closeOnEscapeKey);
-
-    return () => {
-      document.body.removeEventListener("keydown", closeOnEscapeKey);
     };
   });
 

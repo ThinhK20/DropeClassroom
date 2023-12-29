@@ -31,3 +31,10 @@ export interface UserClassRoom {
   role?: string;
   _id?: string;
 }
+
+export interface listInviteUser {
+  classId: Classroom;
+  userId: User;
+  role: "student" | "teacher";
+  isActive: false
+}

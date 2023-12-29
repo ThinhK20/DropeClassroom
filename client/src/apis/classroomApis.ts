@@ -4,6 +4,7 @@ import {
   ObjectUser,
   ObjectUserClassRoom,
   UpdateClassroom,
+  listInviteUser,
   listUserClassrooms,
 } from "../models";
 import { axiosInstance } from "./axiosInterceptor";
@@ -79,9 +80,14 @@ export const joinClassByLink_v1Api = async (
   return await axiosInstance.get(path, { signal: controler });
 };
 
-export const acceptByLinkApi = async (
-  path: string,
+export const acceptByLinkApi = async (path: string, controler: AbortSignal) => {
+  return await axiosInstance.post(path, { signal: controler });
+};
+
+export const inviteUsersApi = async (
+  id: string,
+  body: listInviteUser[],
   controler: AbortSignal
 ) => {
-  return await axiosInstance.post(path, { signal: controler });
+  return await axiosInstance.post(`/c/${id}/invite`, body, { signal: controler });
 };

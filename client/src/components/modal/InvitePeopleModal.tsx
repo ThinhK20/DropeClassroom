@@ -1,16 +1,19 @@
-import { useState } from "react";
 import Modal from "./Modal";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useAppDispatch } from "../../hooks/hooks";
 import { User } from "../../models";
 import AvatarCustom from "../avatar/AvatarCustom";
+import Avatar from "@mui/material/Avatar";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import { useEffect, useState } from "react";
+import { blue } from "@mui/material/colors";
 
 interface Props {
   userNotIn: User[];
   label?: string;
   isOpen: boolean;
-  type?: string;
+  type?: "student" | "teacher";
   handleClose: () => void;
+  handleInvite: (u: User[], role: "teacher" | "student") => void;
 }
 
 function InvitePeopleModal({
@@ -19,11 +22,24 @@ function InvitePeopleModal({
   isOpen = false,
   type = "teacher",
   handleClose,
+  handleInvite,
 }: Props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch();
+  const [chooseUser, setListChooseUser] = useState<User[]>([]);
+  const [isChoose, setIsChoose] = useState<boolean[]>([]);
 
-  const onSubmit = async () => {};
+  useEffect(() => {
+    setIsChoose(Array(userNotIn.length).fill(false));
+
+    return () => {
+      setIsChoose(Array(userNotIn.length).fill(false));
+    };
+  }, [userNotIn]);
+
+  const onSubmit = async () => {
+    handleInvite(chooseUser, type);
+    setIsChoose(Array(userNotIn.length).fill(false));
+    handleClose();    
+  };
 
   const headerContent = (
     <div>
@@ -43,44 +59,41 @@ function InvitePeopleModal({
 
       <div className="my-2 max-h-36 overflow-y-auto hide-scrollbar">
         <div className="flex flex-wrap gap-2 p-1">
-          <div className="flex items-center gap-2 border-2 rounded-full pl-[1.2px]">
-            <AvatarCustom
-              name={"hhman"}
-              classroomAvatar={false}
-              height={30}
-              width={30}
-              fontSize={16}
-            />
-            <div>{"hhman240602@gmail.com"}</div>
-            <div className="text-xl pr-2 cursor-pointer pb-1">x</div>
-          </div>
-          <div className="flex items-center gap-2 border-2 rounded-full pl-[1.2px]">
-            <AvatarCustom
-              name={"hhman"}
-              classroomAvatar={false}
-              height={30}
-              width={30}
-              fontSize={16}
-            />
-            <div>{"hhman240602@gmail.com"}</div>
-            <div className="text-xl pr-2 cursor-pointer pb-1">x</div>
-          </div>
-          <div className="flex flex-grow max-w-fit items-center gap-2 border-2 rounded-full pl-[1.2px]">
-            <AvatarCustom
-              name={"hhman"}
-              classroomAvatar={false}
-              height={30}
-              width={30}
-              fontSize={16}
-            />
-            <div>{"hhma"}</div>
-            <div
-              className="text-xl pr-2 cursor-pointer pb-1"
-              placeholder="enter email"
-            >
-              x
-            </div>
-          </div>
+          {chooseUser.length > 0 ? (
+            chooseUser.map((u, idx) => {
+              return (
+                <div
+                  className="flex items-center gap-2 border-2 rounded-full pl-[1.2px]"
+                  key={idx}
+                >
+                  <AvatarCustom
+                    name={u.username}
+                    classroomAvatar={false}
+                    height={30}
+                    width={30}
+                    fontSize={16}
+                  />
+                  <div>{u.email}</div>
+                  <div
+                    className="text-xl pr-2 cursor-pointer pb-1"
+                    onClick={() => {
+                      const updateChooseUser = chooseUser.filter(
+                        (user) => user._id.toString() !== u._id.toString()
+                      );
+                      setListChooseUser(updateChooseUser);
+                      const newState = [...isChoose];
+                      newState[idx] = false;
+                      setIsChoose(newState);
+                    }}
+                  >
+                    x
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
@@ -97,15 +110,30 @@ function InvitePeopleModal({
               <li
                 className="flex items-center py-2 px-4 hover:bg-gray-500/20 space-x-6 cursor-pointer"
                 key={idx}
-                onClick={() => {}}
+                onClick={() => {
+                  const res = chooseUser.includes(u);
+                  if (!res) {
+                    setListChooseUser([...chooseUser, u]);
+                    const newState = [...isChoose];
+                    newState[idx] = true;
+                    setIsChoose(newState);
+                  }
+                }}
               >
-                <AvatarCustom
-                  name={u.username}
-                  classroomAvatar={false}
-                  height={38}
-                  width={38}
-                  fontSize={20}
-                />
+                {isChoose[idx] ? (
+                  <Avatar sx={{ bgcolor: blue[500], height: 38, width: 38 }}>
+                    <CheckOutlinedIcon sx={{ fontSize: 20 }} />
+                  </Avatar>
+                ) : (
+                  <AvatarCustom
+                    name={u.username}
+                    classroomAvatar={false}
+                    height={38}
+                    width={38}
+                    fontSize={20}
+                  />
+                )}
+
                 <div>
                   <div className="whitespace-nowrap">{u.email}</div>
                   <div className="whitespace-nowrap text-sm text-gray-500">
@@ -121,7 +149,7 @@ function InvitePeopleModal({
   );
 
   const footerContent = (
-    <div className="mt-5 px-5 text-gray-500/80">
+    <div className="mt-5 px-5 text-gray-500/80 text-center">
       Teachers can do everything except delete classes and invite
     </div>
   );
@@ -129,9 +157,12 @@ function InvitePeopleModal({
   return (
     <Modal
       title={`Invite ${label}`}
-      disabled={isLoading}
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={() => {
+        handleClose();
+        setListChooseUser([]);
+        setIsChoose(Array(userNotIn.length).fill(false));
+      }}
       header={headerContent}
       body={bodyContent}
       footer={type === "teacher" ? footerContent : <></>}
@@ -139,7 +170,7 @@ function InvitePeopleModal({
       onSubmit={onSubmit}
       animationFirst="scale-100 opacity-100"
       animationSecond="scale-90 opacity-0"
-      width="500px"
+      width="400px"
     />
   );
 }
