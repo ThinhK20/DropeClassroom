@@ -108,8 +108,7 @@ export class StudentAssignmentService {
           x.studentId?.toString() ===
           item.studentAssignments[0]?.studentId?.toString(),
       );
-
-      if (existingItem) {
+      if (existingItem && item.studentAssignments.length > 0) {
         existingItem.assignments.push({
           assignmentId: item.assignmentId,
           averageScore: item.averageScore || 0,
