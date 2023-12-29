@@ -95,8 +95,8 @@ export default function ListAssignments() {
               }}
               role={""}
             />
-            {currentClass?.role === "teacher" && (
-              <div className="absolute right-0 mr-3 w-11 h-11 flex row items-center rounded-full cursor-pointer">
+            {currentClass?.role !== "student" && (
+              <div className="absolute right-0 mr-3 cursor-pointer">
                 <UpdateAssignmentModal
                   assignment={assignment}
                   isOpen={showModal}

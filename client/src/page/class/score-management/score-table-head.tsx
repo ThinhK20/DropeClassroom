@@ -38,6 +38,10 @@ export default function ScoreTableHead(props: Props) {
 
   const currentUser = useAppSelector((state) => state.users.data);
 
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
+
   function getClassId() {
     const inputString = location.pathname;
 
@@ -138,11 +142,12 @@ export default function ScoreTableHead(props: Props) {
             }}
           >
             {props.assignment?.assignmentStatus !==
-              AssignmentStatusEnum.Completed && (
-              <MenuItem onClick={markAssignmentToFinish}>
-                Mark to finish
-              </MenuItem>
-            )}
+              AssignmentStatusEnum.Completed &&
+              currentClass?.role !== "student" && (
+                <MenuItem onClick={markAssignmentToFinish}>
+                  Mark to finish
+                </MenuItem>
+              )}
             <ViewAssigmentModal
               assignment={props.assignment as any}
               isOpen={true}

@@ -74,6 +74,10 @@ export default function CreateGradeReview(props: Props) {
 
   const currentUser = useAppSelector((state) => state.users.data);
 
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
+
   function getClassId() {
     const inputString = location.pathname;
 
@@ -159,10 +163,14 @@ export default function CreateGradeReview(props: Props) {
       .finally(() => handleClose());
   }
 
+  const tooltipTitle = !props.isEdit
+    ? "View grade request"
+    : "Create a new grade request";
+
   return (
     <div className="pt-2">
       {groupStudentAssignmentsByStudentId.length > 0 && (
-        <Tooltip title="Create a new grade request">
+        <Tooltip title={tooltipTitle}>
           {props.children ? (
             <div onClick={handleOpen}>{props.children}</div>
           ) : (
@@ -196,16 +204,17 @@ export default function CreateGradeReview(props: Props) {
                 Submit
               </Button>
             )}
-            {props.gradeReview?.status !== AssignmentStatusEnum.Completed && (
-              <Button
-                variant="outlined"
-                color="inherit"
-                style={{ marginLeft: "20px" }}
-                onClick={handleAccept}
-              >
-                Accept
-              </Button>
-            )}
+            {props.gradeReview?.status !== AssignmentStatusEnum.Completed &&
+              currentClass?.role !== "student" && (
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  style={{ marginLeft: "20px" }}
+                  onClick={handleAccept}
+                >
+                  Accept
+                </Button>
+              )}
             <Button
               autoFocus
               style={{ marginLeft: "20px" }}

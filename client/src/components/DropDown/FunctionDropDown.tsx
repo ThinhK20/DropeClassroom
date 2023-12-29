@@ -44,25 +44,27 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
               id="toast-notification"
               className="w-full  p-4 text-gray-900 bg-gray rounded-lg shadow "
             >
-              <div className="flex items-center">
-                <div className="relative inline-block shrink-0">
-                  <AvatarCustom
-                    name={notification.title as string}
-                    classroomAvatar={false}
-                  />
-                </div>
-                <div className="ms-3 text-sm font-normal">
-                  <div className="text-sm font-semibold text-gray-900">
-                    {notification.title}
+              <a href={`/c/${notification.classId}/w/t/all`}>
+                <div className="flex items-center">
+                  <div className="relative inline-block shrink-0">
+                    <AvatarCustom
+                      name={notification.title as string}
+                      classroomAvatar={false}
+                    />
                   </div>
-                  <div className="text-sm font-normal">
-                    {notification.content}
+                  <div className="ms-3 text-sm font-normal">
+                    <div className="text-sm font-semibold text-gray-900">
+                      {notification.title}
+                    </div>
+                    <div className="text-sm font-normal">
+                      {notification.content}
+                    </div>
+                    <span className="text-xs font-medium text-blue-600 dark:text-blue-500">
+                      a few seconds ago
+                    </span>
                   </div>
-                  <span className="text-xs font-medium text-blue-600 dark:text-blue-500">
-                    a few seconds ago
-                  </span>
                 </div>
-              </div>
+              </a>
             </div>
           )
       )
