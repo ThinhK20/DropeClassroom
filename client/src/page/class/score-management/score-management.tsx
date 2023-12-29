@@ -169,7 +169,7 @@ export default function ScoreManagement() {
    }
 
    return (
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className="w-full pt-[50px]">
          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
                <TableRow>
@@ -207,37 +207,44 @@ export default function ScoreManagement() {
                </TableRow>
                {groupStudentAssignmentsByStudentId.map((row: any) => {
                   return (
-                     <TableRow
-                        key={row?.studentId}
-                        sx={{
-                           "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                     >
-                        <TableCell
-                           component="th"
-                           scope="row"
-                           className="flex items-center"
+                     row.studentId && (
+                        <TableRow
+                           key={row?.studentId}
+                           sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                           }}
                         >
-                           <Typography>
-                              {
-                                 users.find(
-                                    (user) => user.studentId === row.studentId
-                                 )?.username
+                           <TableCell
+                              component="th"
+                              scope="row"
+                              className="flex items-center"
+                           >
+                              <Typography>
+                                 {
+                                    users?.find(
+                                       (user) =>
+                                          user.studentId === row.studentId
+                                    )?.username
+                                 }
+                              </Typography>
+                           </TableCell>
+                           {row.assignments.map(
+                              (assignment: any, key: number) => {
+                                 if (!assignment)
+                                    return (
+                                       <ScoreTableCell key={key} score={0} />
+                                    );
+                                 return (
+                                    <ScoreTableCell
+                                       score={assignment?.averageScore}
+                                       studentAssignment={assignment}
+                                       key={key}
+                                    />
+                                 );
                               }
-                           </Typography>
-                        </TableCell>
-                        {row.assignments.map((assignment: any, key: number) => {
-                           if (!assignment)
-                              return <ScoreTableCell key={key} score={0} />;
-                           return (
-                              <ScoreTableCell
-                                 score={assignment?.averageScore}
-                                 studentAssignment={assignment}
-                                 key={key}
-                              />
-                           );
-                        })}
-                     </TableRow>
+                           )}
+                        </TableRow>
+                     )
                   );
                })}
             </TableBody>

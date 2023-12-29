@@ -85,6 +85,7 @@ export class UserClassroomService {
 
   // get specific user classroom by user classroom id
   async getUser(id: string): Promise<UserClassroom> {
+    if (!id || typeof id === 'undefined' || id === 'undefined') return null;
     const user = await this.userClassroomModel.findById(id).populate('userId');
     return user;
   }

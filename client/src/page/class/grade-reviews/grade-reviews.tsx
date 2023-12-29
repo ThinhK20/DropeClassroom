@@ -66,13 +66,13 @@ export default function GradeReviews() {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                            {
-                              gradeReview.studentAssignment.assignmentId
-                                 .assignmentName
+                              gradeReview.studentAssignment?.assignmentId
+                                 ?.assignmentName
                            }
                         </TableCell>
                         <TableCell>
                            {
-                              gradeReview.studentAssignment.studentId.userId
+                              gradeReview.studentAssignment?.studentId?.userId
                                  ?.username
                            }
                         </TableCell>
