@@ -58,6 +58,7 @@ export class UserClassroomService {
       .find({
         userId: user._id,
         role: role,
+        isActive: true,
       })
       .select('classId role -_id')
       .populate({
@@ -101,12 +102,8 @@ export class UserClassroomService {
       const populate = await Promise.all(
         res.map(async (doc) => {
           return await doc.populate({
-            path: 'classId',
-            select: '-createdAt -updatedAt -__v',
-            populate: {
-              path: 'owner',
-              select: '_id username email',
-            },
+            path: 'userId',
+            select: '_id username email',
           });
         }),
       );
@@ -140,6 +137,10 @@ export class UserClassroomService {
           path: 'owner',
           select: '_id username email',
         },
+      })
+      .populate({
+        path: 'userId',
+        select: '_id username email',
       });
 
     if (!res) throw new NotFoundException('user not found');
@@ -156,23 +157,21 @@ export class UserClassroomService {
           classId: dto.classId,
         })
         .populate({
-          path: 'classId',
-          select: '-createdAt -updatedAt -__v',
-          populate: {
-            path: 'owner',
-            select: '_id username email',
-          },
+          path: 'userId',
+          select: '_id username email',
         });
 
-      if (existClass) return existClass;
+      if (existClass) {
+        if (existClass.role === dto.role) return existClass;
+        else
+          throw new BadRequestException(
+            `user exists in Class with role ${existClass.role}`,
+          );
+      }
 
       return (await this.userClassroomModel.create(dto)).populate({
-        path: 'classId',
-        select: '-createdAt -updatedAt -__v',
-        populate: {
-          path: 'owner',
-          select: '_id username email',
-        },
+        path: 'userId',
+        select: '_id username email',
       });
     } catch (err) {
       throw new Error('Error creating instance: ' + err.message);
