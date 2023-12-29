@@ -1,12 +1,12 @@
 import ClassRoomCard from "../../components/Card/ClassRoomCard";
 import ClientWrapper from "../../components/ClientWrapper";
 import { useAppSelector } from "../../hooks/hooks";
-import { UserClassRoom } from "../../models";
+import { listUserClassrooms } from "../../models";
 import DefaultHome from "./DefaultHome";
 
 function MainPage() {
   // call list class
-  const listClasses: UserClassRoom = useAppSelector(
+  const listClasses: listUserClassrooms = useAppSelector(
     (state) => state.userClassroom.classes
   );
 
@@ -17,6 +17,7 @@ function MainPage() {
       </ClientWrapper>
     );
   }
+
 
   return (
     <main className="relative w-full h-full pt-5 pb-16 px-6 md:px-10 flex flex-col flex-1 items-start overflow-hidden">

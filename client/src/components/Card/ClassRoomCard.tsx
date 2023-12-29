@@ -15,7 +15,6 @@ interface ClassroomCardProps {
 function ClassRoomCard({ classroom }: ClassroomCardProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const pathClassRoom = "/c/" + classroom.classId._id;
 
   return (
     <article className="col-span-1 group">
@@ -32,7 +31,7 @@ function ClassRoomCard({ classroom }: ClassroomCardProps) {
           <div
             className="overflow-hidden flex flex-col w-full text-white hover:underline-offset-1 hover:underline cursor-pointer "
             onClick={() => {
-              navigate(pathClassRoom);
+              navigate(`/c/${classroom.classId._id}`);
               dispatch(setCurrentClass(classroom));
             }}
           >
@@ -61,7 +60,7 @@ function ClassRoomCard({ classroom }: ClassroomCardProps) {
             <div className="flex justify-end items-center mr-4">
               <div className="flex justify-between items-center w-ful -mt-14">
                 <Avatar
-                  src="/src/assets/testimonial-03.jpg"
+                  src="/src/assets/noavatar.png"
                   sx={{ height: 65, width: 65 }}
                 />
               </div>

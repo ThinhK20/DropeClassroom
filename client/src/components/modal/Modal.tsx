@@ -11,6 +11,9 @@ interface ModalProps {
   body?: React.ReactElement;
   footer?: React.ReactElement;
   disabled?: boolean;
+  animationFirst?: string;
+  animationSecond?: string;
+  width?: string;
 }
 
 function Modal({
@@ -22,7 +25,10 @@ function Modal({
   header,
   body,
   footer,
-  disabled,
+  disabled,  
+  animationFirst =  'translate-y-0 opacity-100',
+  animationSecond = 'translate-y-full opacity-0',
+  width = `500px`
 }: ModalProps) {
 
   const [showModal, setShowModal] = useState(isOpen);
@@ -97,8 +103,8 @@ function Modal({
       <div className="fixed inset-0 z-modal flex items-center justify-center">
         <div
           ref={nodeRef}
-          className={`relative w-[500px] bg-white rounded-lg shadow-sm flex flex-col transition-all duration-300 ${
-            showModal ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+          className={`relative w-[${width}] bg-white rounded-lg shadow-sm flex flex-col transition-all duration-300 ${
+            showModal ? animationFirst : animationSecond
           } ml-20 p-4`}
         >
           <div className="w-full flex justify-between">

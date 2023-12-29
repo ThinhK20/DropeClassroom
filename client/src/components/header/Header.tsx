@@ -8,6 +8,7 @@ import AvatarButton from "./button/AvatarButton";
 import { useLocation, useMatches } from "react-router-dom";
 import { HeadingName } from "../../shared/type/types";
 import { useAppSelector } from "../../hooks/hooks";
+import { useMemo } from "react";
 
 interface Props {
   user: User;
@@ -21,7 +22,7 @@ function Header({ user, handleToggle }: Props) {
     (state) => state.userClassroom.currentClass
   );
 
-  const headingName = (): HeadingName => {
+  const headingName = useMemo((): HeadingName => {
     if (Number(url.id) === 2) return { name: "Schedule", title: undefined };
     if (Number(url.id) === 3) return { name: "Archived", title: undefined };
     if (Number(url.id) === 4) return { name: "Setting", title: undefined };
@@ -40,7 +41,7 @@ function Header({ user, handleToggle }: Props) {
     if (Number(url.id) === 9) return { name: "Admin", title: undefined };
 
     return { name: undefined, title: undefined };
-  };
+  }, [url, location]);
 
   return (
     <header className="relative md:sticky md:top-0 md:left-0 z-header flex flex-row items-center justify-between h-16 md:w-full border-b transition-all border-gray-200 bg-white py-3 px-4">
@@ -52,8 +53,8 @@ function Header({ user, handleToggle }: Props) {
         <Logo />
         {/* Current Class */}
         <CurrentClassHeading
-          name={headingName().name}
-          title={headingName().title}
+          name={headingName.name}
+          title={headingName.title}
         />
       </div>
 

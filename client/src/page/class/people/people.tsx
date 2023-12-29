@@ -1,4 +1,4 @@
-import { ObjectUser, User } from "../../../models";
+import { ObjectUser, ObjectUserClassRoom, User } from "../../../models";
 import AddPeopleDropDown from "../../../components/dropDown/AddPeopleDropDown";
 import { useAppSelector } from "../../../hooks/hooks";
 import {
@@ -7,7 +7,7 @@ import {
   getAllUsersClassApi,
 } from "../../../apis/classroomApis";
 import PeopleBox from "../../../components/box/PeopleBox";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
 import { getAllUsersNotInClassApi } from "../../../apis/userApis";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
@@ -17,22 +17,11 @@ function People() {
     (state) => state.userClassroom.currentClass
   );
 
-  const [listUser, setListUser] = useState<ObjectUser[]>([]);
+  const [listUser, setListUser] = useState<ObjectUserClassRoom[]>([]);
   const [listUserNotIn, setListUserNotIn] = useState<User[]>([]);
   const [isFetch, setIsFetch] = useState<boolean>(false);
 
-  // const user: User = {
-  //   _id: "6566115223c81cf1bc4e7f15",
-  //   username: "Minh An",
-  //   email: "anhoang483@gmail.com",
-  //   isActive: true,
-  //   gender: "m",
-  //   role: "admin",
-  //   createdDate: "2023-11-28T16:11:01.769Z",
-  //   updatedDate: "2023-11-28T16:11:01.769Z",
-  // };
-
-  const removePeople = (u: ObjectUser) => {
+  const removePeople = (u: ObjectUserClassRoom) => {
     if (!currentClass) return;
     const updateList = listUser.filter(
       (user) => user.userId._id.toString() !== u.userId._id.toString()
@@ -91,14 +80,14 @@ function People() {
     setListUser([...listUser, { userId: u, role }]);
   };
 
-  const countStudent = (u: ObjectUser[]): number => {
+  const countStudent = useMemo((): number => {
     let count = 0;
-    u.find((_u) => {
+    listUser.find((_u) => {
       if (_u.role === "student") count += 1;
     });
 
     return count;
-  };
+  }, [listUser]);
 
   useEffect(() => {
     if (!isFetch) {
@@ -107,19 +96,21 @@ function People() {
       getAllUsersClassApi(currentClass.classId._id, controller.signal)
         .then((data) => {
           setListUser(data);
-          const controller_post = new AbortController();
-          getAllUsersNotInClassApi({ users: [...data] }, controller_post.signal)
-            .then((data) => {
-              setListUserNotIn(data);
-              console.log(data);
-            })
-            .catch((err: AxiosError) => {
-              setIsFetch(true);
-              console.log(err);
-            })
-            .finally(() => {
-              controller_post.abort();
-            });
+          // const userIds = data.map((u) => u.userId);
+
+          // const controller_post = new AbortController();
+          // getAllUsersNotInClassApi({ users: [...userIds] }, controller_post.signal)
+          //   .then((data) => {
+          //     setListUserNotIn(data);
+          //     console.log(data);
+          //   })
+          //   .catch((err: AxiosError) => {
+          //     setIsFetch(true);
+          //     console.log(err);
+          //   })
+          //   .finally(() => {
+          //     controller_post.abort();
+          //   });
           setIsFetch(true);
         })
         .catch((err: AxiosError) => {
@@ -131,7 +122,7 @@ function People() {
           setIsFetch(true);
         });
     }
-  });
+  }, [isFetch]);
 
   if (!currentClass) return <></>;
 
@@ -154,8 +145,10 @@ function People() {
           <PeopleBox
             currentRole={currentClass}
             user={{
+              classId: currentClass.classId,
               userId: currentClass.classId.owner,
               role: "owner",
+              isActive: true,
             }}
             removePeople={removePeople}
           />
@@ -168,27 +161,29 @@ function People() {
           )}
         </div>
 
-        {(listUser.length > 0) ? listUser.map((u, idx) => {
-          if (u.role === "teacher")
-            return (
-              <PeopleBox
-                currentRole={currentClass}
-                user={u}
-                key={idx}
-                removePeople={removePeople}
-              />
-            );
-          else return <></>;
-        }) : <></>}
+        {listUser.length > 0 ? (
+          listUser.map((u, idx) => {
+            if (u.role === "teacher")
+              return (
+                <PeopleBox
+                  currentRole={currentClass}
+                  user={u}
+                  key={idx}
+                  removePeople={removePeople}
+                />
+              );
+            else return <></>;
+          })
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="w-full flex justify-between items-center border-b-2 border-blue-600 mt-10">
         <p className="text-blue-600 medium-32 ml-2 mb-4">Students</p>
 
         <div className="flex items-center gap-4">
-          <p className="text-blue-600 medium-14 pr-2">{`${countStudent(
-            listUser
-          )} students`}</p>
+          <p className="text-blue-600 medium-14 pr-2">{`${countStudent} students`}</p>
           {currentClass.role === "owner" && (
             <AddPeopleDropDown
               userNotIn={listUserNotIn}
@@ -200,18 +195,22 @@ function People() {
       </div>
 
       <div className="w-full divide-y flex flex-col">
-        {(listUser.length > 0) ? listUser.map((u, idx) => {
-          if (u.role === "student")
-            return (
-              <PeopleBox
-                currentRole={currentClass}
-                user={u}
-                key={idx}
-                removePeople={removePeople}
-              />
-            );
-          else return <></>;
-        }) : <></>}
+        {listUser.length > 0 ? (
+          listUser.map((u, idx) => {
+            if (u.role === "student")
+              return (
+                <PeopleBox
+                  currentRole={currentClass}
+                  user={u}
+                  key={idx}
+                  removePeople={removePeople}
+                />
+              );
+            else return <></>;
+          })
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

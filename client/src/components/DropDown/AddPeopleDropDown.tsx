@@ -2,6 +2,7 @@ import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import { useEffect, useRef, useState } from "react";
 import { User } from "../../models";
 import AvatarCustom from "../avatar/AvatarCustom";
+import InvitePeopleModal from "../modal/InvitePeopleModal";
 
 interface Props {
   userNotIn: User[];
@@ -13,20 +14,6 @@ function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
   const nodeRef = useRef<HTMLButtonElement>(null);
   const [isDropDown, setIsDropDown] = useState(false);
 
-  useEffect(() => {
-    function handleClickOutPopover(this: Document, ev: MouseEvent) {
-      if (nodeRef.current && !nodeRef.current.contains(ev.target as Node)) {
-        setIsDropDown(false);
-      }
-    }
-
-    document.addEventListener("click", handleClickOutPopover);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutPopover);
-    };
-  }, [isDropDown]);
-
   return (
     <div className="relative">
       <button
@@ -37,7 +24,7 @@ function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
         <PersonAddAltOutlinedIcon />
       </button>
 
-      <div
+      {/* <div
         className={`absolute transition duration-200 ${
           isDropDown ? "block opacity-100" : "hidden opacity-0"
         } bg-white z-[99] border rounded shadow-lg top-8 right-8 overflow-y-auto hide-scrollbar max-h-56 `}
@@ -64,7 +51,13 @@ function AddPeopleDropDown({ userNotIn, role, addPeople }: Props) {
             })}
           </ul>
         )}
-      </div>
+      </div> */}
+
+      <InvitePeopleModal
+        isOpen={isDropDown}
+        userNotIn={userNotIn}
+        handleClose={() => setIsDropDown(!isDropDown)}
+      />
     </div>
   );
 }

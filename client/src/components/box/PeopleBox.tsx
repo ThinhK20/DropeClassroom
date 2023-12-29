@@ -1,11 +1,11 @@
-import { ObjectUser, ObjectUserClassRoom } from "../../models";
+import { ObjectUserClassRoom } from "../../models";
 import AvatarCustom from "../avatar/AvatarCustom";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
 interface Props {
   currentRole: ObjectUserClassRoom;
-  user: ObjectUser;
-  removePeople: (u: ObjectUser) => void;
+  user: ObjectUserClassRoom;
+  removePeople: (u: ObjectUserClassRoom) => void;
 }
 
 function PeopleBox({ currentRole, user, removePeople }: Props) {
@@ -16,11 +16,12 @@ function PeopleBox({ currentRole, user, removePeople }: Props) {
           <AvatarCustom
             name={user.userId.username}
             classroomAvatar={false}
+            url={!user.isActive ? '/src/assets/noavatar.png': ''}
             height={38}
             width={38}
             fontSize={20}
           />
-          <div>{user.userId.username}</div>
+          <div className={`${!user.isActive ? 'text-gray-500': ''}`}>{user.userId.username}</div>
         </div>
         <div className="flex items-center py-2">
           <button

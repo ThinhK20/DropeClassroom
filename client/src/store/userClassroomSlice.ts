@@ -2,25 +2,24 @@ import {
   PayloadAction,
   createAsyncThunk,
   createSlice,
-  current,
 } from "@reduxjs/toolkit";
 import {
   Classroom,
   CreateClassroom,
   ObjectUserClassRoom,
   UpdateClassroom,
-  UserClassRoom,
+  listUserClassrooms,
 } from "../models";
 import {
   createClassApi,
   getAllClassesApi,
-  joinClassByLink_v2Api,
+  acceptByLinkApi,
   updateClassApi,
   userJoinClassByCodeApi,
 } from "../apis/classroomApis";
 
 interface UserClassRoomType {
-  classes: UserClassRoom;
+  classes: listUserClassrooms;
   currentClass: ObjectUserClassRoom | null;
 }
 
@@ -50,6 +49,7 @@ export const createUserClass = createAsyncThunk(
 
     return {
       classId: res,
+      userId: res.owner,
       role: "owner",
     };
   }
@@ -78,8 +78,8 @@ export const userJoinClassByCode = createAsyncThunk(
   }
 );
 
-export const userJoinClassByLink = createAsyncThunk(
-  "userClassoom/userJoinClassByLink",
+export const accpetJoinClassByLink = createAsyncThunk(
+  "userClassoom/accpetJoinClassByLink",
   async (
     body: {
       pathName: string;
@@ -88,11 +88,10 @@ export const userJoinClassByLink = createAsyncThunk(
     },
     thunkAPI
   ): Promise<ObjectUserClassRoom> => {
-    const res = await joinClassByLink_v2Api(
-      `${body.pathName}/v2/?cjc=${body.classCode}&role=${body.role}`,
+    const res = await acceptByLinkApi(
+      `${body.pathName}/accept/?cjc=${body.classCode}&role=${body.role}`,
       thunkAPI.signal
     );
-    console.log(res);
     return res.data;
   }
 );
@@ -101,9 +100,8 @@ const UserClassroomSlice = createSlice({
   initialState,
   name: "userClassroom",
   reducers: {
-    setCurrentClass(state, action: PayloadAction<ObjectUserClassRoom>) {
-      if (state.currentClass !== action.payload)
-        state.currentClass = action.payload;
+    setCurrentClass(state, action: PayloadAction<ObjectUserClassRoom | null>) {
+      state.currentClass = action.payload;
     },
     setCheckParam(state, action: PayloadAction<string>) {
       const classes = [
@@ -113,7 +111,7 @@ const UserClassroomSlice = createSlice({
       ];
 
       const cl = classes.findIndex((c) => c.classId._id === action.payload);
-      if (cl === -1) state.currentClass = null;
+      if (cl < 0) state.currentClass = null;
 
       state.currentClass = classes[cl];
     },
@@ -139,27 +137,18 @@ const UserClassroomSlice = createSlice({
         });
       })
       .addCase(userJoinClassByCode.fulfilled, (state, action) => {
+        state.classes.count += 1;
         state.classes.erolled_class.push(action.payload);
       })
-      .addCase(userJoinClassByLink.fulfilled, (state, action) => {
+      .addCase(accpetJoinClassByLink.fulfilled, (state, action) => {
+        state.classes.count += 1;
         if (action.payload.role === "student") {
           state.classes.erolled_class.push(action.payload);
         }
         if (action.payload.role === "teacher") {
           state.classes.teaching_class.push(action.payload);
         }
-
-        state.currentClass = action.payload;
       })
-      .addMatcher(
-        (action) => action.type.includes("cancel"),
-        (state, action) => {
-          console.log(current(state), action);
-        }
-      )
-      .addDefaultCase((state, action) => {
-        console.log(`action type ${action.type}`, current(state));
-      });
   },
 });
 

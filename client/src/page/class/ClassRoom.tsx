@@ -13,7 +13,7 @@ import { RootState } from "../../store/store";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   setCheckParam,
-  userJoinClassByLink,
+  accpetJoinClassByLink,
 } from "../../store/userClassroomSlice";
 import AcceptInvitation from "./invitation-authen/AcceptInvitation";
 import { joinClassByLink_v1Api } from "../../apis/classroomApis";
@@ -23,7 +23,7 @@ import { AxiosError } from "axios";
 
 export default function ClassRoom() {
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
-  const [isAccept, setIsAccept] = useState(false);
+  const [acceptComponent, setAcceptComponent] = useState(false);
 
   const user: User = useAppSelector(
     (state: RootState) => state.users.data
@@ -31,7 +31,6 @@ export default function ClassRoom() {
   const currentClass = useAppSelector(
     (state) => state.userClassroom.currentClass
   );
-  // const lsClass = useAppSelector((state) => state.userClassroom.classes);
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -41,9 +40,7 @@ export default function ClassRoom() {
   const continueClass = () => {
     const searchParams = new URLSearchParams(location.search);
     const cjcValue = searchParams.get("cjc");
-    // console.log(cjcValue);
     const roleValue = searchParams.get("role");
-    console.log("role", roleValue);
 
     if (!cjcValue) return;
 
@@ -51,88 +48,70 @@ export default function ClassRoom() {
       const isValidRole = /^(student|teacher)$/.test(roleValue as string);
       if (!isValidRole) return;
       dispatch(
-        userJoinClassByLink({
+        accpetJoinClassByLink({
           pathName: location.pathname,
           classCode: cjcValue,
-          role: roleValue === "student" ? "student" : "teacher",
+          role: roleValue as "student" | "teacher",
         })
       )
         .then(() => {
           navigate(`/c/${param.id}`);
+          dispatch(setCheckParam(param.id as string));
+          setAcceptComponent(false);
         })
         .catch((err: AxiosError) => {
           console.log(err);
-        })
-        .finally(() => {});
-    } else {
-      dispatch(
-        userJoinClassByLink({
-          pathName: location.pathname,
-          classCode: cjcValue,
-          role: "student",
-        })
-      )
-        .then(() => {
-          navigate(`/c/${param.id}`);
-        })
-        .catch((err: AxiosError) => {
-          console.log(err);
-        })
-        .finally(() => {});
+          setAcceptComponent(false);
+        });
     }
   };
 
   useEffect(() => {
-    // console.log(currentClass?.classId._id);
-    // console.log(location.pathname);
-    // console.log(param.id);
     dispatch(setCheckParam(param.id as string));
+  }, []);
 
-    if (location.search !== "") {
-      const searchParams = new URLSearchParams(location.search);
-      const cjcValue = searchParams.get("cjc");
-      // console.log(cjcValue);
-      // console.log(roleValue);
-      if (!cjcValue) return;
-      const isValidFormat = /^[a-zA-Z0-9]{6}$/.test(cjcValue as string);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const cjcValue = searchParams.get("cjc");
+    const roleValue = searchParams.get("role");
 
-      if (isValidFormat) {
-        // Xử lý khi giá trị hợp lệ
-        // console.log("Valid cjc value:", cjcValue);
-        const controller = new AbortController();
-
-        console.log(`${location.pathname}/v1${location.search}`);
-        joinClassByLink_v1Api(
-          `${location.pathname}/v1${location.search}`,
-          controller.signal
-        )
-          .then((data) => {
-            // console.log(data);
-            if (!isAccept && data === "isAccepting") {
-              // isAccept = false;
-              setIsAccept(true);
-            } else if (data === "Pending") {
-              return;
-            }
-          })
-          .catch((err: AxiosError) => {
-            console.log(err);
-          })
-          .finally(() => {
-            controller.abort();
-          });
-      } else {
-        // Xử lý khi giá trị không hợp lệ
-        console.log("Invalid cjc value:", cjcValue);
-      }
-    } else if (location.search === "" && currentClass) {
-      setIsAccept(false);
-    } else if (location.search === "" && !currentClass) {
-      setIsAccept(false);
+    if (!cjcValue) {
+      setAcceptComponent(false);
+      return;
     }
-  }, [isAccept, currentClass, dispatch, location, param.id]);
 
-  if (!currentClass && !isAccept) return <div>Errors</div>;
+    if (!roleValue) {
+      setAcceptComponent(false);
+      return;
+    }
+
+    const isValidFormat = /^[a-zA-Z0-9]{6}$/.test(cjcValue as string);
+    const isValidRole = /^(student|teacher)$/.test(roleValue as string);
+
+    if (!isValidFormat || !isValidRole) {
+      setAcceptComponent(false);
+    } else if (isValidFormat && isValidRole) {
+      const controller = new AbortController();
+      joinClassByLink_v1Api(
+        `${location.pathname}/v1${location.search}`,
+        controller.signal
+      )
+        .then(() => {
+          setAcceptComponent(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAcceptComponent(false);
+        })
+        .finally(() => {
+          controller.abort();
+        });
+    }
+  }, [location]);
+
+  console.log(acceptComponent);
+
+  if (!currentClass && !acceptComponent) return <div>Errors</div>;
 
   return (
     <>
@@ -151,7 +130,7 @@ export default function ClassRoom() {
         >
           <Sidebar isOpen={isOpenSideBar} />
           <main className="relative w-full h-full flex flex-col items-start overflow-hidden">
-            {isAccept ? (
+            {acceptComponent ? (
               <AcceptInvitation user={user} action={continueClass} />
             ) : (
               <>

@@ -2,15 +2,16 @@ import {
   Classroom,
   CreateClassroom,
   ObjectUser,
+  ObjectUserClassRoom,
   UpdateClassroom,
-  UserClassRoom,
+  listUserClassrooms,
 } from "../models";
 import { axiosInstance } from "./axiosInterceptor";
 
 export const getAllClassesApi = async (
   path: string,
   controler: AbortSignal
-): Promise<UserClassRoom> => {
+): Promise<listUserClassrooms> => {
   return (await axiosInstance.get(path, { signal: controler })).data;
 };
 
@@ -38,7 +39,7 @@ export const updateClassApi = async (
 export const getAllUsersClassApi = async (
   id: string,
   controler: AbortSignal
-): Promise<ObjectUser[]> => {
+): Promise<ObjectUserClassRoom[]> => {
   return (await axiosInstance.get(`c/${id}/uic`, { signal: controler })).data;
 };
 
@@ -74,11 +75,11 @@ export const getClassByIdApi = async (id: string) => {
 export const joinClassByLink_v1Api = async (
   path: string,
   controler: AbortSignal
-): Promise<string> => {
-  return (await axiosInstance.get(path, { signal: controler })).data;
+) => {
+  return await axiosInstance.get(path, { signal: controler });
 };
 
-export const joinClassByLink_v2Api = async (
+export const acceptByLinkApi = async (
   path: string,
   controler: AbortSignal
 ) => {

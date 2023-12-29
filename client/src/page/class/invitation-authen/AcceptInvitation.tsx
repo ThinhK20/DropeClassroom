@@ -62,9 +62,7 @@ function AcceptInvitation({
             </span>
             <button
               className="px-4 py-2 border bg-blue-600 medium-18 text-white rounded-md text-center my-4 focus:bg-blue-800 hover:bg-blue-700"
-              onClick={() => {
-                action();
-              }}
+              onClick={action}
             >
               Continue
             </button>

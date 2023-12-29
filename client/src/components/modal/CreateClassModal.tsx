@@ -91,6 +91,7 @@ function CreateClassModal() {
          body={bodyContent}
          labelSubmit="Create"
          onSubmit={handleSubmit(onSubmit)}
+         width="600px"
       />
    );
 }
