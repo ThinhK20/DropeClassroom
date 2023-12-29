@@ -36,6 +36,7 @@ function InvitePeopleModal({
   }, [userNotIn]);
 
   const onSubmit = async () => {
+    if(chooseUser.length < 1) return;
     handleInvite(chooseUser, type);
     setIsChoose(Array(userNotIn.length).fill(false));
     handleClose();    
