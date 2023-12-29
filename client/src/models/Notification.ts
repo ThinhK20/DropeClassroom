@@ -1,8 +1,8 @@
 export interface Notification {
   _id: string;
-  studentId: string;
-  assignmentId: string;
-  classId: string;
+  studentId?: string;
+  assignmentId?: string;
+  classId?: string;
   title: string;
   content: string;
 }

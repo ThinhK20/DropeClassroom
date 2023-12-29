@@ -91,18 +91,20 @@ export default function CreateAssignmentModal(props: {
 
   return (
     <React.Fragment>
-      <Button
-        variant="outlined"
-        onClick={handleOpen}
-        startIcon={<AddIcon />}
-        sx={{
-          borderRadius: `60px`,
-          padding: `20px`,
-          marginBottom: `-20px`,
-        }}
-      >
-        Create Assignment
-      </Button>
+      {currentClass?.role != "student" && (
+        <Button
+          variant="outlined"
+          onClick={handleOpen}
+          startIcon={<AddIcon />}
+          sx={{
+            borderRadius: `60px`,
+            padding: `20px`,
+            marginBottom: `-20px`,
+          }}
+        >
+          Create Assignment
+        </Button>
+      )}
       <Dialog
         fullScreen
         open={open}

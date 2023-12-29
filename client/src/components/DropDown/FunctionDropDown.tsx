@@ -22,12 +22,24 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
 
   const currentUserId = useAppSelector((state) => state.users.data?._id);
 
+  const currentClassId = useAppSelector(
+    (state) => state.userClassroom.currentClass?.classId._id
+  );
+
+  const currentUsername = useAppSelector((state) => state.users.data?.username);
+
+  const currentUserCls = useAppSelector(
+    (state) => state.userClassroom.currentClass?.classId._id
+  );
+
+  console.log("currentUserCls", currentUserCls);
+
   const NotificationList = () => {
     return (
       notifications.length > 0 &&
       notifications.reverse().map(
         (notification: Notification) =>
-          notification.studentId === currentUserId && (
+          notification.classId === currentUserCls && (
             <div
               id="toast-notification"
               className="w-full  p-4 text-gray-900 bg-gray rounded-lg shadow "

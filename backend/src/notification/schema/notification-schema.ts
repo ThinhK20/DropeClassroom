@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
-import { User } from 'src/shared/schemas/user.schema';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
+import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 
 export type NotificationDocument = HydratedDocument<Notification>;
 
@@ -10,8 +10,8 @@ export type NotificationDocument = HydratedDocument<Notification>;
 export class Notification {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  studentId: User;
+  @Prop({ required: false, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  studentId: UserClassroom;
 
   @Prop({
     required: false,
