@@ -4,17 +4,13 @@ import {
   NotAcceptableException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/shared/schemas/user.schema';
 import { generateToken } from 'src/shared/utils/utils';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.getUserByQuery({ email });

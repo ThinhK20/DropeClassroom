@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
-import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -13,18 +12,10 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 360000,
+        maxAge: 24 * 60 * 60 * 1000, // 10 minutes
       },
     }),
   );
-
-  // // validate input
-  // app.useGlobalPipes(
-  //   new ValidationPipe({
-  //     whitelist: true,
-  //     forbidNonWhitelisted: true,
-  //   }),
-  // );
 
   app.use(cookieParser());
   app.use(passport.initialize());
