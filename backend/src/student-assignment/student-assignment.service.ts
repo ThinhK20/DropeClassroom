@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { StudentAssignment } from './schemas/student-assignment.schema';
 import { StudentAssignmentDto } from './dto/student-assignment.dto';
 import { Assignment } from 'src/shared/schemas/assignment.schema';
+import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 
 @Injectable()
 export class StudentAssignmentService {
@@ -12,6 +13,8 @@ export class StudentAssignmentService {
     private studentAssignmentModel: mongoose.Model<StudentAssignment>,
     @InjectModel(Assignment.name)
     private assignmentModel: mongoose.Model<Assignment>,
+    @InjectModel(UserClassroom.name)
+    private userClassroomModel: mongoose.Model<UserClassroom>,
   ) {}
 
   async createNewAssignment(

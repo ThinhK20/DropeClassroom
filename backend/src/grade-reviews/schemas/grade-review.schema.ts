@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { NextFunction } from 'express';
+import mongoose, { HydratedDocument, Model, model } from 'mongoose';
 import { Classroom } from 'src/classroom/schemas/classroom.schema';
+import { CommentType } from 'src/comments/schemas/comments.schema';
 import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
 
 export type GradeReviewDocument = HydratedDocument<GradeReview>;
@@ -38,3 +41,14 @@ export class GradeReview {
 }
 
 export const GradeReviewSchema = SchemaFactory.createForClass(GradeReview);
+
+export const GradeReviewFactory = (comment_model: Model<CommentType>) => {
+  const schema = GradeReviewSchema;
+  schema.pre('findOneAndDelete', async function (next) {
+    console.log('CAlled: ');
+    // const doc = await this.model.findOne(this.getFilter());
+    return next();
+  });
+
+  return schema;
+};

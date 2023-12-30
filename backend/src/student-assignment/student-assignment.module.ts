@@ -11,12 +11,17 @@ import {
   Assignment,
   AssignmentSchema,
 } from 'src/shared/schemas/assignment.schema';
+import {
+  UserClassroom,
+  UserClassroomSchema,
+} from 'src/user-classroom/schemas/user-classroom.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: StudentAssignment.name, schema: StudentAssignmentSchema },
       { name: Assignment.name, schema: AssignmentSchema },
+      { name: UserClassroom.name, schema: UserClassroomSchema },
     ]),
   ],
   controllers: [StudentAssignmentController],

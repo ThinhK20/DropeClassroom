@@ -1,17 +1,32 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
 import { GradeReviewsService } from './grade-reviews.service';
 import { GradeReviewsController } from './grade-reviews.controller';
-import { GradeReview, GradeReviewSchema } from './schemas/grade-review.schema';
+import { GradeReview, GradeReviewFactory } from './schemas/grade-review.schema';
 import {
   StudentAssignment,
   StudentAssignmentSchema,
 } from 'src/student-assignment/schemas/student-assignment.schema';
+import {
+  CommentSchema,
+  CommentType,
+} from 'src/comments/schemas/comments.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeatureAsync([
+      {
+        name: GradeReview.name,
+        inject: [getModelToken(CommentType.name)],
+        imports: [
+          MongooseModule.forFeature([
+            { name: CommentType.name, schema: CommentSchema },
+          ]),
+        ],
+        useFactory: GradeReviewFactory,
+      },
+    ]),
     MongooseModule.forFeature([
-      { name: GradeReview.name, schema: GradeReviewSchema },
       { name: StudentAssignment.name, schema: StudentAssignmentSchema },
     ]),
   ],

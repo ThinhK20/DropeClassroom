@@ -56,7 +56,7 @@ export class GradeReviewsService {
   }
 
   async deleteGradeReview(id: string): Promise<boolean> {
-    return await this.gradeReviewModel.findByIdAndDelete(id);
+    return await this.gradeReviewModel.findOneAndDelete({ _id: id });
   }
 
   async acceptGradeReview(gradeReview: GradeReview): Promise<boolean> {

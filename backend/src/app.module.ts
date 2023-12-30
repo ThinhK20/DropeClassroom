@@ -15,6 +15,7 @@ import { StudentAssignmentModule } from './student-assignment/student-assignment
 import { NotificationModule } from './notification/notification.module';
 import { GradeReviewsModule } from './grade-reviews/grade-reviews.module';
 import { GradeReviewsController } from './grade-reviews/grade-reviews.controller';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { GradeReviewsController } from './grade-reviews/grade-reviews.controller
     StudentAssignmentModule,
     NotificationModule,
     GradeReviewsModule,
+    CommentsModule,
   ],
   controllers: [AppController, MailController, GradeReviewsController],
   providers: [AppService, SendgridService],
