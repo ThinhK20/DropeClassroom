@@ -45,7 +45,6 @@ export const GradeReviewSchema = SchemaFactory.createForClass(GradeReview);
 export const GradeReviewFactory = (comment_model: Model<CommentType>) => {
   const schema = GradeReviewSchema;
   schema.pre('findOneAndDelete', async function (next) {
-    console.log('CAlled: ');
     // const doc = await this.model.findOne(this.getFilter());
     return next();
   });

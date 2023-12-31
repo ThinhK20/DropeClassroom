@@ -7,6 +7,8 @@ export interface GradeReview {
    gradeExpectation: number;
    studentExplanation: string;
    status?: string;
+   createdAt?: string;
+   updatedAt?: string;
 }
 
 export interface CreateGradeReviewType {
