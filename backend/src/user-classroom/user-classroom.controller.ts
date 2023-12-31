@@ -34,10 +34,18 @@ export class UserClassroomController {
     return this.userClassroomService.getAllClassWithRole(dto, role);
   }
 
-  @Get('/:id')
+  @Get('/get/:id')
   async getSpecificUserClassroom(
     @Param('id') id: string,
   ): Promise<UserClassroom> {
     return this.userClassroomService.getUser(id);
+  }
+
+  @Get('/specific')
+  async getUserClassroomByUserIdAndClassId(
+    @Query('userId') userId: string,
+    @Query('classId') classId: string,
+  ): Promise<UserClassroom> {
+    return this.userClassroomService.getUserByUserIdAndClassId(userId, classId);
   }
 }

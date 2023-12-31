@@ -17,15 +17,21 @@ interface Props {
 export default function CommentBox(props: Props) {
    const [content, setContent] = useState<string>("");
    const [comments, setComments] = useState<Comment[]>([]);
-   const currentUser = useAppSelector(
-      (state) => state.userClassroom.currentClass
+   const currentUserClassroom = useAppSelector(
+      (state) => state.userClassroom.currentUserClassroom
    );
    function handleAddComment() {
       if (!content || content.trim().length === 0) return;
+
+      const userClassroomId = currentUserClassroom?._id?.toString();
+      if (!userClassroomId) {
+         toast.error("User classroom not found ! Please try again.");
+         return;
+      }
       const submitData = {
          content: content.trim(),
          gradeReview: props.gradeReview?._id,
-         userClassroom: "658e35c2fcc78b14aece6f12",
+         userClassroom: userClassroomId,
       } as Record<keyof Comment, string>;
 
       addCommentApi(submitData)
@@ -84,10 +90,10 @@ export default function CommentBox(props: Props) {
                         <div className="mt-4 flex items-center space-x-4 py-6">
                            <div className="">
                               <img
-                                 className="w-12 h-12 rounded-full"
+                                 className="w-12 h-12 rounded-full object-cover"
                                  src={
                                     comment.userClassroom.userId?.avatar ||
-                                    "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/408576504_1420267468843291_3324063907747099310_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=efb6e6&_nc_ohc=x3wS_Who8kkAX9j-506&_nc_ht=scontent.fsgn8-4.fna&cb_e2o_trans=t&oh=00_AfCvyN08hq-5MV8TzeUImGH3Lx24N61TMN5GNSwnXl7S5g&oe=6594E7D4"
+                                    "https://preview.redd.it/komari-hikikomari-kyuuketsuki-no-monmon-v0-f5r1niv03vsb1.jpg?auto=webp&s=acbcf059295aa959fe4cafb73afa0af1b151e290"
                                  }
                                  alt=""
                               />

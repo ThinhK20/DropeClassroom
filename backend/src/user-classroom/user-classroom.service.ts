@@ -95,6 +95,21 @@ export class UserClassroomService {
     return user;
   }
 
+  // get specific user classroom by userId & classId
+  async getUserByUserIdAndClassId(
+    userId: string,
+    classId: string,
+  ): Promise<UserClassroom> {
+    if (!userId || typeof userId === 'undefined' || userId === 'undefined')
+      return null;
+    if (!classId || typeof classId === 'undefined' || classId === 'undefined')
+      return null;
+    const user = await this.userClassroomModel
+      .findOne({ classId, userId })
+      .populate('userId');
+    return user;
+  }
+
   // invite user in class
   async inviteUserClass(dto: UserClassroomDtos[]): Promise<UserClassroom[]> {
     try {
