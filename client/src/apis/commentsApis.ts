@@ -7,7 +7,7 @@ const API_URL = "/comments";
 export const getAllCommentsByGradeReviewIdApi = (
    gradeReviewId: string
 ): Promise<AxiosResponse<Comment[]>> => {
-   return axiosInstance.get(`${API_URL}?grade-review=${gradeReviewId}`);
+   return axiosInstance.get(`${API_URL}/get?grade-review=${gradeReviewId}`);
 };
 
 export const addCommentApi = (

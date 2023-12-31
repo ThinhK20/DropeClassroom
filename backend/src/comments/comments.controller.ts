@@ -20,7 +20,7 @@ export class CommentsController {
     return await this.commentsService.getAllComments();
   }
 
-  @Get()
+  @Get('/get')
   async getAllCommentsByGradeReviewId(
     @Query('grade-review') gradeReviewId: string,
   ): Promise<CommentType[]> {

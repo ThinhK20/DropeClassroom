@@ -28,6 +28,7 @@ import {
    acceptGradeReviewApi,
    createGradeReviewApi,
    getAllGradeReviewsByClassIdApi,
+   rejectGradeReviewApi,
    updateGradeReviewApi,
 } from "../../../apis/gradeReviewsApis";
 import { toast } from "react-toastify";
@@ -73,7 +74,9 @@ export default function CreateGradeReview(props: Props) {
       setAssignmentId(props.gradeReview?.studentAssignment as any);
    }, []);
 
-   const currentUser = useAppSelector((state) => state.users.data);
+   const currentUserClassroom = useAppSelector(
+      (state) => state.userClassroom.currentUserClassroom
+   );
 
    const currentClass = useAppSelector(
       (state) => state.userClassroom.currentClass
@@ -111,7 +114,7 @@ export default function CreateGradeReview(props: Props) {
                createNotification({
                   title: "Grade review updated",
                   content: "Grade review updated",
-                  studentId: currentUser?._id as string,
+                  studentId: currentUserClassroom?._id as string,
                   classId: getClassId(),
                });
                fetchGradeReviewsApi();
@@ -125,7 +128,7 @@ export default function CreateGradeReview(props: Props) {
                createNotification({
                   title: "Grade review created",
                   content: "Grade review created",
-                  studentId: currentUser?._id as string,
+                  studentId: currentUserClassroom?._id as string,
                   classId: getClassId(),
                });
                fetchGradeReviewsApi();
@@ -158,6 +161,29 @@ export default function CreateGradeReview(props: Props) {
       };
 
       acceptGradeReviewApi(modifiedData as any)
+         .then(() => {
+            toast.success("Request successfully.");
+            fetchGradeReviewsApi();
+         })
+         .catch((err) => toast.error(err))
+         .finally(() => handleClose());
+   }
+
+   function handleReject() {
+      if (!submitData) {
+         console.error("Accept grade review is empty.");
+      }
+
+      const modifiedData = {
+         ...submitData,
+         classId: getClassId(),
+         studentAssignment:
+            groupStudentAssignmentsByStudentId[0].assignments.find(
+               (val) => (val.assignmentId as any) === assignmentId?.toString()
+            )?._id,
+      };
+
+      rejectGradeReviewApi(modifiedData as any)
          .then(() => {
             toast.success("Request successfully.");
             fetchGradeReviewsApi();
@@ -219,8 +245,7 @@ export default function CreateGradeReview(props: Props) {
                         Submit
                      </Button>
                   )}
-                  {props.gradeReview?.status !==
-                     AssignmentStatusEnum.Completed &&
+                  {props.gradeReview?.status === AssignmentStatusEnum.Pending &&
                      currentClass?.role !== "student" && (
                         <Button
                            variant="outlined"
@@ -229,6 +254,17 @@ export default function CreateGradeReview(props: Props) {
                            onClick={handleAccept}
                         >
                            Accept
+                        </Button>
+                     )}
+                  {props.gradeReview?.status === AssignmentStatusEnum.Pending &&
+                     currentClass?.role !== "student" && (
+                        <Button
+                           variant="contained"
+                           color="error"
+                           style={{ marginLeft: "20px" }}
+                           onClick={handleReject}
+                        >
+                           Reject
                         </Button>
                      )}
                   <Button
@@ -369,7 +405,8 @@ export default function CreateGradeReview(props: Props) {
                                     <p className="text-sm font-medium text-gray-900 truncate">
                                        {props.gradeReview?.studentAssignment
                                           ?.studentId?.userId?.username ||
-                                          "Unknown"}
+                                          currentUserClassroom?.userId
+                                             ?.username}
                                     </p>
                                     <p className="text-sm text-gray-500 truncate">
                                        {new Date().toLocaleDateString()}

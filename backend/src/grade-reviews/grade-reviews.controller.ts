@@ -25,7 +25,12 @@ export class GradeReviewsController {
   async getAllGradeReviewsByClassId(
     @Param('id') id: string,
   ): Promise<GradeReview[]> {
-    return await this.gradeReviewsService.getAllGradeReviewsByClassId(id);
+    return (
+      await this.gradeReviewsService.getAllGradeReviewsByClassId(id)
+    ).sort(
+      (a: any, b: any) =>
+        new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf(),
+    );
   }
 
   @Post('create')
@@ -61,6 +66,15 @@ export class GradeReviewsController {
   async acceptGradeReview(@Body() gradeReview: GradeReview): Promise<boolean> {
     try {
       return await this.gradeReviewsService.acceptGradeReview(gradeReview);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  @Post('reject')
+  async rejectGradeReview(@Body() gradeReview: GradeReview): Promise<boolean> {
+    try {
+      return await this.gradeReviewsService.rejectGradeReview(gradeReview);
     } catch (ex) {
       console.log(ex);
     }

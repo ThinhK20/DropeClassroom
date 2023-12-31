@@ -44,7 +44,7 @@ export default function CommentBox(props: Props) {
 
    function fetchComments() {
       if (!props.gradeReview) return;
-      getAllCommentsByGradeReviewIdApi(props?.gradeReview?._id).then((res) => {
+      getAllCommentsByGradeReviewIdApi(props.gradeReview?._id).then((res) => {
          setComments(res.data);
       });
    }

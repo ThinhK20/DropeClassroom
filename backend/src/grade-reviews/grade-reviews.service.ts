@@ -76,4 +76,22 @@ export class GradeReviewsService {
 
     return res ? true : false;
   }
+
+  async rejectGradeReview(gradeReview: GradeReview): Promise<boolean> {
+    const gradeReviewEntity = await this.gradeReviewModel.findById(
+      gradeReview._id,
+    );
+    const res = await this.studentAssignmentModel.findByIdAndUpdate(
+      gradeReviewEntity.studentAssignment,
+      {
+        grade: gradeReviewEntity.gradeExpectation,
+        status: AssignmentStatus.Dismissed,
+      },
+    );
+    await this.gradeReviewModel.findByIdAndUpdate(gradeReview._id, {
+      status: AssignmentStatus.Dismissed,
+    });
+
+    return res ? true : false;
+  }
 }

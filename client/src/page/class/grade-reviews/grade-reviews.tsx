@@ -62,6 +62,7 @@ export default function GradeReviews() {
                      <TableCell>Student Name</TableCell>
                      <TableCell>Grade Expectation</TableCell>
                      <TableCell>Student Explanation</TableCell>
+                     <TableCell>Created At</TableCell>
                      <TableCell>Status</TableCell>
                      <TableCell></TableCell>
                   </TableRow>
@@ -85,6 +86,11 @@ export default function GradeReviews() {
                         <TableCell>{gradeReview.gradeExpectation}</TableCell>
                         <TableCell className="max-w-[200px]">
                            {gradeReview.studentExplanation}
+                        </TableCell>
+                        <TableCell>
+                           {gradeReview.createdAt
+                              ? new Date(gradeReview.createdAt).toLocaleString()
+                              : new Date().toLocaleString()}
                         </TableCell>
                         <TableCell>
                            {gradeReview.status ===
@@ -126,8 +132,8 @@ export default function GradeReviews() {
                                  </CreateGradeReview>
                               </div>
                               <div className="cursor-pointer">
-                                 {gradeReview.status !==
-                                    AssignmentStatusEnum.Completed &&
+                                 {gradeReview.status ===
+                                    AssignmentStatusEnum.Pending &&
                                     currentClass?.role === "student" && (
                                        <CreateGradeReview
                                           gradeReview={gradeReview}
@@ -141,8 +147,8 @@ export default function GradeReviews() {
                                     )}
                               </div>
                               <div className="cursor-pointer">
-                                 {gradeReview.status !==
-                                    AssignmentStatusEnum.Completed &&
+                                 {gradeReview.status ===
+                                    AssignmentStatusEnum.Pending &&
                                     currentClass?.role === "student" && (
                                        <DeleteGradeReview
                                           gradeReview={gradeReview}
