@@ -60,7 +60,8 @@ function FunctionDropDown({ isOpen }: FunctionProps) {
                       {notification.content}
                     </div>
                     <span className="text-xs font-medium text-blue-600 dark:text-blue-500">
-                      a few seconds ago
+                      {notification.createdAt &&
+                        new Date(notification.createdAt).toLocaleString()}
                     </span>
                   </div>
                 </div>
