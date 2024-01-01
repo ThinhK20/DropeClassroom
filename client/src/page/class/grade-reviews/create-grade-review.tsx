@@ -104,7 +104,7 @@ export default function CreateGradeReview(props: Props) {
          classId: getClassId(),
          studentAssignment:
             groupStudentAssignmentsByStudentId[0].assignments.find(
-               (val) => (val.assignmentId as any) === assignmentId?.toString()
+               (val) => val.assignmentId._id === assignmentId?.toString()
             )?._id,
       };
       if (props.gradeReview) {
@@ -156,7 +156,7 @@ export default function CreateGradeReview(props: Props) {
          classId: getClassId(),
          studentAssignment:
             groupStudentAssignmentsByStudentId[0].assignments.find(
-               (val) => (val.assignmentId as any) === assignmentId?.toString()
+               (val) => val.assignmentId._id === assignmentId?.toString()
             )?._id,
       };
 
@@ -179,7 +179,7 @@ export default function CreateGradeReview(props: Props) {
          classId: getClassId(),
          studentAssignment:
             groupStudentAssignmentsByStudentId[0].assignments.find(
-               (val) => (val.assignmentId as any) === assignmentId?.toString()
+               (val) => val.assignmentId._id === assignmentId?.toString()
             )?._id,
       };
 

@@ -88,7 +88,7 @@ export class StudentAssignmentService {
 
         existedGroupIds.push(assignment._id.toString());
         return {
-          assignmentId: assignment._id.toString(),
+          assignmentId: assignment,
           averageScore,
           studentAssignments: group,
         };
@@ -98,7 +98,7 @@ export class StudentAssignmentService {
     const otherGroups = assignments
       .filter((x) => existedGroupIds.indexOf(x._id as any) !== -1)
       .map((x) => ({
-        assignmentId: x._id,
+        assignmentId: x,
         averageScore: 0,
         studentAssignments: [],
       }));

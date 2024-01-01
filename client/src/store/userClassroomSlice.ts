@@ -133,7 +133,6 @@ const UserClassroomSlice = createSlice({
          .addCase(updateUserClass.fulfilled, (state, action) => {
             // console.log('update class', action.payload._id);
             state.classes.owner_class.find((c, index) => {
-               console.log(c.classId._id);
                if (c.classId._id === action.payload._id) {
                   state.classes.owner_class[index].classId = action.payload;
                   return true;

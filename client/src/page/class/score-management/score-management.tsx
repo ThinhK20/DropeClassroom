@@ -12,7 +12,10 @@ import {
    Typography,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { StudentAssignment } from "../../../models/StudentAssignment";
+import {
+   GroupStudentAssignmentsByStudentId,
+   StudentAssignment,
+} from "../../../models/StudentAssignment";
 import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
 import { useLocation } from "react-router-dom";
 import ExportScoreBoard from "./export-score-board";
@@ -72,7 +75,7 @@ export default function ScoreManagement() {
 
             existedGroupIds.push(assignment._id.toString());
             return {
-               assignmentId: assignment._id.toString(),
+               assignmentId: assignment,
                averageScore,
                studentAssignments: group,
             };
@@ -82,7 +85,7 @@ export default function ScoreManagement() {
       const otherGroups = assignments
          .filter((x) => existedGroupIds.indexOf(x._id) === -1)
          .map((x) => ({
-            assignmentId: x._id,
+            assignmentId: x,
             averageScore: 0,
             studentAssignments: [],
          }));
@@ -108,6 +111,19 @@ export default function ScoreManagement() {
    useEffect(() => {
       getAllUsers().then((value) => setUsers(value as any));
    }, [groupStudentAssignmentsByStudentId]);
+
+   function getTotalScore(group: GroupStudentAssignmentsByStudentId) {
+      let num = 0;
+      let deno = 0;
+      group.assignments.forEach((studentAssignment) => {
+         num +=
+            studentAssignment.grade *
+            studentAssignment.assignmentId?.assignmentPercentage;
+         deno += studentAssignment.assignmentId?.assignmentPercentage;
+      });
+      if (deno <= 0) deno = 1;
+      return Math.floor(num / deno);
+   }
 
    const getAllAssignments = async () => {
       await fetch("http://localhost:8000/assignment", {
@@ -155,17 +171,39 @@ export default function ScoreManagement() {
    }
 
    function renderTableSummaryCell() {
-      return calculateAverageScores.map((avgScore, key) => (
-         <TableCell
-            className="flex flex-row"
-            align="left"
-            key={key}
-            scope="row"
-         >
-            <label>{avgScore?.averageScore}</label>
-            <label>/100</label>
-         </TableCell>
-      ));
+      const getTotalSummaryScore = () => {
+         let num = 0;
+         let deno = 0;
+         calculateAverageScores.forEach((avgScore) => {
+            const averageScore = avgScore?.averageScore as number;
+            const assignmentPercent = avgScore?.assignmentId
+               ?.assignmentPercentage as number;
+            num += averageScore * assignmentPercent;
+            deno += assignmentPercent;
+         });
+         if (deno <= 0) deno = 1;
+         return Math.floor(num / deno);
+      };
+
+      return (
+         <>
+            {calculateAverageScores.map((avgScore, key) => (
+               <TableCell
+                  className="flex flex-row"
+                  align="left"
+                  key={key}
+                  scope="row"
+               >
+                  <label>{avgScore?.averageScore}</label>
+                  <label>/100</label>
+               </TableCell>
+            ))}
+            <TableCell>
+               <span className="font-bold">{getTotalSummaryScore()}/100</span>
+            </TableCell>
+            <TableCell></TableCell>
+         </>
+      );
    }
 
    return (
@@ -176,12 +214,13 @@ export default function ScoreManagement() {
                   <TableCell>Sort by Name</TableCell>
                   {calculateAverageScores.map((averageScore, key) => {
                      const assignment = assignments.find(
-                        (x) => x._id === averageScore?.assignmentId?.toString()
+                        (x) => x._id === averageScore?.assignmentId?._id
                      );
                      return (
                         <ScoreTableHead key={key} assignment={assignment} />
                      );
                   })}
+                  <TableCell>Total Score</TableCell>
                   <TableCell>
                      <ExportScoreBoard />
                      {/* <DownloadAssignmentTemplate /> */}
@@ -232,17 +271,26 @@ export default function ScoreManagement() {
                               (assignment: any, key: number) => {
                                  if (!assignment)
                                     return (
-                                       <ScoreTableCell key={key} score={0} />
+                                       <>
+                                          <ScoreTableCell key={key} score={0} />
+                                       </>
                                     );
                                  return (
-                                    <ScoreTableCell
-                                       score={assignment?.averageScore}
-                                       studentAssignment={assignment}
-                                       key={key}
-                                    />
+                                    <>
+                                       <ScoreTableCell
+                                          score={assignment?.averageScore}
+                                          studentAssignment={assignment}
+                                          key={key}
+                                       />
+                                    </>
                                  );
                               }
                            )}
+                           <TableCell>
+                              <span className="font-bold">
+                                 {getTotalScore(row)}/100
+                              </span>
+                           </TableCell>
                         </TableRow>
                      )
                   );
