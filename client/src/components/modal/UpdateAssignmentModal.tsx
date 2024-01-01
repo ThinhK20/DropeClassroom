@@ -223,7 +223,7 @@ export default function UpdateAssignmentModal(props: {
                     </div>
                   </div>
 
-                  <div className="col-span-full">
+                  {/* <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
@@ -264,7 +264,7 @@ export default function UpdateAssignmentModal(props: {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -347,7 +347,7 @@ export default function UpdateAssignmentModal(props: {
                 </div>
               </div>
 
-              <div className="border-b border-gray-900/10 pb-12">
+              {/* <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Assignment for
                 </h2>
@@ -388,7 +388,7 @@ export default function UpdateAssignmentModal(props: {
                     </div>
                   </fieldset>
                 </div>
-              </div>
+              </div> */}
             </div>
           </form>
         </Box>
