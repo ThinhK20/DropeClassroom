@@ -11,7 +11,7 @@ import {
    TableRow,
    Typography,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
    GroupStudentAssignmentsByStudentId,
    StudentAssignment,
@@ -29,6 +29,8 @@ import {
 import { getUserClassroomApi } from "../../../apis/userClassroomApis";
 import { Assignment, User, UserClassRoom } from "../../../models";
 import { setAssignments } from "../../../store/assignmentSlice";
+import { DroppableComponent } from "./drag-&-drop/droppable-component";
+import { DropResult } from "react-beautiful-dnd";
 
 export default function ScoreManagement() {
    const location = useLocation();
@@ -55,7 +57,30 @@ export default function ScoreManagement() {
       return result;
    }
 
-   const calculateAverageScores = useMemo(() => {
+   useEffect(() => {
+      setGroupByStudentIdState([...groupStudentAssignmentsByStudentId]);
+   }, [groupStudentAssignmentsByStudentId]);
+
+   const [groupByStudentIdState, setGroupByStudentIdState] = useState<
+      GroupStudentAssignmentsByStudentId[]
+   >([]);
+
+   const [calculateAverageScores, setCalculateAverageScores] = useState<
+      (
+         | {
+              assignmentId: Assignment;
+              averageScore: number;
+              studentAssignments: StudentAssignment[];
+           }
+         | undefined
+      )[]
+   >([]);
+
+   useEffect(() => {
+      init();
+   }, []);
+
+   useEffect(() => {
       const existedGroupIds = [] as string[];
       const averageScores = assignments.map((assignment) => {
          const group =
@@ -90,12 +115,8 @@ export default function ScoreManagement() {
             studentAssignments: [],
          }));
 
-      return [...averageScores, ...otherGroups];
+      setCalculateAverageScores([...averageScores, ...otherGroups]);
    }, [assignments, groupStudentAssignmentsByAssignmentId]);
-
-   useEffect(() => {
-      init();
-   }, []);
 
    async function getAllUsers() {
       if (groupStudentAssignmentsByStudentId?.length <= 0) return;
@@ -206,18 +227,48 @@ export default function ScoreManagement() {
       );
    }
 
+   function handleDragEnd(result: DropResult) {
+      // Swap headers
+      const cloneCalculateAverageScores = [...calculateAverageScores];
+      const temp = cloneCalculateAverageScores[result.source.index];
+      cloneCalculateAverageScores[result.source.index] =
+         cloneCalculateAverageScores[result.destination?.index as any];
+      cloneCalculateAverageScores[result.destination?.index as any] = temp;
+      setCalculateAverageScores(cloneCalculateAverageScores);
+
+      // Swap body
+      const cloneGroupByStudentIdState = [...groupByStudentIdState].map(
+         (row) => {
+            const assignments = [...row.assignments];
+            const temp2 = assignments[result.source.index];
+            assignments[result.source.index] =
+               assignments[result.destination?.index as any];
+            assignments[result.destination?.index as any] = temp2;
+
+            row = { ...row, assignments };
+
+            return row;
+         }
+      );
+      setGroupByStudentIdState(cloneGroupByStudentIdState);
+   }
+
    return (
       <TableContainer component={Paper} className="w-full pt-[50px]">
          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-               <TableRow>
+               <TableRow component={DroppableComponent(handleDragEnd)}>
                   <TableCell>Sort by Name</TableCell>
                   {calculateAverageScores.map((averageScore, key) => {
                      const assignment = assignments.find(
                         (x) => x._id === averageScore?.assignmentId?._id
                      );
                      return (
-                        <ScoreTableHead key={key} assignment={assignment} />
+                        <ScoreTableHead
+                           key={key}
+                           assignment={assignment}
+                           index={key}
+                        />
                      );
                   })}
                   <TableCell>Total Score</TableCell>
@@ -244,9 +295,10 @@ export default function ScoreManagement() {
                   </TableCell>
                   {renderTableSummaryCell()}
                </TableRow>
-               {groupStudentAssignmentsByStudentId.map((row: any) => {
+               {groupByStudentIdState.map((row: any) => {
+                  console.log("Row: ", row);
                   return (
-                     row.studentId && (
+                     row?.studentId && (
                         <TableRow
                            key={row?.studentId}
                            sx={{
