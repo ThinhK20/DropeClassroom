@@ -29,22 +29,33 @@ export default function ExportScoreBoard() {
 
    useEffect(() => {
       getAllStudentAssignmentsByClassId(false, getClassId()).then((res) => {
-         const filteredData = res.data.map((data: any) => {
-            data.username = data.studentId.username;
-            data.email = data.studentId.email;
-            data.studentId = data.studentId._id;
-            const { isActive, createdAt, updatedAt, __v, ...result } = data;
-            return result;
-         });
-         setStudentAssignments(filteredData);
+         // const filteredData = [...res.data].map((data: any) => {
+         //    data.username = data.studentId.userId.username;
+         //    data.email = data.studentId.userId.email;
+         //    data.studentId = data.studentId._id;
+         //    const { isActive, createdAt, updatedAt, __v, ...result } = data;
+         //    return result;
+         // });
+
+         setStudentAssignments(res.data);
       });
    }, []);
+
+   function convertToReport() {
+      return studentAssignments.map((studentAssignment) => ({
+         studentId: studentAssignment.studentId._id,
+         username: studentAssignment.studentId.userId?.username,
+         email: studentAssignment.studentId.userId?.email,
+         grade: studentAssignment.grade,
+         status: studentAssignment.status,
+      }));
+   }
 
    return (
       <CSVLink
          filename="grade-board.csv"
          className="w-fit block"
-         data={studentAssignments}
+         data={convertToReport()}
       >
          <Tooltip title="Export grade board">
             <Avatar sx={{ bgcolor: "green", cursor: "pointer" }}>

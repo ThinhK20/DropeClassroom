@@ -32,14 +32,29 @@ export class StudentAssignmentService {
   }
 
   async getAllAssignmentsByClassId(id: string): Promise<StudentAssignment[]> {
-    const assignment = await this.assignmentModel.findOne({
+    const assignments = await this.assignmentModel.find({
       assignmentClassId: id,
     });
-    if (!assignment) return [];
-    const studentAssignments = await this.studentAssignmentModel.find({
-      assignmentId: assignment._id,
+    if (!assignments) return [];
+    const assignmentPromises = assignments.map(async (assignment) => {
+      const studentAssignments = await this.studentAssignmentModel
+        .find({
+          assignmentId: assignment._id,
+        })
+        .populate({
+          path: 'studentId',
+          populate: [
+            {
+              path: 'userId',
+            },
+          ],
+        });
+      return [...studentAssignments];
     });
-    return studentAssignments;
+
+    const result = await Promise.all(assignmentPromises);
+
+    return result.flat();
   }
 
   async getAllAssignmentsGroupByClassId(id: string): Promise<any> {
