@@ -130,4 +130,6 @@ export class UsersService {
     if (!res) return [];
     return res;
   }
+
+  // delete user by id
 }

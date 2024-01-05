@@ -121,14 +121,6 @@ export class ClassroomController {
     return this.classroomService.deleteUserClass(owner, u, id);
   }
 
-  // get all class by admin
-  @Roles(Role.Admin)
-  @UseGuards(SessionGuard, RolesGuard)
-  @Get('ad/all')
-  async getAllClassByAdmin(): Promise<Classroom[]> {
-    return this.classroomService.getAllClasses();
-  }
-
   // Join class by link
   @UseGuards(SessionGuard)
   @Get(':id/v1')
@@ -166,6 +158,14 @@ export class ClassroomController {
     @Query('role') role: ROLE_CLASS,
   ): Promise<UserClassroom> {
     return this.classroomService.acceptInviteUserClass(owner, id, cjc, role);
+  }
+
+  // get all class by admin
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Get('ad/all')
+  async getAllClassByAdmin(): Promise<Classroom[]> {
+    return this.classroomService.getAllClasses();
   }
 }
 
