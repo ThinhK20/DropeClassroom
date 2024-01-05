@@ -19,6 +19,7 @@ import Dashboard from "../page/admin/dashboard/Dashboard";
 import Users from "../page/admin/users/Users";
 import Classrooms from "../page/admin/classrooms/Classrooms";
 import ForgotPassword from "../page/forgot-password/forgot-password";
+import SingleUser from "../page/admin/users/SingleUser";
 
 export const router = createBrowserRouter([
   {
@@ -91,27 +92,31 @@ export const router = createBrowserRouter([
     element: <Admin />,
     children: [
       {
-        path: "db",
+        path: "/ad/db",
         element: <Dashboard />,
       },
       {
-        path: "u",
+        path: "/ad/u",
         element: <Users />,
       },
       {
-        path: "cr",
+        path: "/ad/u/:id",
+        element: <SingleUser />,
+      },
+      {
+        path: "/ad/cr",
         element: <Classrooms />,
       },
       {
-        path: "stats",
+        path: "/ad/stats",
         element: <div>stats</div>,
       },
       {
-        path: "notifi",
+        path: "/ad/notifi",
         element: <div>Hello Notifications</div>,
       },
       {
-        path: "s",
+        path: "/ad/s",
         element: <div>Hello Settings</div>,
       },
     ],

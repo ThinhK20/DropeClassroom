@@ -22,6 +22,8 @@ function Header({ user, handleToggle }: Props) {
     (state) => state.userClassroom.currentClass
   );
 
+  console.log(url.id);
+
   const headingName = useMemo((): HeadingName => {
     if (Number(url.id) === 2) return { name: "Schedule", title: undefined };
     if (Number(url.id) === 3) return { name: "Archived", title: undefined };
@@ -38,7 +40,7 @@ function Header({ user, handleToggle }: Props) {
             : currentClass?.classId.section,
       };
 
-    if (Number(url.id) === 9) return { name: "Admin", title: undefined };
+    if (Number(url.id) === 10) return { name: "Admin", title: undefined };
 
     return { name: undefined, title: undefined };
   }, [url, location]);
