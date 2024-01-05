@@ -17,9 +17,16 @@
     --theme-divider-tertiary: #a8b3cf33;
 }
 
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+}
 
 @layer components {
-
     .linearGradient {
         background: linear-gradient(97deg, #4066ff 4%, #2949c6 100%);
     }

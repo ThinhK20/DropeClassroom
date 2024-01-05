@@ -18,7 +18,7 @@ import {
 } from "../../../models/StudentAssignment";
 import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
 import { useLocation } from "react-router-dom";
-import ExportScoreBoard from "./export-score-board";
+import ExportScoreBoard from "./excels/export-score-board";
 import ScoreTableHead from "./score-table-head";
 import ScoreTableCell from "./score-table-cell";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
@@ -254,101 +254,109 @@ export default function ScoreManagement() {
    }
 
    return (
-      <TableContainer component={Paper} className="w-full pt-[50px]">
-         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-               <TableRow component={DroppableComponent(handleDragEnd)}>
-                  <TableCell>Sort by Name</TableCell>
-                  {calculateAverageScores.map((averageScore, key) => {
-                     const assignment = assignments.find(
-                        (x) => x._id === averageScore?.assignmentId?._id
-                     );
+      <>
+         <div className="fixed bottom-10 right-2 flex flex-col gap-5 z-50">
+            <ExportScoreBoard />
+         </div>
+         <TableContainer
+            component={Paper}
+            className="relative w-full pt-[50px]"
+         >
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+               <TableHead>
+                  <TableRow component={DroppableComponent(handleDragEnd)}>
+                     <TableCell></TableCell>
+                     {calculateAverageScores.map((averageScore, key) => {
+                        const assignment = assignments.find(
+                           (x) => x._id === averageScore?.assignmentId?._id
+                        );
+                        return (
+                           <ScoreTableHead
+                              key={key}
+                              assignment={assignment}
+                              index={key}
+                           />
+                        );
+                     })}
+                     <TableCell>Total Score</TableCell>
+                  </TableRow>
+               </TableHead>
+               <TableBody>
+                  <TableRow
+                     key={"score-avg"}
+                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                     <TableCell component="th" scope="row">
+                        <Typography>
+                           <FontAwesomeIcon
+                              icon={faUser}
+                              size="2xl"
+                              className="mr-2"
+                           />
+                           Class average score
+                        </Typography>
+                     </TableCell>
+                     {renderTableSummaryCell()}
+                  </TableRow>
+                  {groupByStudentIdState.map((row: any) => {
                      return (
-                        <ScoreTableHead
-                           key={key}
-                           assignment={assignment}
-                           index={key}
-                        />
-                     );
-                  })}
-                  <TableCell>Total Score</TableCell>
-                  <TableCell>
-                     <ExportScoreBoard />
-                     {/* <DownloadAssignmentTemplate /> */}
-                  </TableCell>
-               </TableRow>
-            </TableHead>
-            <TableBody>
-               <TableRow
-                  key={"score-avg"}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-               >
-                  <TableCell component="th" scope="row">
-                     <Typography>
-                        <FontAwesomeIcon
-                           icon={faUser}
-                           size="2xl"
-                           className="mr-2"
-                        />
-                        Class average score
-                     </Typography>
-                  </TableCell>
-                  {renderTableSummaryCell()}
-               </TableRow>
-               {groupByStudentIdState.map((row: any) => {
-                  console.log("Row: ", row);
-                  return (
-                     row?.studentId && (
-                        <TableRow
-                           key={row?.studentId}
-                           sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                           }}
-                        >
-                           <TableCell
-                              component="th"
-                              scope="row"
-                              className="flex items-center"
+                        row?.studentId && (
+                           <TableRow
+                              key={row?.studentId}
+                              sx={{
+                                 "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                 },
+                              }}
                            >
-                              <Typography>
-                                 {
-                                    users?.find(
-                                       (user) =>
-                                          user.studentId === row.studentId
-                                    )?.username
-                                 }
-                              </Typography>
-                           </TableCell>
-                           {row.assignments.map(
-                              (assignment: any, key: number) => {
-                                 if (!assignment)
+                              <TableCell
+                                 component="th"
+                                 scope="row"
+                                 className="flex items-center"
+                              >
+                                 <Typography>
+                                    {
+                                       users?.find(
+                                          (user) =>
+                                             user.studentId === row.studentId
+                                       )?.username
+                                    }
+                                 </Typography>
+                              </TableCell>
+                              {row.assignments.map(
+                                 (assignment: any, key: number) => {
+                                    if (!assignment)
+                                       return (
+                                          <>
+                                             <ScoreTableCell
+                                                key={key}
+                                                score={0}
+                                             />
+                                          </>
+                                       );
                                     return (
                                        <>
-                                          <ScoreTableCell key={key} score={0} />
+                                          <ScoreTableCell
+                                             score={assignment?.averageScore}
+                                             studentAssignment={assignment}
+                                             key={key}
+                                          />
                                        </>
                                     );
-                                 return (
-                                    <>
-                                       <ScoreTableCell
-                                          score={assignment?.averageScore}
-                                          studentAssignment={assignment}
-                                          key={key}
-                                       />
-                                    </>
-                                 );
-                              }
-                           )}
-                           <TableCell>
-                              <span className="font-bold">
-                                 {getTotalScore(row)}/100
-                              </span>
-                           </TableCell>
-                        </TableRow>
-                     )
-                  );
-               })}
-            </TableBody>
-         </Table>
-      </TableContainer>
+                                 }
+                              )}
+                              <TableCell>
+                                 <span className="font-bold">
+                                    {getTotalScore(row)}/100
+                                 </span>
+                              </TableCell>
+                           </TableRow>
+                        )
+                     );
+                  })}
+               </TableBody>
+            </Table>
+         </TableContainer>
+      </>
    );
 }

@@ -13,6 +13,7 @@ import { setAssignments } from "../../../store/assignmentSlice";
 import { createNotification } from "../../../apis/notificationApis";
 import { useAppSelector } from "../../../hooks/hooks";
 import { DraggableComponent } from "./drag-&-drop/draggable-component";
+import ExportScoreTemplate from "./excels/export-score-template";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -156,6 +157,9 @@ export default function ScoreTableHead(props: Props) {
                            title="View"
                            role={""}
                         />
+                     </div>
+                     <div className="p-4">
+                        <ExportScoreTemplate />
                      </div>
                   </div>
                )}
