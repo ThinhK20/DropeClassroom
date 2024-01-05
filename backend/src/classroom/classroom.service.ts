@@ -280,4 +280,15 @@ export class ClassroomService {
 
     return await this.userClassroomService.accpetInvite(u, classId, role);
   }
+
+  // inActive or Active class
+  async activeClass(classId: string, isActive: boolean) {
+    try {
+      await this.classroomModel.findByIdAndUpdate(classId, {
+        isActive: isActive,
+      });
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
 }

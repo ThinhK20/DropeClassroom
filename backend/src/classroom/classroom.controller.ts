@@ -18,6 +18,7 @@ import {
   CreateClassDto,
   JoinClassDto,
   UpdateClassDto,
+  ActiveClassDto,
 } from './dto';
 import { GetUser, Roles } from 'src/auth/decorator';
 import { User } from 'src/shared/schemas/user.schema';
@@ -166,6 +167,15 @@ export class ClassroomController {
   @Get('ad/all')
   async getAllClassByAdmin(): Promise<Classroom[]> {
     return this.classroomService.getAllClasses();
+  }
+
+  // inActive or active class by admin
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Patch('ad/active')
+  async activeClassByAdmin(@Body() dto: ActiveClassDto) {
+    this.classroomService.activeClass(dto._id, dto.isActive);
+    return Role.Admin;
   }
 }
 
