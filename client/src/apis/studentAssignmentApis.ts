@@ -32,3 +32,12 @@ export const updateStudentAssignmentApi = async (id: any, submitData: any) => {
       submitData
    );
 };
+
+export const updateStudentAssignmentByStudentAndAssignmentIdApi = async (
+   submitData: any
+) => {
+   return await axiosInstance.put(
+      "/student-assignments/updateByBody",
+      submitData
+   );
+};

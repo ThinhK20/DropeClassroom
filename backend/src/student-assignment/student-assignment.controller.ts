@@ -74,6 +74,15 @@ export class StudentAssignmentController {
     );
   }
 
+  @Put('updateByBody') // create new assignment
+  async updateAssignmentByAssignmentIdAndStudentId(
+    @Body() studentAssignment: StudentAssignment,
+  ): Promise<StudentAssignment> {
+    return await this.studentAssignmentService.updateAssignmentByAssignmentIdAndStudentId(
+      studentAssignment,
+    );
+  }
+
   // Delete: .../assignments/_id
   @Delete(':id')
   async deleteStudentAssignmentById(

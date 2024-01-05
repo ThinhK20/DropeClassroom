@@ -43,11 +43,11 @@ export default function ExportScoreBoard() {
 
    function convertToReport() {
       return studentAssignments.map((studentAssignment) => ({
-         studentId: studentAssignment.studentId._id,
-         username: studentAssignment.studentId.userId?.username,
-         email: studentAssignment.studentId.userId?.email,
-         grade: studentAssignment.grade,
-         status: studentAssignment.status,
+         Username: studentAssignment.studentId.userId?.username,
+         Assignment: studentAssignment.assignmentId?.assignmentName,
+         Email: studentAssignment.studentId.userId?.email,
+         Grade: studentAssignment.grade,
+         Status: studentAssignment.status,
       }));
    }
 

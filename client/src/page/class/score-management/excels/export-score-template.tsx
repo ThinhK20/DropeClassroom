@@ -5,11 +5,14 @@ import { getAllStudentAssignmentsByClassId } from "../../../../apis/studentAssig
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { StudentAssignment } from "../../../../models/StudentAssignment";
-import { Avatar, Tooltip, Typography } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faFile } from "@fortawesome/free-solid-svg-icons";
+import { Typography } from "@mui/material";
+import { Assignment } from "../../../../models";
 
-export default function ExportScoreTemplate() {
+interface Props {
+   assignment: Assignment | undefined;
+}
+
+export default function ExportScoreTemplate(props: Props) {
    const location = useLocation();
    const [studentAssignments, setStudentAssignments] = useState<
       StudentAssignment[]
@@ -42,18 +45,18 @@ export default function ExportScoreTemplate() {
    }, []);
 
    function convertToReport() {
-      return studentAssignments.map((studentAssignment) => ({
-         studentId: studentAssignment.studentId._id,
-         username: studentAssignment.studentId.userId?.username,
-         email: studentAssignment.studentId.userId?.email,
-         grade: studentAssignment.grade,
-         status: studentAssignment.status,
-      }));
+      return studentAssignments
+         .filter((s) => s.assignmentId._id === props.assignment?._id)
+         .map((studentAssignment) => ({
+            studentId: studentAssignment.studentId?._id,
+            username: studentAssignment.studentId.userId?.username,
+            grade: studentAssignment.grade,
+         }));
    }
 
    return (
       <CSVLink
-         filename="grade-board.csv"
+         filename={`${props.assignment?.assignmentName}-grade-template.csv`}
          className="w-fit block"
          data={convertToReport()}
       >

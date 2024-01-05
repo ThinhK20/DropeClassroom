@@ -14,6 +14,7 @@ import { createNotification } from "../../../apis/notificationApis";
 import { useAppSelector } from "../../../hooks/hooks";
 import { DraggableComponent } from "./drag-&-drop/draggable-component";
 import ExportScoreTemplate from "./excels/export-score-template";
+import ImportScoreTemplate from "./excels/import-score-template";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -159,7 +160,10 @@ export default function ScoreTableHead(props: Props) {
                         />
                      </div>
                      <div className="p-4">
-                        <ExportScoreTemplate />
+                        <ExportScoreTemplate assignment={props.assignment} />
+                     </div>
+                     <div className="p-4">
+                        <ImportScoreTemplate assignment={props.assignment} />
                      </div>
                   </div>
                )}

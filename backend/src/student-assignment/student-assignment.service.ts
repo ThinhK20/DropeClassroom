@@ -41,14 +41,19 @@ export class StudentAssignmentService {
         .find({
           assignmentId: assignment._id,
         })
-        .populate({
-          path: 'studentId',
-          populate: [
-            {
-              path: 'userId',
-            },
-          ],
-        });
+        .populate([
+          {
+            path: 'studentId',
+            populate: [
+              {
+                path: 'userId',
+              },
+            ],
+          },
+          {
+            path: 'assignmentId',
+          },
+        ]);
       return [...studentAssignments];
     });
 
@@ -183,6 +188,22 @@ export class StudentAssignmentService {
     const updatedAssignment =
       await this.studentAssignmentModel.findOneAndUpdate(
         { _id: id },
+        assignmentDTO,
+      );
+    if (!updatedAssignment)
+      throw new NotFoundException('Student assignment not found');
+    return updatedAssignment;
+  }
+
+  async updateAssignmentByAssignmentIdAndStudentId(
+    assignmentDTO: StudentAssignment,
+  ): Promise<StudentAssignment> {
+    const updatedAssignment =
+      await this.studentAssignmentModel.findOneAndUpdate(
+        {
+          assignmentId: assignmentDTO.assignmentId,
+          studentId: assignmentDTO.studentId,
+        },
         assignmentDTO,
       );
     if (!updatedAssignment)
