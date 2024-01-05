@@ -60,6 +60,7 @@ export default function GradeReviews() {
                      <TableCell>Id</TableCell>
                      <TableCell>Assignment</TableCell>
                      <TableCell>Student Name</TableCell>
+                     <TableCell>Current Grade</TableCell>
                      <TableCell>Grade Expectation</TableCell>
                      <TableCell>Student Explanation</TableCell>
                      <TableCell>Created At</TableCell>
@@ -82,6 +83,9 @@ export default function GradeReviews() {
                               gradeReview.studentAssignment?.studentId?.userId
                                  ?.username
                            }
+                        </TableCell>
+                        <TableCell>
+                           {gradeReview.studentAssignment?.grade}
                         </TableCell>
                         <TableCell>{gradeReview.gradeExpectation}</TableCell>
                         <TableCell className="max-w-[200px]">

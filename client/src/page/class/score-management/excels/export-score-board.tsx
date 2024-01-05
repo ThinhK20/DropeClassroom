@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CSVLink } from "react-csv";
-import { getAllStudentAssignmentsByClassId } from "../../../apis/studentAssignmentApis";
+import { getAllStudentAssignmentsByClassId } from "../../../../apis/studentAssignmentApis";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { StudentAssignment } from "../../../models/StudentAssignment";
+import { StudentAssignment } from "../../../../models/StudentAssignment";
 import { Avatar, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
@@ -57,7 +57,7 @@ export default function ExportScoreBoard() {
          className="w-fit block"
          data={convertToReport()}
       >
-         <Tooltip title="Export grade board">
+         <Tooltip placement="left" title="Export grade board" arrow>
             <Avatar sx={{ bgcolor: "green", cursor: "pointer" }}>
                <FontAwesomeIcon icon={faDownload} />
             </Avatar>
