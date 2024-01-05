@@ -9,7 +9,10 @@ import {
 import { Classroom } from "../../../models";
 import AvatarCustom from "../../../components/avatar/AvatarCustom";
 import SecurityIcon from "@mui/icons-material/Security";
-import { getClassByAdminApi } from "../../../apis/classroomApis";
+import {
+  activeClassByAdminApi,
+  getClassByAdminApi,
+} from "../../../apis/classroomApis";
 import { AxiosError } from "axios";
 
 function Classrooms() {
@@ -27,12 +30,27 @@ function Classrooms() {
   );
 
   const toggleActive = useCallback(
-    (id: string) => () => {
-      setRows((prevRows) =>
-        prevRows.map((row) =>
-          row._id === id ? { ...row, isActive: !row.isActive } : row
-        )
-      );
+    (id: string, isActive: boolean) => () => {
+      const ctrl = new AbortController();
+      activeClassByAdminApi(
+        {
+          _id: id,
+          isActive: !isActive,
+        },
+        ctrl.signal
+      )
+        .then(() => {
+          setRows((prevRows) =>
+            prevRows.map((row) =>
+              row._id === id ? { ...row, isActive: !row.isActive } : row
+            )
+          );
+          ctrl.abort();
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+          ctrl.abort();
+        });
     },
     []
   );
@@ -110,7 +128,7 @@ function Classrooms() {
           <GridActionsCellItem
             icon={<SecurityIcon />}
             label={`${params.row.isActive ? "Pending" : "Active"}`}
-            onClick={toggleActive(params.row._id)}
+            onClick={toggleActive(params.row._id, params.row.isActive as boolean)}
             showInMenu
           />,
         ],
@@ -123,13 +141,15 @@ function Classrooms() {
     if (!isFetch) {
       const ctrl = new AbortController();
 
-      getClassByAdminApi(ctrl.signal).then((data)=> {
-        setRows(data.data);
-        ctrl.abort();
-      }).catch((err: AxiosError) => {
-        console.log(err);
-        ctrl.abort();
-      })
+      getClassByAdminApi(ctrl.signal)
+        .then((data) => {
+          setRows(data.data);
+          ctrl.abort();
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+          ctrl.abort();
+        });
 
       setIsFetch(false);
     }

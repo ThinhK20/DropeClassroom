@@ -97,3 +97,17 @@ export const inviteUsersApi = async (
 export const getClassByAdminApi = async (controler: AbortSignal) => {
   return await axiosInstance.get("c/ad/all", { signal: controler });
 };
+
+export const activeClassByAdminApi = async (
+  body: {
+    _id: string;
+    isActive: boolean;
+  },
+  controler: AbortSignal
+) => {
+  return await axiosInstance.patch("c/ad/active", body, { signal: controler });
+};
+
+export const deleteClass = async (id: string, controler: AbortSignal) => {
+  return await axiosInstance.delete(`c/${id}`, { signal: controler });
+};
