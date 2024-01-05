@@ -9,6 +9,8 @@ import {
 import { Classroom } from "../../../models";
 import AvatarCustom from "../../../components/avatar/AvatarCustom";
 import SecurityIcon from "@mui/icons-material/Security";
+import { getClassByAdminApi } from "../../../apis/classroomApis";
+import { AxiosError } from "axios";
 
 function Classrooms() {
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ function Classrooms() {
     []
   );
 
-  const toggleAdmin = useCallback(
+  const toggleActive = useCallback(
     (id: string) => () => {
       setRows((prevRows) =>
         prevRows.map((row) =>
@@ -46,25 +48,7 @@ function Classrooms() {
         field: "className",
         headerName: "Class Name",
         width: 150,
-        // renderCell: (params) => {
-        //   return (
-        //     <div className="relative w-full h-full">
-        //       <img
-        //         src={params.row.coverImage}
-        //         alt="img-class"
-        //         className="relative object-cover"
-        //       ></img>
-        //       <p className="absolute inset-0 text-white px-2 flex items-center ">
-        //         {params.row.className}
-        //       </p>
-        //     </div>
-        //   );
-        // },
       },
-    //   {
-    //     field: "subject",
-    //     headerName: "Subject",
-    //   },
       {
         field: "owner",
         headerName: "Owner",
@@ -126,111 +110,26 @@ function Classrooms() {
           <GridActionsCellItem
             icon={<SecurityIcon />}
             label={`${params.row.isActive ? "Pending" : "Active"}`}
-            onClick={toggleAdmin(params.row._id)}
+            onClick={toggleActive(params.row._id)}
             showInMenu
           />,
         ],
       },
     ],
-    [deleteUser, toggleAdmin, navigate]
+    [deleteUser, toggleActive, navigate]
   );
 
   useEffect(() => {
     if (!isFetch) {
-      setRows([
-        {
-          _id: "657883e3ea322c82b2db08e0",
-          className: "Nest Js Tutorial",
-          section: "Junior",
-          subject: "Web Advanced Development",
-          room: "20CLC01",
-          coverImage: "/src/assets/gg3.png",
-          owner: {
-            _id: "6566115223c81cf1bc4e7f15",
-            username: "Minh An",
-            email: "anhoang483@gmail.com",
-            dateOfBirth: "2002-06-24T00:00:00.000Z",
-            isActive: true,
-            gender: "m",
-            role: "admin",
-            about: "Developer HCMUS - intern",
-            address: "District 1",
-          },
-          isActive: true,
-          classCode: "08b147",
-          createdAt: "2023-12-12T16:01:39.216Z",
-          updatedAt: "2023-12-23T14:37:28.204Z",
-        },
-        {
-          _id: "65788463ea322c82b2db08e7",
-          className: ".NET Tutorial",
-          section: "Beginer",
-          subject: "Web Advanced Development",
-          room: "20CLC01",
-          coverImage: "/src/assets/gg3.png",
-          owner: {
-            address: "",
-            about: "",
-            _id: "656f288b65ab6e44490ad976",
-            username: "Thinh Nguyen",
-            email: "thinhnguyent.2002@gmail.com",
-            dateOfBirth: null,
-            isActive: true,
-            gender: "m",
-            role: "user",
-          },
-          isActive: true,
-          classCode: "6eb97d",
-          createdAt: "2023-12-12T16:03:47.153Z",
-          updatedAt: "2023-12-12T16:03:47.153Z",
-        },
-        {
-          _id: "6579b288feaf8ab7db9e753e",
-          className: "Advance Web",
-          section: "Technology",
-          subject: "Subject 1 ",
-          room: "1",
-          coverImage: "/src/assets/gg2.png",
-          owner: {
-            address: "",
-            about: "",
-            _id: "656c7fa4483f61a479518b10",
-            username: "Nighlord",
-            email: "nighlord13082002@gmail.com",
-            dateOfBirth: "2023-11-10T17:00:00.000Z",
-            isActive: true,
-            gender: "m",
-            role: "user",
-          },
-          isActive: true,
-          classCode: "bd5e6c",
-          createdAt: "2023-12-13T13:32:56.846Z",
-          updatedAt: "2023-12-13T13:32:56.846Z",
-        },
-        {
-          _id: "6579c5d261a85808d76cceba",
-          className: "123dá",
-          section: "123",
-          subject: "afasf",
-          room: "haha",
-          coverImage: "/src/assets/gg1.png",
-          owner: {
-            address: "",
-            about: "",
-            _id: "656f288b65ab6e44490ad976",
-            username: "Thinh Nguyen",
-            email: "thinhnguyent.2002@gmail.com",
-            dateOfBirth: null,
-            isActive: true,
-            gender: "m",
-            role: "user",
-          },
-          isActive: true,
-          classCode: "c14b10",
-          createdAt: "2023-12-13T14:55:14.839Z",
-          updatedAt: "2023-12-13T18:13:39.902Z",
-        },
-      ]);
+      const ctrl = new AbortController();
+
+      getClassByAdminApi(ctrl.signal).then((data)=> {
+        setRows(data.data);
+        ctrl.abort();
+      }).catch((err: AxiosError) => {
+        console.log(err);
+        ctrl.abort();
+      })
 
       setIsFetch(false);
     }

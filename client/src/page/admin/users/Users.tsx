@@ -5,11 +5,16 @@ import { GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
 import { UserResponse } from "../../../models";
 import AvatarCustom from "../../../components/avatar/AvatarCustom";
 import SecurityIcon from "@mui/icons-material/Security";
+import {
+  banUserApi,
+  getAllUserApi,
+  unBanUserApi,
+} from "../../../apis/userApis";
+import { AxiosError } from "axios";
 
 function Users() {
   const navigate = useNavigate();
   const [rows, setRows] = useState<UserResponse[]>([]);
-  const [isFetch, setIsFetch] = useState<boolean>(false);
 
   const deleteUser = useCallback(
     (id: string) => () => {
@@ -21,12 +26,36 @@ function Users() {
   );
 
   const toggleAdmin = useCallback(
-    (id: string) => () => {
-      setRows((prevRows) =>
-        prevRows.map((row) =>
-          row._id === id ? { ...row, isActive: !row.isActive } : row
-        )
-      );
+    (id: string, isActive: boolean) => () => {
+      const ctrl = new AbortController();
+      // ban
+      if (isActive) {
+        banUserApi(id, ctrl.signal)
+          .then(() => {
+            setRows((prevRows) =>
+              prevRows.map((row) =>
+                row._id === id ? { ...row, isActive: !row.isActive } : row
+              )
+            );
+          })
+          .catch((err: AxiosError) => {
+            console.log(err);
+            ctrl.abort();
+          });
+      } else {
+        unBanUserApi(id, ctrl.signal)
+          .then(() => {
+            setRows((prevRows) =>
+              prevRows.map((row) =>
+                row._id === id ? { ...row, isActive: !row.isActive } : row
+              )
+            );
+          })
+          .catch((err: AxiosError) => {
+            console.log(err);
+            ctrl.abort();
+          });
+      }
     },
     []
   );
@@ -95,7 +124,7 @@ function Users() {
           <GridActionsCellItem
             icon={<SecurityIcon />}
             label={`${params.row.isActive ? "Pending" : "Active"}`}
-            onClick={toggleAdmin(params.row._id)}
+            onClick={toggleAdmin(params.row._id, params.row.isActive)}
             showInMenu
           />,
         ],
@@ -105,52 +134,18 @@ function Users() {
   );
 
   useEffect(() => {
-    if (!isFetch) {
-      setRows([
-        {
-          address: "",
-          about: "",
-          _id: "656c7fa4483f61a479518b10",
-          username: "Nighlord",
-          email: "nighlord13082002@gmail.com",
-          dateOfBirth: "2023-11-10T17:00:00.000Z",
-          isActive: true,
-          gender: "m",
-          role: "user",
-          createdDate: "2023-12-03T12:54:37.167Z",
-          updatedDate: "2023-12-03T12:54:37.167Z",
-        },
-        {
-          address: "",
-          about: "",
-          _id: "656f288b65ab6e44490ad976",
-          username: "Thinh Nguyen",
-          email: "thinhnguyent.2002@gmail.com",
-          dateOfBirth: null,
-          isActive: true,
-          gender: "m",
-          role: "user",
-          createdDate: "2023-12-05T13:11:25.656Z",
-          updatedDate: "2023-12-05T13:11:25.656Z",
-        },
-        {
-          address: "",
-          about: "",
-          _id: "65742682e0a8358c649eebc7",
-          username: "Tai Nguyen",
-          email: "tainguyensanh@gmail.com",
-          dateOfBirth: null,
-          isActive: false,
-          gender: "m",
-          role: "user",
-          createdDate: "2023-12-09T08:27:02.376Z",
-          updatedDate: "2023-12-09T08:27:02.376Z",
-        },
-      ]);
+    const ctrl = new AbortController();
 
-      setIsFetch(false);
-    }
-  }, [isFetch]);
+    getAllUserApi(ctrl.signal)
+      .then((data) => {
+        setRows(data.data);
+        ctrl.abort();
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+        ctrl.abort();
+      });
+  }, []);
 
   return (
     <div className="relative w-full h-full pt-5 pb-10 px-6 md:px-10 flex flex-col flex-1 items-start overflow-hidden ">

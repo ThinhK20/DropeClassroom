@@ -18,8 +18,13 @@ function SideBarItem({ item, children }: SideBarItemProps) {
   };
 
   useEffect(() => {
-    if (params[0].pathname === item.path) setIsActive(true);
-    else setIsActive(false);
+
+    const isLocation = params.findIndex((p) => p.pathname === item.path);
+
+    if(isLocation < 0) setIsActive(false);
+    else setIsActive(true);
+    // if (params[0].pathname === item.path) setIsActive(true);
+    // else setIsActive(false);
   }, [params]);
 
   return (

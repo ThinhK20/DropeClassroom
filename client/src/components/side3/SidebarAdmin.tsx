@@ -36,9 +36,9 @@ function SidebarAdmin({ isOpen }: SidebarProps) {
                     name: "DashBoard",
                     icon: <DashboardOutlinedIcon sx={{ fontSize: 28 }} />,
                     submenu: false,
-                    path: "/ad",
+                    path: "/ad/db",
                     actionGoDo: () => {
-                      navigate("/ad");
+                      navigate("/ad/db");
                     },
                   } as SideNavItem
                 }

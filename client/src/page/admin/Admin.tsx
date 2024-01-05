@@ -1,23 +1,16 @@
 import { useState } from "react";
 import ClientWrapper from "../../components/ClientWrapper";
 import Header from "../../components/header/Header";
-import { User } from "../../models";
 import SidebarAdmin from "../../components/side3/SidebarAdmin";
 import { Outlet } from "react-router-dom";
+import { useAppSelector } from "../../hooks/hooks";
 
 function Admin() {
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
 
-  const user: User = {
-    _id: "6566115223c81cf1bc4e7f15",
-    username: "Minh An",
-    email: "anhoang483@gmail.com",
-    isActive: true,
-    gender: "m",
-    role: "admin",
-    createdDate: "2023-11-28T16:11:01.769Z",
-    updatedDate: "2023-11-28T16:11:01.769Z",
-  };
+  const user = useAppSelector((state) => state.users.data);
+
+  if(!user) return <></>;
 
   return (
     <>

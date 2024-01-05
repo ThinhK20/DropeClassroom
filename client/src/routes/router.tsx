@@ -91,27 +91,27 @@ export const router = createBrowserRouter([
     element: <Admin />,
     children: [
       {
-        path: "/ad/",
+        path: "db",
         element: <Dashboard />,
       },
       {
-        path: "/ad/u",
+        path: "u",
         element: <Users />,
       },
       {
-        path: "/ad/cr",
+        path: "cr",
         element: <Classrooms />,
       },
       {
-        path: "/ad/stats",
+        path: "stats",
         element: <div>stats</div>,
       },
       {
-        path: "/ad/notifi",
+        path: "notifi",
         element: <div>Hello Notifications</div>,
       },
       {
-        path: "/ad/s",
+        path: "s",
         element: <div>Hello Settings</div>,
       },
     ],

@@ -89,5 +89,11 @@ export const inviteUsersApi = async (
   body: listInviteUser[],
   controler: AbortSignal
 ) => {
-  return await axiosInstance.post(`/c/${id}/invite`, body, { signal: controler });
+  return await axiosInstance.post(`/c/${id}/invite`, body, {
+    signal: controler,
+  });
+};
+
+export const getClassByAdminApi = async (controler: AbortSignal) => {
+  return await axiosInstance.get("c/ad/all", { signal: controler });
 };

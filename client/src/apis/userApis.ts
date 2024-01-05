@@ -11,3 +11,15 @@ export const getAllUsersNotInClassApi = async (
 export const updateUserApi = async (body: UpdateUserInfoDto, controler: AbortSignal): Promise<User> => {
   return (await axiosInstance.patch('u', body,  { signal: controler })).data;
 }
+
+export const getAllUserApi = async (controler: AbortSignal) => {
+   return await axiosInstance.get('u/all', { signal: controler })
+}
+
+export const banUserApi = async(id: string, controler: AbortSignal) => {
+   return await axiosInstance.patch('/u/b', {userId: id}, { signal: controler })
+}
+
+export const unBanUserApi = async(id: string, controler: AbortSignal) => {
+   return await axiosInstance.patch('/u/nb', {userId: id}, { signal: controler })
+}
