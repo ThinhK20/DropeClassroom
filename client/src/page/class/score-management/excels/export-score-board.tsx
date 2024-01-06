@@ -8,12 +8,17 @@ import { StudentAssignment } from "../../../../models/StudentAssignment";
 import { Avatar, Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { useAppSelector } from "../../../../hooks/hooks";
+import { AssignmentStatusEnum } from "../../../../shared/enums/StudentAssignment";
 
 export default function ExportScoreBoard() {
    const location = useLocation();
    const [studentAssignments, setStudentAssignments] = useState<
       StudentAssignment[]
    >([]);
+   const currentUserClassroom = useAppSelector(
+      (state) => state.userClassroom
+   ).currentUserClassroom;
 
    function getClassId() {
       const inputString = location.pathname;
@@ -29,26 +34,37 @@ export default function ExportScoreBoard() {
 
    useEffect(() => {
       getAllStudentAssignmentsByClassId(false, getClassId()).then((res) => {
-         // const filteredData = [...res.data].map((data: any) => {
-         //    data.username = data.studentId.userId.username;
-         //    data.email = data.studentId.userId.email;
-         //    data.studentId = data.studentId._id;
-         //    const { isActive, createdAt, updatedAt, __v, ...result } = data;
-         //    return result;
-         // });
-
          setStudentAssignments(res.data);
       });
    }, []);
 
    function convertToReport() {
-      return studentAssignments.map((studentAssignment) => ({
-         Username: studentAssignment.studentId.userId?.username,
-         Assignment: studentAssignment.assignmentId?.assignmentName,
-         Email: studentAssignment.studentId.userId?.email,
-         Grade: studentAssignment.grade,
-         Status: studentAssignment.status,
-      }));
+      let exportData = null;
+      if (currentUserClassroom?.role === "student") {
+         exportData = studentAssignments
+            .filter(
+               (s) =>
+                  s.studentId._id === currentUserClassroom._id &&
+                  s.assignmentId.assignmentStatus ===
+                     AssignmentStatusEnum.Completed
+            )
+            .map((studentAssignment) => ({
+               Username: studentAssignment.studentId.userId?.username,
+               Assignment: studentAssignment.assignmentId?.assignmentName,
+               Email: studentAssignment.studentId.userId?.email,
+               Grade: studentAssignment.grade,
+               Status: studentAssignment.status,
+            }));
+      } else {
+         exportData = studentAssignments.map((studentAssignment) => ({
+            Username: studentAssignment.studentId.userId?.username,
+            Assignment: studentAssignment.assignmentId?.assignmentName,
+            Email: studentAssignment.studentId.userId?.email,
+            Grade: studentAssignment.grade,
+            Status: studentAssignment.status,
+         }));
+      }
+      return exportData;
    }
 
    return (

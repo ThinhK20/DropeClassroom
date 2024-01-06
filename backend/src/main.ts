@@ -9,14 +9,13 @@ async function bootstrap() {
   app.use(
     session({
       secret: 'secretKey',
-      name: 'session',
       resave: false,
       saveUninitialized: false,
       cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 1 day
-        secure: true,
-        sameSite: 'lax',
-        httpOnly: false,
+        // secure: true,
+        // sameSite: 'lax',
+        // httpOnly: false,
       },
     }),
   );
