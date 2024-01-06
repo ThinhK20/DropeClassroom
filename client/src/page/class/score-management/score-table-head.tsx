@@ -151,7 +151,7 @@ export default function ScoreTableHead(props: Props) {
                 AssignmentStatusEnum.Completed &&
                 currentClass?.role !== "student" && (
                   <div
-                    className="block px-4 py-2 text-sm text-gray-200 cursor-pointer"
+                    className="block px-4 py-2 text-sm text-gray-200 cursor-pointer hover:bg-gray-200 hover:text-white"
                     style={{
                       color: "black",
                     }}
@@ -164,7 +164,7 @@ export default function ScoreTableHead(props: Props) {
                 )}
 
               <div
-                className="block px-4 py-2 text-sm text-gray-200 cursor-pointer"
+                className="block px-4 py-2 text-sm text-gray-200 cursor-pointer hover:bg-gray-200 hover:text-white"
                 style={{
                   color: "black",
                 }}
@@ -179,10 +179,10 @@ export default function ScoreTableHead(props: Props) {
                   role={""}
                 />
               </div>
-              <div className="p-4">
+              <div className="p-4 hover:bg-gray-200 ">
                 <ExportScoreTemplate assignment={props.assignment} />
               </div>
-              <div className="p-4">
+              <div className="p-4 hover:bg-gray-200 ">
                 <ImportScoreTemplate assignment={props.assignment} />
               </div>
             </div>
