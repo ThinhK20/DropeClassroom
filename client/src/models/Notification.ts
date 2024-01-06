@@ -5,6 +5,7 @@ export interface Notification {
   classId?: string;
   title: string;
   content: string;
+  link: string;
   createdAt: string;
   updatedAt: string;
 }

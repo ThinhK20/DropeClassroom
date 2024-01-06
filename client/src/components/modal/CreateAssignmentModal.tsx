@@ -15,243 +15,239 @@ import { createNotification } from "../../apis/notificationApis";
 import { BASE_API_URL } from "../../apis/axiosInterceptor";
 
 const Transition = React.forwardRef(function Transition(
-   props: TransitionProps & {
-      children: React.ReactElement;
-   },
-   ref: React.Ref<unknown>
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
 ) {
-   return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function CreateAssignmentModal() {
-   const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-   const handleOpen = () => setOpen(true);
-   const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-   const currentClassId = useAppSelector(
-      (state) => state.userClassroom.currentClass?.classId._id
-   );
+  const currentClassId = useAppSelector(
+    (state) => state.userClassroom.currentClass?.classId._id
+  );
 
-   const [assignment, setAssignment] = React.useState({
-      assignmentName: "",
-      assignmentDescription: "",
-      assignmentDueDate: "",
-      assignmentStatus: "Pending",
-      assignmentCreatedBy: "",
-      assignmentUpdatedBy: "",
-      assignmentGrade: 0,
-      assignmentGradeComment: "",
-      assignmentPercentage: 50,
-      assignmentClassId: "",
-   });
+  const [assignment, setAssignment] = React.useState({
+    assignmentName: "",
+    assignmentDescription: "",
+    assignmentDueDate: "",
+    assignmentStatus: "Pending",
+    assignmentCreatedBy: "",
+    assignmentUpdatedBy: "",
+    assignmentGrade: 0,
+    assignmentGradeComment: "",
+    assignmentPercentage: 50,
+    assignmentClassId: "",
+  });
 
-   const currentClass = useAppSelector(
-      (state) => state.userClassroom.currentClass
-   );
+  const currentClass = useAppSelector(
+    (state) => state.userClassroom.currentClass
+  );
 
-   const userName = useAppSelector((state) =>
-      state.users.data?.username?.toString()
-   );
+  const userName = useAppSelector((state) =>
+    state.users.data?.username?.toString()
+  );
 
-   const currentUserId = useAppSelector((state) => state.users.data?._id);
+  const currentUserId = useAppSelector((state) => state.users.data?._id);
 
-   const newAssignment = {
-      assignmentName: assignment.assignmentName,
-      assignmentDescription: assignment.assignmentDescription,
-      assignmentDueDate: assignment.assignmentDueDate,
-      assignmentStatus: assignment.assignmentStatus,
-      assignmentCreatedBy: userName,
-      assignmentUpdatedBy: assignment.assignmentUpdatedBy,
-      assignmentGrade: 100,
-      assignmentPercentage: assignment.assignmentPercentage,
-      assignmentClassId: currentClass?.classId._id as string,
-   };
+  const newAssignment = {
+    assignmentName: assignment.assignmentName,
+    assignmentDescription: assignment.assignmentDescription,
+    assignmentDueDate: assignment.assignmentDueDate,
+    assignmentStatus: assignment.assignmentStatus,
+    assignmentCreatedBy: userName,
+    assignmentUpdatedBy: assignment.assignmentUpdatedBy,
+    assignmentGrade: 100,
+    assignmentPercentage: assignment.assignmentPercentage,
+    assignmentClassId: currentClass?.classId._id as string,
+  };
 
-   const createAssignment = async (assignment: any) => {
-      await fetch(`${BASE_API_URL}/assignment/create`, {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(assignment),
+  const createAssignment = async (assignment: any) => {
+    await fetch(`${BASE_API_URL}/assignment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(assignment),
+    })
+      .then((res: any) => {
+        return res.json();
       })
-         .then((res: any) => {
-            return res.json();
-         })
-         .then((res: any) => {
-            return res.json();
-         })
-         .catch((err: any) => {
-            console.log(err);
-         });
-   };
+      .then((res: any) => {
+        return res.json();
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
-   return (
-      <React.Fragment>
-         {currentClass?.role != "student" && (
+  return (
+    <React.Fragment>
+      {currentClass?.role != "student" && (
+        <Button
+          variant="outlined"
+          onClick={handleOpen}
+          startIcon={<AddIcon />}
+          sx={{
+            borderRadius: `60px`,
+            padding: `20px`,
+            marginBottom: `-20px`,
+          }}
+        >
+          Create Assignment
+        </Button>
+      )}
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Create Assignment
+            </Typography>
             <Button
-               variant="outlined"
-               onClick={handleOpen}
-               startIcon={<AddIcon />}
-               sx={{
-                  borderRadius: `60px`,
-                  padding: `20px`,
-                  marginBottom: `-20px`,
-               }}
+              autoFocus
+              color="inherit"
+              onClick={() => {
+                createAssignment(newAssignment);
+                handleClose();
+                createNotification({
+                  title: newAssignment.assignmentCreatedBy as string,
+                  content: `Created a new assignment ${newAssignment.assignmentName} for ${currentClass?.classId.className}`,
+                  classId: currentClassId as string,
+                  studentId: currentUserId as string,
+                  link: `/c/${currentClassId}/w/t/all`,
+                });
+                //  reload the page
+                window.location.reload();
+              }}
             >
-               Create Assignment
+              save
             </Button>
-         )}
-         <Dialog
-            fullScreen
-            open={open}
-            onClose={handleClose}
-            TransitionComponent={Transition}
-         >
-            <AppBar sx={{ position: "relative" }}>
-               <Toolbar>
-                  <IconButton
-                     edge="start"
-                     color="inherit"
-                     onClick={handleClose}
-                     aria-label="close"
-                  >
-                     <CloseIcon />
-                  </IconButton>
-                  <Typography
-                     sx={{ ml: 2, flex: 1 }}
-                     variant="h6"
-                     component="div"
-                  >
-                     Create Assignment
-                  </Typography>
-                  <Button
-                     autoFocus
-                     color="inherit"
-                     onClick={() => {
-                        createAssignment(newAssignment);
-                        handleClose();
-                        createNotification({
-                           title: newAssignment.assignmentCreatedBy as string,
-                           content: `Created a new assignment ${newAssignment.assignmentName} for ${currentClass?.classId.className}`,
-                           classId: currentClassId as string,
-                           studentId: currentUserId as string,
-                        });
-                        //  reload the page
-                        window.location.reload();
-                     }}
-                  >
-                     save
-                  </Button>
-               </Toolbar>
-            </AppBar>
-            <Box
-               sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  mt: 10,
-               }}
-            >
-               <form className="flex flex-col justify-center items-center w-[80%]">
-                  <div className="space-y-12 w-full">
-                     <div className="border-b border-gray-900/10 pb-12">
-                        <h2 className="text-base font-semibold leading-7 text-gray-900">
-                           Create Assignment
-                        </h2>
-                        <p className="mt-1 text-sm leading-6 text-gray-600">
-                           Create new assignment for{" "}
-                           {currentClass?.classId.className}
+          </Toolbar>
+        </AppBar>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 10,
+          }}
+        >
+          <form className="flex flex-col justify-center items-center w-[80%]">
+            <div className="space-y-12 w-full">
+              <div className="border-b border-gray-900/10 pb-12">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                  Create Assignment
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-gray-600">
+                  Create new assignment for {currentClass?.classId.className}
+                </p>
+
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-4">
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Assignment Name
+                    </label>
+                    <div className="mt-2">
+                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                        <input
+                          type="text"
+                          name="street-address"
+                          id="street-address"
+                          autoComplete="street-address"
+                          className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          onChange={(e) => {
+                            setAssignment({
+                              ...assignment,
+                              assignmentName: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="about"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Assignment Description
+                    </label>
+                    <div className="mt-2">
+                      <textarea
+                        id="about"
+                        name="about"
+                        rows={3}
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) => {
+                          setAssignment({
+                            ...assignment,
+                            assignmentDescription: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-gray-600">
+                      Brief description for your assignment or instructions for
+                      your students.
+                    </p>
+                  </div>
+
+                  <div className="col-span-full">
+                    <label
+                      htmlFor="photo"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Created By
+                    </label>
+                    <div className="mt-2 flex items-center gap-x-3">
+                      <svg
+                        className="h-12 w-12 text-gray-300"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {userName}
                         </p>
+                        <p className="text-sm text-gray-500 truncate">
+                          {new Date().toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                           <div className="sm:col-span-4">
-                              <label
-                                 htmlFor="username"
-                                 className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                 Assignment Name
-                              </label>
-                              <div className="mt-2">
-                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input
-                                       type="text"
-                                       name="street-address"
-                                       id="street-address"
-                                       autoComplete="street-address"
-                                       className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                       onChange={(e) => {
-                                          setAssignment({
-                                             ...assignment,
-                                             assignmentName: e.target.value,
-                                          });
-                                       }}
-                                    />
-                                 </div>
-                              </div>
-                           </div>
-
-                           <div className="col-span-full">
-                              <label
-                                 htmlFor="about"
-                                 className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                 Assignment Description
-                              </label>
-                              <div className="mt-2">
-                                 <textarea
-                                    id="about"
-                                    name="about"
-                                    rows={3}
-                                    className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    onChange={(e) => {
-                                       setAssignment({
-                                          ...assignment,
-                                          assignmentDescription: e.target.value,
-                                       });
-                                    }}
-                                 />
-                              </div>
-                              <p className="mt-3 text-sm leading-6 text-gray-600">
-                                 Brief description for your assignment or
-                                 instructions for your students.
-                              </p>
-                           </div>
-
-                           <div className="col-span-full">
-                              <label
-                                 htmlFor="photo"
-                                 className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                 Created By
-                              </label>
-                              <div className="mt-2 flex items-center gap-x-3">
-                                 <svg
-                                    className="h-12 w-12 text-gray-300"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    aria-hidden="true"
-                                 >
-                                    <path
-                                       fill-rule="evenodd"
-                                       d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                                       clip-rule="evenodd"
-                                    />
-                                 </svg>
-                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate">
-                                       {userName}
-                                    </p>
-                                    <p className="text-sm text-gray-500 truncate">
-                                       {new Date().toLocaleDateString()}
-                                    </p>
-                                 </div>
-                              </div>
-                           </div>
-
-                           {/* <div className="col-span-full">
+                  {/* <div className="col-span-full">
                     <label
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
@@ -293,65 +289,63 @@ export default function CreateAssignmentModal() {
                       </div>
                     </div>
                   </div> */}
-                        </div>
-                     </div>
+                </div>
+              </div>
 
-                     <div className="border-b border-gray-900/10 pb-12">
-                        <h2 className="text-base font-semibold leading-7 text-gray-900">
-                           Due Date
-                        </h2>
-                        <p className="mt-1 text-sm leading-6 text-gray-600">
-                           Set the due date for this assignment.
-                        </p>
-                        <TextField
-                           id="datetime-local"
-                           type="datetime-local"
-                           defaultValue={new Date().toISOString().slice(0, 16)}
-                           sx={{ width: 300, mb: 3 }}
-                           InputLabelProps={{
-                              shrink: true,
-                           }}
-                           onChange={(e) =>
-                              setAssignment({
-                                 ...assignment,
-                                 assignmentDueDate: e.target.value,
-                              })
-                           }
-                           style={{
-                              marginRight: 100,
-                           }}
-                        />
+              <div className="border-b border-gray-900/10 pb-12">
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                  Due Date
+                </h2>
+                <p className="mt-1 text-sm leading-6 text-gray-600">
+                  Set the due date for this assignment.
+                </p>
+                <TextField
+                  id="datetime-local"
+                  type="datetime-local"
+                  defaultValue={new Date().toISOString().slice(0, 16)}
+                  sx={{ width: 300, mb: 3 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={(e) =>
+                    setAssignment({
+                      ...assignment,
+                      assignmentDueDate: e.target.value,
+                    })
+                  }
+                  style={{
+                    marginRight: 100,
+                  }}
+                />
 
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                           <div className="sm:col-span-4">
-                              <label
-                                 htmlFor="number"
-                                 className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                 Percentage
-                              </label>
-                              <div className="mt-2">
-                                 <input
-                                    id="number"
-                                    name="precetage"
-                                    type="number"
-                                    autoComplete="number"
-                                    className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    onChange={(e) =>
-                                       setAssignment({
-                                          ...assignment,
-                                          assignmentPercentage: parseInt(
-                                             e.target.value
-                                          ),
-                                       })
-                                    }
-                                 />
-                              </div>
-                           </div>
-                        </div>
-                     </div>
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-4">
+                    <label
+                      htmlFor="number"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Percentage
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        id="number"
+                        name="precetage"
+                        type="number"
+                        autoComplete="number"
+                        className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) =>
+                          setAssignment({
+                            ...assignment,
+                            assignmentPercentage: parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                     {/* <div className="border-b border-gray-900/10 pb-12">
+              {/* <div className="border-b border-gray-900/10 pb-12">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
                   Assignment for
                 </h2>
@@ -393,10 +387,10 @@ export default function CreateAssignmentModal() {
                   </fieldset>
                 </div>
               </div> */}
-                  </div>
-               </form>
-            </Box>
-         </Dialog>
-      </React.Fragment>
-   );
+            </div>
+          </form>
+        </Box>
+      </Dialog>
+    </React.Fragment>
+  );
 }

@@ -99,6 +99,7 @@ export default function ScoreTableHead(props: Props) {
           content: `Assignment ${props.assignment?.assignmentName} was completed by ${currentUser?.username}`,
           classId: getClassId(),
           studentId: currentUser?._id as string,
+          link: `/c/${getClassId()}/gb/all`,
         });
       })
       .catch((err) => toast.error(err));
