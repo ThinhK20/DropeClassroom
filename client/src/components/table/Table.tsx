@@ -8,12 +8,14 @@ import "./table.scss";
 interface Props  {
   columns: GridColDef[];
   rows: object[];
+  tableNumber?: number;
+  height?: string;
 }
 
-function Table({columns, rows}: Props) {
+function Table({columns, rows, tableNumber = 10, height = '500'}: Props) {
 
   return (
-    <div className="relative h-[500px]">
+    <div className={`relative h-[${height}px]`}>
       <DataGrid
         className="dataGrid"
         rows={rows}
@@ -21,7 +23,7 @@ function Table({columns, rows}: Props) {
         getRowId={(row) => row._id}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
+            paginationModel: { page: 0, pageSize: tableNumber },
           },
         }}
         // pageSizeOptions={[5, 10]}

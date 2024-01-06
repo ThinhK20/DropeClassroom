@@ -1,6 +1,7 @@
 import { Classroom, User } from ".";
 
 export interface ObjectUserClassRoom {
+  _id?: string;
   classId: Classroom;
   role: "teacher" | "student" | "owner";
   studentId?: string;

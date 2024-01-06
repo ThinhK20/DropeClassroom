@@ -2,7 +2,7 @@ import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 
 function JoinClass() {
   return (
-    <div className="w-full border rounded-lg flex flex-col mt-2 mb-2">
+    <div className="w-full border rounded-lg flex flex-col">
       <div className="flex flex-row items-center px-4 py-2 w-full">
         <img
           src="https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-48dp/logo_meet_2020q4_color_1x_web_48dp.png"
