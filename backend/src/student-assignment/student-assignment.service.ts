@@ -126,41 +126,44 @@ export class StudentAssignmentService {
     const result1 = [...averageScores, ...otherGroups];
 
     const mergedData = result1.reduce((acc: any, item) => {
-      const existingItem = acc.find(
-        (x) =>
-          x.studentId?.toString() ===
-          item.studentAssignments[0]?.studentId?.toString(),
-      );
-      if (existingItem && item.studentAssignments.length > 0) {
-        existingItem.assignments.push({
-          assignmentId: item.assignmentId,
-          averageScore: item.averageScore || 0,
-          createdAt: item.studentAssignments[0].createdAt,
-          grade: item.studentAssignments[0].grade || 0,
-          isActive: item.studentAssignments[0].isActive,
-          status: item.studentAssignments[0].status,
-          studentId: item.studentAssignments[0].studentId,
-          updatedAt: item.studentAssignments[0].updatedAt,
-          _id: item.studentAssignments[0]._id,
-        });
-      } else {
-        acc.push({
-          studentId: item.studentAssignments[0]?.studentId,
-          assignments: [
-            {
-              assignmentId: item.assignmentId,
-              averageScore: item.averageScore || 0,
-              createdAt: item.studentAssignments[0]?.createdAt,
-              grade: item.studentAssignments[0]?.grade || 0,
-              isActive: item.studentAssignments[0]?.isActive,
-              status: item.studentAssignments[0]?.status,
-              studentId: item.studentAssignments[0]?.studentId,
-              updatedAt: item.studentAssignments[0]?.updatedAt,
-              _id: item.studentAssignments[0]?._id,
-            },
-          ],
-        });
-      }
+      item.studentAssignments.forEach((studentAssignment) => {
+        const existingItem = acc.find(
+          (x) =>
+            studentAssignment.studentId.toString() === x.studentId.toString(),
+        );
+        studentAssignment.assignmentId = item.assignmentId;
+
+        if (existingItem) {
+          existingItem.assignments.push({
+            assignmentId: studentAssignment.assignmentId,
+            averageScore: item.averageScore || 0,
+            createdAt: studentAssignment.createdAt,
+            grade: studentAssignment.grade || 0,
+            isActive: studentAssignment.isActive,
+            status: studentAssignment.status,
+            studentId: studentAssignment.studentId,
+            updatedAt: studentAssignment.updatedAt,
+            _id: studentAssignment._id,
+          });
+        } else {
+          acc.push({
+            studentId: studentAssignment.studentId,
+            assignments: [
+              {
+                assignmentId: studentAssignment.assignmentId,
+                averageScore: item.averageScore || 0,
+                createdAt: studentAssignment.createdAt,
+                grade: studentAssignment.grade || 0,
+                isActive: studentAssignment.isActive,
+                status: studentAssignment.status,
+                studentId: studentAssignment.studentId,
+                updatedAt: studentAssignment.updatedAt,
+                _id: studentAssignment._id,
+              },
+            ],
+          });
+        }
+      });
 
       return acc;
     }, []);
@@ -209,5 +212,26 @@ export class StudentAssignmentService {
     if (!updatedAssignment)
       throw new NotFoundException('Student assignment not found');
     return updatedAssignment;
+  }
+
+  async createStudentAssignmentsByStudentId(
+    studentId: string,
+  ): Promise<boolean> {
+    const assigments = await this.assignmentModel.find();
+    const promises = assigments.forEach(async (assignment) => {
+      const studentAssigment = this.studentAssignmentModel.findOne({
+        assignmentId: assignment._id,
+        studentId: studentId,
+      });
+      if (studentAssigment === null) {
+        await this.studentAssignmentModel.create({
+          assignmentId: assignment._id,
+          studentId: studentId,
+        });
+      }
+    });
+
+    await Promise.all([promises]);
+    return true;
   }
 }

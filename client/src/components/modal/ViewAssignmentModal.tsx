@@ -5,20 +5,11 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import { TransitionProps } from "@mui/material/transitions";
-
-import {
-   convertDateToString,
-   convertStringToDate,
-} from "../../helper/assignment_helper";
 
 import { Assignment } from "../../models";
 
 import { Box, Button, Typography } from "@mui/material";
-import { useAppSelector } from "../../hooks/hooks";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { TransitionProps } from "@mui/material/transitions";
 
 const Transition = React.forwardRef(function Transition(
    props: TransitionProps & {

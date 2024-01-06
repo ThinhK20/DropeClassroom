@@ -11,12 +11,17 @@ import {
   StudentAssignmentSchema,
 } from 'src/student-assignment/schemas/student-assignment.schema';
 import { ClassroomModule } from 'src/classroom/classroom.module';
+import {
+  GradeReview,
+  GradeReviewSchema,
+} from 'src/grade-reviews/schemas/grade-review.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Assignment.name, schema: AssignmentSchema },
       { name: StudentAssignment.name, schema: StudentAssignmentSchema },
+      { name: GradeReview.name, schema: GradeReviewSchema },
     ]),
     ClassroomModule,
   ],

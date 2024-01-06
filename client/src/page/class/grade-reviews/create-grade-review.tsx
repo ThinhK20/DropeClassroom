@@ -37,6 +37,8 @@ import { setGradeReviews } from "../../../store/gradeReviewsSlice";
 import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 import { createNotification } from "../../../apis/notificationApis";
 import CommentBox from "./comments/comments";
+import { UserClassRoom } from "../../../models";
+import { GroupStudentAssignmentsByStudentId } from "../../../models/StudentAssignment";
 
 const Transition = React.forwardRef(function Transition(
    props: TransitionProps & {
@@ -102,10 +104,14 @@ export default function CreateGradeReview(props: Props) {
       const modifiedData = {
          ...submitData,
          classId: getClassId(),
-         studentAssignment:
-            groupStudentAssignmentsByStudentId[0].assignments.find(
-               (val) => val.assignmentId._id === assignmentId?.toString()
-            )?._id,
+         studentAssignment: (
+            groupStudentAssignmentsByStudentId.find(
+               (x) =>
+                  x.studentId! === (currentUserClassroom as UserClassRoom)._id
+            ) as GroupStudentAssignmentsByStudentId
+         ).assignments.find(
+            (val) => val.assignmentId._id === assignmentId?.toString()
+         )?._id,
       };
       if (props.gradeReview) {
          updateGradeReviewApi(modifiedData as any)
