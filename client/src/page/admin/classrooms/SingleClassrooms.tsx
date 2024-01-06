@@ -36,14 +36,18 @@ function SingleClassrooms() {
         <div className="left infor__owner relative shadow-[2px_4px_10px_1px_rgba(201,201,201,0.47)] p-[20px] flex-1">
           <h1 className="title text-2xl">Information Owner</h1>
 
-          <div className="item">
-            <AvatarCustom
-              classroomAvatar={false}
-              name={classroom?.owner.username || "hhman"}
-              url={"/src/assets/testimonial-03.jpg"}
-              height={40}
-              width={40}
-            />
+          <div className="item flex">
+            <div className="img ">
+              <AvatarCustom
+                classroomAvatar={false}
+                name={classroom?.owner.username || "hhman"}
+                url={""}
+                height={150}
+                width={150}
+                fontSize={100}
+              />
+            </div>
+
             <div className="">{classroom?.owner.email}</div>
           </div>
         </div>
