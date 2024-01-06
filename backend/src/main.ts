@@ -12,10 +12,11 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 86400000, // 1 day
         secure: true,
         sameSite: 'none',
         httpOnly: false,
+        path: '/',
       },
     }),
   );
