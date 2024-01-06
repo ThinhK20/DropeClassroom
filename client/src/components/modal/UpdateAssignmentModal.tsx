@@ -272,57 +272,7 @@ export default function UpdateAssignmentModal(props: {
               </div>
 
               <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Due Date
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Set the due date for this assignment.
-                </p>
-                <TextField
-                  id="datetime-local"
-                  type="datetime-local"
-                  defaultValue={new Date().toISOString().slice(0, 16)}
-                  sx={{ width: 300, mb: 3 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={(e) =>
-                    setAssignment({
-                      ...assignment,
-                      assignmentDueDate: e.target.value,
-                    })
-                  }
-                  value={assignment.assignmentDueDate}
-                  style={{
-                    marginRight: 100,
-                  }}
-                />
-
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="first-name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Grade
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="number"
-                        name="first-name"
-                        id="first-name"
-                        autoComplete="given-name"
-                        className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        onChange={(e) =>
-                          setAssignment({
-                            ...assignment,
-                            assignmentGrade: parseInt(e.target.value),
-                          })
-                        }
-                        value={assignment.assignmentGrade}
-                      />
-                    </div>
-                  </div>
                   <div className="sm:col-span-4">
                     <label
                       htmlFor="number"

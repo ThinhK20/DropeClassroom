@@ -293,31 +293,6 @@ export default function CreateAssignmentModal() {
               </div>
 
               <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Due Date
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Set the due date for this assignment.
-                </p>
-                <TextField
-                  id="datetime-local"
-                  type="datetime-local"
-                  defaultValue={new Date().toISOString().slice(0, 16)}
-                  sx={{ width: 300, mb: 3 }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={(e) =>
-                    setAssignment({
-                      ...assignment,
-                      assignmentDueDate: e.target.value,
-                    })
-                  }
-                  style={{
-                    marginRight: 100,
-                  }}
-                />
-
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="sm:col-span-4">
                     <label
