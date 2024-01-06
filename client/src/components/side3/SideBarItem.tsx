@@ -17,8 +17,6 @@ function SideBarItem({ item, children }: SideBarItemProps) {
     setSubMenuOpen(!subMenuOpen);
   };
 
-  console.log(params);
-
   useEffect(() => {
 
     const isLocation = params.findIndex((p) => p.pathname === item.path);

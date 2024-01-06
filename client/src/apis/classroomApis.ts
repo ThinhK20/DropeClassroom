@@ -111,3 +111,7 @@ export const activeClassByAdminApi = async (
 export const deleteClass = async (id: string, controler: AbortSignal) => {
   return await axiosInstance.delete(`c/${id}`, { signal: controler });
 };
+
+export const findClassByIdApi = async(id: string, controler: AbortSignal) => {
+  return await axiosInstance.get(`c/${id}`, { signal: controler });
+}

@@ -20,6 +20,7 @@ import Users from "../page/admin/users/Users";
 import Classrooms from "../page/admin/classrooms/Classrooms";
 import ForgotPassword from "../page/forgot-password/forgot-password";
 import SingleUser from "../page/admin/users/SingleUser";
+import SingleClassrooms from "../page/admin/classrooms/SingleClassrooms";
 
 export const router = createBrowserRouter([
   {
@@ -106,6 +107,10 @@ export const router = createBrowserRouter([
       {
         path: "/ad/cr",
         element: <Classrooms />,
+      },
+      {
+        path: "/ad/cr/:id",
+        element: <SingleClassrooms />,
       },
       {
         path: "/ad/stats",

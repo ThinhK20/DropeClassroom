@@ -71,6 +71,7 @@ function Classrooms() {
         field: "owner",
         headerName: "Owner",
         width: 230,
+        valueFormatter: ({value}) => `${value.username}`,
         renderCell: (params) => {
           return (
             <div className="flex items-center justify-center gap-[10px]">
@@ -115,9 +116,9 @@ function Classrooms() {
         getActions: (params) => [
           <GridActionsCellItem
             icon={<img src="/src/assets/view.svg" />}
-            label="Delete"
+            label="View"
             onClick={() => {
-              navigate("ad/user/" + params.row._id);
+              navigate(params.row._id);
             }}
           />,
           <GridActionsCellItem
