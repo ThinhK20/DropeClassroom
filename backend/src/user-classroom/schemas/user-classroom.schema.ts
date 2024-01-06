@@ -30,6 +30,8 @@ export type UserClassroomDocument = HydratedDocument<UserClassroom>;
   timestamps: true,
 })
 export class UserClassroom {
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,

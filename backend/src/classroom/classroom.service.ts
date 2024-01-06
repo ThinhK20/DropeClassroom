@@ -22,6 +22,7 @@ import {
   UpdateClassDto,
 } from './dto';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
+import { StudentAssignmentService } from 'src/student-assignment/student-assignment.service';
 
 @Injectable() // this is "Dependency Injection"
 export class ClassroomService {
@@ -29,6 +30,7 @@ export class ClassroomService {
     @InjectModel(Classroom.name)
     private classroomModel: mongoose.Model<Classroom>,
     private readonly userClassroomService: UserClassroomService,
+    private readonly studentAssignmentService: StudentAssignmentService,
     private readonly sendgridService: SendgridService,
   ) {}
 
@@ -164,11 +166,15 @@ export class ClassroomService {
     if (classroom.owner._id.toString() !== owner._id.toString())
       throw new BadRequestException('user is not owner');
 
-    return await this.userClassroomService.createUserClass({
+    const userClassroom = await this.userClassroomService.createUserClass({
       classId: classroom,
       role: user.role,
       userId: user.userId,
     });
+    await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+      userClassroom._id as unknown as string,
+    );
+    return userClassroom;
   }
 
   // delete user

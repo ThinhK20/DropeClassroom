@@ -125,15 +125,12 @@ export class StudentAssignmentService {
 
     const result1 = [...averageScores, ...otherGroups];
 
-    console.log('Resul1: ', result1);
-
     const mergedData = result1.reduce((acc: any, item) => {
       item.studentAssignments.forEach((studentAssignment) => {
         const existingItem = acc.find(
           (x) =>
             studentAssignment.studentId.toString() === x.studentId.toString(),
         );
-        console.log('Existing item: ', existingItem);
         studentAssignment.assignmentId = item.assignmentId;
 
         if (existingItem) {
@@ -215,5 +212,26 @@ export class StudentAssignmentService {
     if (!updatedAssignment)
       throw new NotFoundException('Student assignment not found');
     return updatedAssignment;
+  }
+
+  async createStudentAssignmentsByStudentId(
+    studentId: string,
+  ): Promise<boolean> {
+    const assigments = await this.assignmentModel.find();
+    const promises = assigments.forEach(async (assignment) => {
+      const studentAssigment = this.studentAssignmentModel.findOne({
+        assignmentId: assignment._id,
+        studentId: studentId,
+      });
+      if (studentAssigment === null) {
+        await this.studentAssignmentModel.create({
+          assignmentId: assignment._id,
+          studentId: studentId,
+        });
+      }
+    });
+
+    await Promise.all([promises]);
+    return true;
   }
 }
