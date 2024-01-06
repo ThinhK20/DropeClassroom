@@ -15,6 +15,7 @@ import { useAppSelector } from "../../../hooks/hooks";
 import { DraggableComponent } from "./drag-&-drop/draggable-component";
 import ExportScoreTemplate from "./excels/export-score-template";
 import ImportScoreTemplate from "./excels/import-score-template";
+import { BASE_API_URL } from "../../../apis/axiosInterceptor";
 
 interface Props {
    assignment: Assignment | undefined;
@@ -45,7 +46,7 @@ export default function ScoreTableHead(props: Props) {
    }
 
    const getAllAssignments = async () => {
-      await fetch("http://localhost:8000/assignment", {
+      await fetch(`${BASE_API_URL}/assignment`, {
          method: "GET",
          headers: {
             "Content-Type": "application/json",

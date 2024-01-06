@@ -35,7 +35,7 @@ export default function CommentBox(props: Props) {
       } as Record<keyof Comment, string>;
 
       addCommentApi(submitData)
-         .then((val) => {
+         .then(() => {
             setContent("");
             fetchComments();
          })

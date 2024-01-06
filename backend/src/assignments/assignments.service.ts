@@ -8,6 +8,7 @@ import { AssignmentStatus } from 'enums/AssignmentStatus.enum';
 import { StudentAssignment } from 'src/student-assignment/schemas/student-assignment.schema';
 import { ClassroomService } from 'src/classroom/classroom.service';
 import { ROLE_CLASS } from 'src/shared/enums';
+import { GradeReview } from 'src/grade-reviews/schemas/grade-review.schema';
 
 @Injectable()
 export class AssignmentService {
@@ -16,6 +17,8 @@ export class AssignmentService {
     private assignmentModel: mongoose.Model<Assignment>,
     @InjectModel(StudentAssignment.name)
     private studentAssignmentsModel: mongoose.Model<StudentAssignment>,
+    @InjectModel(GradeReview.name)
+    private gradeReviewsModel: mongoose.Model<GradeReview>,
     private classroomService: ClassroomService,
   ) {}
 
@@ -61,9 +64,24 @@ export class AssignmentService {
   }
 
   async deleteAssignmentById(id: string): Promise<Assignment> {
+    const studentAssignments = await this.studentAssignmentsModel.find({
+      assignmentId: id,
+    });
+
+    const gradeReviewPromises = studentAssignments.map(async (sa) => {
+      return await this.gradeReviewsModel.deleteMany({
+        studentAssignment: sa._id,
+      });
+    });
+
+    await Promise.all(gradeReviewPromises);
+
+    await this.studentAssignmentsModel.deleteMany({ assignmentId: id });
+
     const assignment = await this.assignmentModel.findOneAndDelete({
       _id: id,
     });
+
     if (!assignment) throw new NotFoundException('Assignment not found');
     return assignment;
   }

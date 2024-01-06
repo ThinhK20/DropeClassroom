@@ -31,6 +31,7 @@ import { Assignment, User, UserClassRoom } from "../../../models";
 import { setAssignments } from "../../../store/assignmentSlice";
 import { DroppableComponent } from "./drag-&-drop/droppable-component";
 import { DropResult } from "react-beautiful-dnd";
+import { BASE_API_URL } from "../../../apis/axiosInterceptor";
 
 export default function ScoreManagement() {
    const location = useLocation();
@@ -147,7 +148,7 @@ export default function ScoreManagement() {
    }
 
    const getAllAssignments = async () => {
-      await fetch("http://localhost:8000/assignment", {
+      await fetch(`${BASE_API_URL}/assignment`, {
          method: "GET",
          headers: {
             "Content-Type": "application/json",
@@ -337,7 +338,7 @@ export default function ScoreManagement() {
                                     return (
                                        <>
                                           <ScoreTableCell
-                                             score={assignment?.averageScore}
+                                             score={assignment?.grade}
                                              studentAssignment={assignment}
                                              key={key}
                                           />
