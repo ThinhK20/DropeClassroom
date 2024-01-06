@@ -22,7 +22,7 @@ async function bootstrap() {
   app.use(passport.session());
 
   app.enableCors({
-    origin: 'http://localhost:3000', // Replace with your ReactJS client's origin
+    origin: process.env.CLIENT_URL, // Replace with your ReactJS client's origin
     credentials: true,
   });
 

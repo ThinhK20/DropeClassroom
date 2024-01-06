@@ -15,11 +15,12 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Alert } from "@mui/material";
 import { validateEmail } from "../../libs/utils";
-import { loginApi, loginByGoogleApi } from "../../apis/authApis";
+import { loginApi, loginByGoogleApi, signupApi } from "../../apis/authApis";
 import { AxiosError } from "axios";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setLogin } from "../../store/userSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -69,8 +70,44 @@ export default function SignIn() {
                decodeURIComponent(urlParams.get("authResult"))
             );
             authResult = { ...authResult, isActive: true };
-            dispatch(setLogin(authResult));
-            navigate("/");
+
+            const guidPassword = "c44b00de-1de2-4974-8f3f-0494dec482d7";
+
+            loginApi({
+               email: authResult.email,
+               password: guidPassword,
+            })
+               .then((res) => {
+                  dispatch(setLogin(res.data));
+                  navigate("/h");
+               })
+               .catch(() => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  signupApi({
+                     email: authResult.email,
+                     password: guidPassword,
+                     username: authResult.firstName + " " + authResult.lastName,
+                  })
+                     .then(() => {
+                        loginApi({
+                           email: authResult.email,
+                           password: guidPassword,
+                        })
+                           .then((res) => {
+                              dispatch(setLogin(res.data));
+                              navigate("/h");
+                           })
+                           .catch((ex: AxiosError) => {
+                              toast.error(ex.response?.data as string);
+                           });
+                     })
+                     .catch((ex: AxiosError) => {
+                        toast.error(ex.response?.data as string);
+                     });
+               });
+
+            // dispatch(setLogin(authResult));
+            // navigate("/");
          }
       }
    }, []);
