@@ -32,7 +32,7 @@ function SingleClassrooms() {
   }, [params.id]);
 
   if (error !== "") return <div className="">{error}</div>;
-  if(!classroom) return;
+  if (!classroom) return;
 
   return (
     <div className="relative w-full h-full pt-5 pb-5 px-6 md:px-10 flex flex-col flex-1 items-start overflow-hidden ">
@@ -66,7 +66,7 @@ function SingleClassrooms() {
           </div>
 
           <div className="shadow-[2px_4px_10px_1px_rgba(201,201,201,0.47)] p-[20px]">
-            <TablePeople clr={classroom as Classroom}/>
+            <TablePeople clr={classroom as Classroom} />
           </div>
         </div>
 
