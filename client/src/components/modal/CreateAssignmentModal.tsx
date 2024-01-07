@@ -13,6 +13,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
 import { createNotification } from "../../apis/notificationApis";
 import { BASE_API_URL } from "../../apis/axiosInterceptor";
+import { toast } from "react-toastify";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -126,17 +127,23 @@ export default function CreateAssignmentModal() {
               autoFocus
               color="inherit"
               onClick={() => {
-                createAssignment(newAssignment);
-                handleClose();
-                createNotification({
-                  title: newAssignment.assignmentCreatedBy as string,
-                  content: `Created a new assignment ${newAssignment.assignmentName} for ${currentClass?.classId.className}`,
-                  classId: currentClassId as string,
-                  studentId: currentUserId as string,
-                  link: `/c/${currentClassId}/w/t/all`,
-                });
-                //  reload the page
-                window.location.reload();
+                if (
+                  newAssignment.assignmentName == "" ||
+                  newAssignment.assignmentDescription == ""
+                ) {
+                  toast.error("Please fill in all the fields");
+                } else {
+                  createAssignment(newAssignment);
+                  createNotification({
+                    title: newAssignment.assignmentCreatedBy as string,
+                    content: `Created a new assignment ${newAssignment.assignmentName} for ${currentClass?.classId.className}`,
+                    classId: currentClassId as string,
+                    studentId: currentUserId as string,
+                    link: `/c/${currentClassId}/w/t/all`,
+                  });
+                  handleClose();
+                  window.location.reload();
+                }
               }}
             >
               save
