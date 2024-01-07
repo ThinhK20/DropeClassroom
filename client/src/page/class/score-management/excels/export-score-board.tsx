@@ -49,7 +49,7 @@ export default function ExportScoreBoard() {
                      AssignmentStatusEnum.Completed
             )
             .map((studentAssignment) => ({
-               Username: studentAssignment.studentId.userId?.username,
+               Username: studentAssignment.studentId?.userId?.username,
                Assignment: studentAssignment.assignmentId?.assignmentName,
                Email: studentAssignment.studentId.userId?.email,
                Grade: studentAssignment.grade,
@@ -57,9 +57,9 @@ export default function ExportScoreBoard() {
             }));
       } else {
          exportData = studentAssignments.map((studentAssignment) => ({
-            Username: studentAssignment.studentId.userId?.username,
+            Username: studentAssignment.studentId?.userId?.username,
             Assignment: studentAssignment.assignmentId?.assignmentName,
-            Email: studentAssignment.studentId.userId?.email,
+            Email: studentAssignment.studentId?.userId?.email,
             Grade: studentAssignment.grade,
             Status: studentAssignment.status,
          }));
