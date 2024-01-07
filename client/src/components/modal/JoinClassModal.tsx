@@ -37,9 +37,11 @@ function JoinClassModal() {
       .then(() => {
         reset();
         dispatch(onCloseJoinClass());
+        setIsLoading(false);
       })
       .catch((err: AxiosError) => {
         console.log(err);
+        setIsLoading(false);
       })
       .finally(() => {
         setIsLoading(false);

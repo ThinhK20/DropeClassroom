@@ -14,7 +14,7 @@ import AccountSetting from "./accountInfo/AccountSetting";
 
 // import { Alert } from "@mui/material";
 
-export default function ClassRoom() {
+export default function Setting() {
   const [isOpenSideBar, setIsOpenSideBar] = useState(true);
   const user: User = useAppSelector(
     (state: RootState) => state.users.data
