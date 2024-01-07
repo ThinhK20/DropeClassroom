@@ -24,6 +24,10 @@ export default function GradeReviews() {
    const gradeReviews = useAppSelector((state) => state.gradeReviews).data;
    const location = useLocation();
 
+   const currentUserClassroom = useAppSelector(
+      (state) => state.userClassroom
+   ).currentUserClassroom;
+
    function getClassId() {
       const inputString = location.pathname;
 
@@ -69,105 +73,115 @@ export default function GradeReviews() {
                   </TableRow>
                </TableHead>
                <TableBody>
-                  {gradeReviews.map((gradeReview, index) => (
-                     <TableRow key={gradeReview._id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>
-                           {
-                              gradeReview.studentAssignment?.assignmentId
-                                 ?.assignmentName
-                           }
-                        </TableCell>
-                        <TableCell>
-                           {
-                              gradeReview.studentAssignment?.studentId?.userId
-                                 ?.username
-                           }
-                        </TableCell>
-                        <TableCell>
-                           {gradeReview.studentAssignment?.grade}
-                        </TableCell>
-                        <TableCell>{gradeReview.gradeExpectation}</TableCell>
-                        <TableCell className="max-w-[200px]">
-                           {gradeReview.studentExplanation}
-                        </TableCell>
-                        <TableCell>
-                           {gradeReview.createdAt
-                              ? new Date(gradeReview.createdAt).toLocaleString()
-                              : new Date().toLocaleString()}
-                        </TableCell>
-                        <TableCell>
-                           {gradeReview.status ===
-                              AssignmentStatusEnum.Completed && (
-                              <Chip
-                                 label={gradeReview.status}
-                                 color="success"
-                                 variant="filled"
-                              />
-                           )}
-                           {gradeReview.status ===
-                              AssignmentStatusEnum.Pending && (
-                              <Chip
-                                 label={gradeReview.status}
-                                 color="warning"
-                                 variant="filled"
-                              />
-                           )}
-                           {gradeReview.status ===
-                              AssignmentStatusEnum.Dismissed && (
-                              <Chip
-                                 label={gradeReview.status}
-                                 color="error"
-                                 variant="filled"
-                              />
-                           )}
-                        </TableCell>
-                        <TableCell>
-                           <div className="flex items-center gap-4">
-                              <div className="cursor-pointer">
-                                 <CreateGradeReview
-                                    gradeReview={gradeReview}
-                                    isEdit={false}
-                                 >
-                                    <FontAwesomeIcon
-                                       icon={faEye}
-                                       className="hover:opacity-75"
-                                    />
-                                 </CreateGradeReview>
+                  {gradeReviews.map((gradeReview, index) => {
+                     if (
+                        currentUserClassroom?.role === "student" &&
+                        gradeReview.studentAssignment.studentId._id?.toString() !==
+                           currentUserClassroom._id?.toString()
+                     )
+                        return;
+                     return (
+                        <TableRow key={gradeReview._id}>
+                           <TableCell>{index + 1}</TableCell>
+                           <TableCell>
+                              {
+                                 gradeReview.studentAssignment?.assignmentId
+                                    ?.assignmentName
+                              }
+                           </TableCell>
+                           <TableCell>
+                              {
+                                 gradeReview.studentAssignment?.studentId
+                                    ?.userId?.username
+                              }
+                           </TableCell>
+                           <TableCell>
+                              {gradeReview.studentAssignment?.grade}
+                           </TableCell>
+                           <TableCell>{gradeReview.gradeExpectation}</TableCell>
+                           <TableCell className="max-w-[200px]">
+                              {gradeReview.studentExplanation}
+                           </TableCell>
+                           <TableCell>
+                              {gradeReview.createdAt
+                                 ? new Date(
+                                      gradeReview.createdAt
+                                   ).toLocaleString()
+                                 : new Date().toLocaleString()}
+                           </TableCell>
+                           <TableCell>
+                              {gradeReview.status ===
+                                 AssignmentStatusEnum.Completed && (
+                                 <Chip
+                                    label={gradeReview.status}
+                                    color="success"
+                                    variant="filled"
+                                 />
+                              )}
+                              {gradeReview.status ===
+                                 AssignmentStatusEnum.Pending && (
+                                 <Chip
+                                    label={gradeReview.status}
+                                    color="warning"
+                                    variant="filled"
+                                 />
+                              )}
+                              {gradeReview.status ===
+                                 AssignmentStatusEnum.Dismissed && (
+                                 <Chip
+                                    label={gradeReview.status}
+                                    color="error"
+                                    variant="filled"
+                                 />
+                              )}
+                           </TableCell>
+                           <TableCell>
+                              <div className="flex items-center gap-4">
+                                 <div className="cursor-pointer">
+                                    <CreateGradeReview
+                                       gradeReview={gradeReview}
+                                       isEdit={false}
+                                    >
+                                       <FontAwesomeIcon
+                                          icon={faEye}
+                                          className="hover:opacity-75"
+                                       />
+                                    </CreateGradeReview>
+                                 </div>
+                                 <div className="cursor-pointer">
+                                    {gradeReview.status ===
+                                       AssignmentStatusEnum.Pending &&
+                                       currentClass?.role === "student" && (
+                                          <CreateGradeReview
+                                             gradeReview={gradeReview}
+                                             isEdit={true}
+                                          >
+                                             <FontAwesomeIcon
+                                                icon={faPencil}
+                                                className="hover:opacity-75"
+                                             />
+                                          </CreateGradeReview>
+                                       )}
+                                 </div>
+                                 <div className="cursor-pointer">
+                                    {gradeReview.status ===
+                                       AssignmentStatusEnum.Pending &&
+                                       currentClass?.role === "student" && (
+                                          <DeleteGradeReview
+                                             gradeReview={gradeReview}
+                                          >
+                                             <FontAwesomeIcon
+                                                icon={faTrash}
+                                                className="hover:opacity-75"
+                                             />
+                                          </DeleteGradeReview>
+                                       )}
+                                 </div>
                               </div>
-                              <div className="cursor-pointer">
-                                 {gradeReview.status ===
-                                    AssignmentStatusEnum.Pending &&
-                                    currentClass?.role === "student" && (
-                                       <CreateGradeReview
-                                          gradeReview={gradeReview}
-                                          isEdit={true}
-                                       >
-                                          <FontAwesomeIcon
-                                             icon={faPencil}
-                                             className="hover:opacity-75"
-                                          />
-                                       </CreateGradeReview>
-                                    )}
-                              </div>
-                              <div className="cursor-pointer">
-                                 {gradeReview.status ===
-                                    AssignmentStatusEnum.Pending &&
-                                    currentClass?.role === "student" && (
-                                       <DeleteGradeReview
-                                          gradeReview={gradeReview}
-                                       >
-                                          <FontAwesomeIcon
-                                             icon={faTrash}
-                                             className="hover:opacity-75"
-                                          />
-                                       </DeleteGradeReview>
-                                    )}
-                              </div>
-                           </div>
-                        </TableCell>
-                     </TableRow>
-                  ))}
+                           </TableCell>
+                        </TableRow>
+                     );
+                  })}
                </TableBody>
             </Table>
          </TableContainer>

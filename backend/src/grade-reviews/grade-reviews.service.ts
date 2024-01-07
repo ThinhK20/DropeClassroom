@@ -51,7 +51,8 @@ export class GradeReviewsService {
   }
 
   async updateGradeReview(gradeReview: GradeReview): Promise<boolean> {
-    const result = await this.gradeReviewModel.findOneAndUpdate(gradeReview);
+    const { _id, ...rest } = gradeReview;
+    const result = await this.gradeReviewModel.findOneAndUpdate({ _id }, rest);
     return result ? true : false;
   }
 
