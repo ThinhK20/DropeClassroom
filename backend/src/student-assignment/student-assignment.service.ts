@@ -64,7 +64,7 @@ export class StudentAssignmentService {
 
   async getAllAssignmentsGroupByClassId(id: string): Promise<any> {
     const assignments = await this.assignmentModel.find({
-      assignmentClassId: { $eq: id },
+      assignmentClassId: id,
     });
 
     const result = await Promise.all(
@@ -87,11 +87,10 @@ export class StudentAssignmentService {
 
   async getAllGroupStudentAssignmentsByClassId(id: string): Promise<any> {
     const assignments = await this.assignmentModel.find({
-      assignmentClassId: { $eq: id },
+      assignmentClassId: id,
     });
     if (!assignments) throw new NotFoundException('Assignment not found');
     const studentAssignments = await this.getAllAssignmentsGroupByClassId(id);
-
     const existedGroupIds = [] as string[];
     const averageScores = assignments.map((assignment) => {
       const group = studentAssignments[assignment._id.toString()];
@@ -214,10 +213,13 @@ export class StudentAssignmentService {
     return updatedAssignment;
   }
 
-  async createStudentAssignmentsByStudentId(
+  async createStudentAssignmentsByStudentIdAndClassId(
     studentId: string,
+    classId: string,
   ): Promise<boolean> {
-    const assigments = await this.assignmentModel.find();
+    const assigments = await this.assignmentModel.find({
+      assignmentClassId: classId,
+    });
     const promises = assigments.forEach(async (assignment) => {
       const studentAssigment = await this.studentAssignmentModel.findOne({
         assignmentId: assignment._id,
