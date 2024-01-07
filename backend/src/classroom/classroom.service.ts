@@ -172,8 +172,9 @@ export class ClassroomService {
       userId: user.userId,
     });
     if (user.role.toString() === Role.Student) {
-      await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+      await this.studentAssignmentService.createStudentAssignmentsByStudentIdAndClassId(
         userClassroom._id as unknown as string,
+        classId,
       );
     }
     return userClassroom;
@@ -285,6 +286,12 @@ export class ClassroomService {
       classCode: cjc,
     });
     if (!classroom) throw new NotFoundException('Class room not found');
+
+    // if (user.role.toString() === Role.Student) {
+    //   await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+    //     userClassroom._id as unknown as string,
+    //   );
+    // }
 
     return await this.userClassroomService.accpetInvite(u, classId, role);
   }

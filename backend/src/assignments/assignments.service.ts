@@ -36,8 +36,9 @@ export class AssignmentService {
     });
 
     users.forEach(async (user) => {
-      await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+      await this.studentAssignmentService.createStudentAssignmentsByStudentIdAndClassId(
         user._id as any,
+        assignment.assignmentClassId,
       );
       // await this.studentAssignmentsModel.create({
       //   assignmentId: res._id,
