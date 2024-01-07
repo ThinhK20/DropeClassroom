@@ -129,7 +129,8 @@ export default function CreateAssignmentModal() {
               onClick={() => {
                 if (
                   newAssignment.assignmentName == "" ||
-                  newAssignment.assignmentDescription == ""
+                  newAssignment.assignmentDescription == "" ||
+                  newAssignment.assignmentPercentage == 0
                 ) {
                   toast.error("Please fill in all the fields");
                 } else {
