@@ -127,9 +127,6 @@ function People() {
   return (
     <div className="w-full min-h-[700px] flex flex-col flex-1 items-start pt-16 px-2 xl:px-44 overflow-auto hide-scrollbar">
       {/* Teacher */}
-      <div className="fixed bottom-5 right-2">
-        <ExportStudentTemplate />
-      </div>
       <div className="w-full flex justify-between items-center border-b-2 border-blue-600 mt-10">
         <p className="text-blue-600 medium-32 ml-2 mb-4">Teachers</p>
         {currentClass.role === "owner" && (
@@ -186,6 +183,7 @@ function People() {
 
         <div className="flex items-center gap-4">
           <p className="text-blue-600 medium-14 pr-2">{`${countStudent} students`}</p>
+          <ExportStudentTemplate />
           {currentClass.role === "owner" && (
             <AddPeopleDropDown
               userNotIn={listUserNotIn}
