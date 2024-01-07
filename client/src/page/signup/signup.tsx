@@ -17,6 +17,7 @@ import { signupApi } from "../../apis/authApis";
 import { SignUpUser } from "../../models/User";
 import { AxiosError } from "axios";
 import { validateEmail } from "../../libs/utils";
+import dayjs from "dayjs";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -158,6 +159,7 @@ export default function SignUp() {
                      </Grid>
                      <Grid item xs={12} md={6}>
                         <DatePicker
+                           defaultValue={dayjs(new Date())}
                            label="Date of birth"
                            format={"DD/MM/YYYY"}
                            onChange={(date: any) => {

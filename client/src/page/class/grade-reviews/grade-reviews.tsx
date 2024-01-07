@@ -96,7 +96,12 @@ export default function GradeReviews() {
                               }
                            </TableCell>
                            <TableCell>
-                              {gradeReview.studentAssignment?.grade}
+                              {currentUserClassroom?.role !== "student" ||
+                              gradeReview.studentAssignment.assignmentId
+                                 .assignmentStatus ===
+                                 AssignmentStatusEnum.Completed
+                                 ? gradeReview.studentAssignment?.grade
+                                 : "Unable to see"}
                            </TableCell>
                            <TableCell>{gradeReview.gradeExpectation}</TableCell>
                            <TableCell className="max-w-[200px]">

@@ -367,20 +367,29 @@ export default function CreateGradeReview(props: Props) {
                                     Current Grade
                                  </label>
                                  <div className="mt-2">
-                                    <TextField
-                                       name="gradeExpectation"
-                                       type="number"
-                                       disabled={true}
-                                       inputProps={{ min: 0, max: 100 }}
-                                       value={
-                                          props.gradeReview?.studentAssignment
-                                             .grade
-                                             ? props.gradeReview
-                                                  ?.studentAssignment.grade
-                                             : 0
-                                       }
-                                       className="block w-fit rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    />
+                                    {currentUserClassroom?.role !== "student" ||
+                                    props.gradeReview.studentAssignment
+                                       .assignmentId.assignmentStatus ===
+                                       AssignmentStatusEnum.Completed ? (
+                                       <TextField
+                                          name="gradeExpectation"
+                                          type="number"
+                                          disabled={true}
+                                          inputProps={{ min: 0, max: 100 }}
+                                          value={
+                                             props.gradeReview
+                                                ?.studentAssignment.grade
+                                                ? props.gradeReview
+                                                     ?.studentAssignment.grade
+                                                : 0
+                                          }
+                                          className="block w-fit rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                       />
+                                    ) : (
+                                       <p className="mt-3 text-sm leading-6 text-gray-600">
+                                          Unable to see.
+                                       </p>
+                                    )}
                                  </div>
                               </div>
                            )}
@@ -401,12 +410,19 @@ export default function CreateGradeReview(props: Props) {
                                     defaultValue={0}
                                     value={submitData?.gradeExpectation}
                                     className="block w-fit rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    onChange={(e) =>
-                                       setSubmitData({
-                                          ...submitData,
-                                          gradeExpectation: e.target.value,
-                                       } as any)
-                                    }
+                                    onChange={(e) => {
+                                       if (Number(e.target.value) > 100) return;
+                                       if (Number(e.target.value) < 0)
+                                          setSubmitData({
+                                             ...submitData,
+                                             gradeExpectation: 0,
+                                          } as any);
+                                       else
+                                          setSubmitData({
+                                             ...submitData,
+                                             gradeExpectation: e.target.value,
+                                          } as any);
+                                    }}
                                  />
                                  <p className="mt-3 text-sm leading-6 text-gray-600">
                                     Give a grade that you want to have.

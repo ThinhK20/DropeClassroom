@@ -18,6 +18,7 @@ import {
    renewPasswordApi,
    sendForgotPasswordEmailApi,
 } from "../../apis/authApis";
+import { AxiosError } from "axios";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -48,11 +49,16 @@ export default function ForgotPassword() {
             "Email invalid. Please submit correctly your email address."
          );
       } else {
-         await sendForgotPasswordEmailApi(formData.email).then((res) => {
-            (event.target as HTMLFormElement).reset();
-            setSuccessMsg(res.data);
-            setIsShow(false);
-         });
+         await sendForgotPasswordEmailApi(formData.email)
+            .then((res) => {
+               (event.target as HTMLFormElement).reset();
+               setSuccessMsg(res.data);
+               setIsShow(false);
+            })
+            .catch((ex: AxiosError) => {
+               // eslint-disable-next-line @typescript-eslint/no-explicit-any
+               setErrorMsg((ex.response?.data as any)?.message as string);
+            });
       }
    };
 
@@ -70,11 +76,16 @@ export default function ForgotPassword() {
          await renewPasswordApi({
             password: formData.password,
             ...(params as any),
-         }).then((res) => {
-            (event.target as HTMLFormElement).reset();
-            setSuccessMsg(res.data);
-            setIsShow(false);
-         });
+         })
+            .then((res) => {
+               (event.target as HTMLFormElement).reset();
+               setSuccessMsg(res.data);
+               setIsShow(false);
+            })
+            .catch((ex: AxiosError) => {
+               // eslint-disable-next-line @typescript-eslint/no-explicit-any
+               setErrorMsg((ex.response?.data as any)?.message as string);
+            });
       }
    };
 
