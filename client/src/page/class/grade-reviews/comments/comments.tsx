@@ -10,6 +10,7 @@ import {
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../../hooks/hooks";
 import AvatarCustom from "../../../../components/avatar/AvatarCustom";
+import { createNotification } from "../../../../apis/notificationApis";
 
 interface Props {
   gradeReview?: GradeReview;
@@ -38,6 +39,15 @@ export default function CommentBox(props: Props) {
     addCommentApi(submitData)
       .then(() => {
         setContent("");
+        createNotification({
+          title: "New comment",
+          content: `New comment on your grade review at ${props.gradeReview?.studentAssignment.assignmentId.assignmentName}`,
+          classId: props.gradeReview?.classId || "",
+          link: `/class/${props.gradeReview?.classId}/gr/all`,
+          studentId: props.gradeReview?.classId || "",
+          assignmentId:
+            props.gradeReview?.studentAssignment.assignmentId._id || "",
+        });
         fetchComments();
       })
       .catch((ex) => toast.error(ex));
