@@ -15,6 +15,7 @@ import {
   GradeReview,
   GradeReviewSchema,
 } from 'src/grade-reviews/schemas/grade-review.schema';
+import { StudentAssignmentModule } from 'src/student-assignment/student-assignment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import {
       { name: GradeReview.name, schema: GradeReviewSchema },
     ]),
     ClassroomModule,
+    StudentAssignmentModule,
   ],
   controllers: [AssignmentController],
   providers: [AssignmentService],

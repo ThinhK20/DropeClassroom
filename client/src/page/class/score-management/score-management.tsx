@@ -241,7 +241,9 @@ export default function ScoreManagement() {
                           key={key}
                           scope="row"
                        >
-                          <label>{avgScore?.averageScore}</label>
+                          <label>
+                             {Math.ceil(avgScore?.averageScore as number)}
+                          </label>
                           <label>/100</label>
                        </TableCell>
                     ))
@@ -252,7 +254,9 @@ export default function ScoreManagement() {
                        key={key}
                        scope="row"
                     >
-                       <label>{avgScore?.averageScore}</label>
+                       <label>
+                          {Math.ceil(avgScore?.averageScore as number)}
+                       </label>
                        <label>/100</label>
                     </TableCell>
                  ))}

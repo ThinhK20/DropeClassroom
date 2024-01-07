@@ -9,6 +9,7 @@ import { StudentAssignment } from 'src/student-assignment/schemas/student-assign
 import { ClassroomService } from 'src/classroom/classroom.service';
 import { ROLE_CLASS } from 'src/shared/enums';
 import { GradeReview } from 'src/grade-reviews/schemas/grade-review.schema';
+import { StudentAssignmentService } from 'src/student-assignment/student-assignment.service';
 
 @Injectable()
 export class AssignmentService {
@@ -20,6 +21,7 @@ export class AssignmentService {
     @InjectModel(GradeReview.name)
     private gradeReviewsModel: mongoose.Model<GradeReview>,
     private classroomService: ClassroomService,
+    private studentAssignmentService: StudentAssignmentService,
   ) {}
 
   async createNewAssignment(
@@ -34,10 +36,13 @@ export class AssignmentService {
     });
 
     users.forEach(async (user) => {
-      await this.studentAssignmentsModel.create({
-        assignmentId: res._id,
-        studentId: (user as any)._id,
-      });
+      await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+        user._id as any,
+      );
+      // await this.studentAssignmentsModel.create({
+      //   assignmentId: res._id,
+      //   studentId: (user as any)._id,
+      // });
     });
     return res;
   }

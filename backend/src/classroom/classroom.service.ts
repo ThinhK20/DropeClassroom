@@ -10,7 +10,7 @@ import { Classroom } from 'src/classroom/schemas/classroom.schema';
 import { User } from 'src/shared/schemas/user.schema';
 import { UserClassroom } from 'src/user-classroom/schemas/user-classroom.schema';
 import { UserClassroomService } from 'src/user-classroom/user-classroom.service';
-import { ROLE_CLASS } from 'src/shared/enums';
+import { ROLE_CLASS, Role } from 'src/shared/enums';
 import {
   getAllClassResponse,
   userClassResponse,
@@ -171,9 +171,11 @@ export class ClassroomService {
       role: user.role,
       userId: user.userId,
     });
-    await this.studentAssignmentService.createStudentAssignmentsByStudentId(
-      userClassroom._id as unknown as string,
-    );
+    if (user.role.toString() === Role.Student) {
+      await this.studentAssignmentService.createStudentAssignmentsByStudentId(
+        userClassroom._id as unknown as string,
+      );
+    }
     return userClassroom;
   }
 
