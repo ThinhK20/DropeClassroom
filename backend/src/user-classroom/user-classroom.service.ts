@@ -72,7 +72,7 @@ export class UserClassroomService {
 
     if (!classes) return [];
 
-    return classes;
+    return classes.filter((c) => c.classId.isActive === true);
   }
 
   // get all user not owner in class
