@@ -10,8 +10,8 @@ import { useEffect, useMemo, useState } from "react";
 import { AxiosError } from "axios";
 import { getAllUsersNotInClassApi } from "../../../apis/userApis";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
-import AddPeopleDropDown from "../../../components/DropDown/AddPeopleDropDown";
 import ExportStudentTemplate from "./export-student-template";
+import AddPeopleDropDown from "../../../components/dropDown/AddPeopleDropDown";
 
 function People() {
   const currentClass = useAppSelector(
@@ -100,7 +100,6 @@ function People() {
           )
             .then((data) => {
               setListUserNotIn(data);
-              console.log(data);
             })
             .catch((err: AxiosError) => {
               setIsFetch(true);

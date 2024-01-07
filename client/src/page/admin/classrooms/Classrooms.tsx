@@ -104,7 +104,7 @@ function Classrooms() {
                 params.row.isActive ? "active" : "pending"
               }`}
             >
-              {params.row.isActive ? "active" : "pending"}
+              {params.row.isActive ? "active" : "inactive"}
             </div>
           );
         },
@@ -128,7 +128,7 @@ function Classrooms() {
           />,
           <GridActionsCellItem
             icon={<SecurityIcon />}
-            label={`${params.row.isActive ? "Pending" : "Active"}`}
+            label={`${params.row.isActive ? "inactive" : "active"}`}
             onClick={toggleActive(params.row._id, params.row.isActive as boolean)}
             showInMenu
           />,

@@ -99,7 +99,7 @@ function Users() {
                 params.row.isActive ? "active" : "pending"
               }`}
             >
-              {params.row.isActive ? "active" : "pending"}
+              {params.row.isActive ? "active" : "inactive"}
             </div>
           );
         },
@@ -123,7 +123,7 @@ function Users() {
           />,
           <GridActionsCellItem
             icon={<SecurityIcon />}
-            label={`${params.row.isActive ? "Pending" : "Active"}`}
+            label={`${params.row.isActive ? "inactive" : "active"}`}
             onClick={toggleAdmin(params.row._id, params.row.isActive)}
             showInMenu
           />,
