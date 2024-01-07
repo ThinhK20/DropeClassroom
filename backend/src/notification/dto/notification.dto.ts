@@ -22,4 +22,8 @@ export class NotificationDto {
   @IsNotEmpty()
   @IsString()
   readonly content: string;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly link: string;
 }

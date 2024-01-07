@@ -37,7 +37,6 @@ import { setGradeReviews } from "../../../store/gradeReviewsSlice";
 import { AssignmentStatusEnum } from "../../../shared/enums/StudentAssignment";
 import { createNotification } from "../../../apis/notificationApis";
 import CommentBox from "./comments/comments";
-import { UserClassRoom } from "../../../models";
 import { GroupStudentAssignmentsByStudentId } from "../../../models/StudentAssignment";
 
 const Transition = React.forwardRef(function Transition(
@@ -106,8 +105,7 @@ export default function CreateGradeReview(props: Props) {
          classId: getClassId(),
          studentAssignment: (
             groupStudentAssignmentsByStudentId.find(
-               (x) =>
-                  x.studentId! === (currentUserClassroom as UserClassRoom)._id
+               (x) => x.studentId! === currentUserClassroom?._id
             ) as GroupStudentAssignmentsByStudentId
          ).assignments.find(
             (val) => val.assignmentId._id === assignmentId?.toString()
@@ -122,6 +120,7 @@ export default function CreateGradeReview(props: Props) {
                   content: "Grade review updated",
                   studentId: currentUserClassroom?._id as string,
                   classId: getClassId(),
+                  link: `/c/${getClassId()}/gr/all`,
                });
                fetchGradeReviewsApi();
             })
@@ -136,6 +135,7 @@ export default function CreateGradeReview(props: Props) {
                   content: "Grade review created",
                   studentId: currentUserClassroom?._id as string,
                   classId: getClassId(),
+                  link: `/c/${getClassId()}/gr/all`,
                });
                fetchGradeReviewsApi();
             })
@@ -357,6 +357,33 @@ export default function CreateGradeReview(props: Props) {
                                  </p>
                               </div>
                            </div>
+
+                           {props.gradeReview && (
+                              <div className="col-span-full">
+                                 <label
+                                    htmlFor="about"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                 >
+                                    Current Grade
+                                 </label>
+                                 <div className="mt-2">
+                                    <TextField
+                                       name="gradeExpectation"
+                                       type="number"
+                                       disabled={true}
+                                       inputProps={{ min: 0, max: 100 }}
+                                       value={
+                                          props.gradeReview?.studentAssignment
+                                             .grade
+                                             ? props.gradeReview
+                                                  ?.studentAssignment.grade
+                                             : 0
+                                       }
+                                       className="block w-fit rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                 </div>
+                              </div>
+                           )}
 
                            <div className="col-span-full">
                               <label

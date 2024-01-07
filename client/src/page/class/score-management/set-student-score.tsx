@@ -124,6 +124,7 @@ export default function SetStudentScore(props: Props) {
                   studentId: student?.studentId,
                   classId: getClassId(),
                   assignmentId: student?.assignments?.assignmentId,
+                  link: `/c/${getClassId()}/gb/all`,
                 });
               }}
             >

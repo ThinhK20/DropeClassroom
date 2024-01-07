@@ -32,6 +32,9 @@ export class Notification {
 
   @Prop({ required: true })
   content: string;
+
+  @Prop({ required: true })
+  link: string;
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);

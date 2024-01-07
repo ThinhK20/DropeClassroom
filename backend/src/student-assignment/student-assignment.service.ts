@@ -219,7 +219,7 @@ export class StudentAssignmentService {
   ): Promise<boolean> {
     const assigments = await this.assignmentModel.find();
     const promises = assigments.forEach(async (assignment) => {
-      const studentAssigment = this.studentAssignmentModel.findOne({
+      const studentAssigment = await this.studentAssignmentModel.findOne({
         assignmentId: assignment._id,
         studentId: studentId,
       });
