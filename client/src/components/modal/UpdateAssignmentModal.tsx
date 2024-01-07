@@ -296,12 +296,19 @@ export default function UpdateAssignmentModal(props: {
                         type="number"
                         autoComplete="number"
                         className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        onChange={(e) =>
-                          setAssignment({
-                            ...assignment,
-                            assignmentPercentage: parseInt(e.target.value),
-                          })
-                        }
+                        onChange={(e) => {
+                          if (Number(e.target.value) > 100) return;
+                          if (Number(e.target.value) < 0)
+                            setAssignment({
+                              ...assignment,
+                              assignmentPercentage: 0,
+                            });
+                          else
+                            setAssignment({
+                              ...assignment,
+                              assignmentPercentage: Number(e.target.value),
+                            });
+                        }}
                         value={assignment.assignmentPercentage}
                       />
                     </div>
