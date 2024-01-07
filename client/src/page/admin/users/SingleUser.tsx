@@ -5,6 +5,7 @@ import { findUserApi, updateUserByAdminApi } from "../../../apis/userApis";
 import { AxiosError } from "axios";
 import AvatarCustom from "../../../components/avatar/AvatarCustom";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import InputSelect from "../../../components/inputs/inputSelect";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
@@ -87,14 +88,20 @@ function SingleUser() {
     <div className="relative w-full h-full pt-5 pb-5 px-6 md:px-10 flex flex-row gap-[30px] items-start overflow-hidden">
       <div className="view__info w-[50%]">
         <div className="top flex gap-4 items-center">
-          <AvatarCustom
-            classroomAvatar={false}
-            name={user.username}
-            url={""}
-            fontSize={40}
-            height={80}
-            width={80}
-          />
+          <div className="relative img">
+            <AvatarCustom
+              classroomAvatar={false}
+              name={user.username}
+              url={""}
+              fontSize={40}
+              height={80}
+              width={80}
+            />
+
+            <button className="absolute right-0 bottom-0 bg-blue-50 rounded-full w-5 h-5 flex justify-center items-center hover:bg-blue-100 transition-all">
+              <ModeEditOutlineOutlinedIcon sx={{fontSize: 14}}/>
+            </button>
+          </div>
           <div className="text-2xl font-[600]">{user.email}</div>
           {isDisabled && (
             <button
