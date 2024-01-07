@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -78,5 +79,24 @@ export class UsersController {
   @Get('/u/all')
   async getAllUser(@GetUser() u: User): Promise<UserResponse[]> {
     return this.usersService._getAllUser(u);
+  }
+
+  // find user by id
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Get('/u/:id')
+  async findUser(@Param('id') _id: string): Promise<UserResponse> {
+    return this.usersService._findUser(_id);
+  }
+
+  // Update User
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Patch('/ad/u/:id')
+  async updateUserAdmin(
+    @Param('id') id: string,
+    @Body() update: UpdateUserDto,
+  ): Promise<UserResponse> {
+    return this.usersService._updateUserByAdmin(id, update);
   }
 }

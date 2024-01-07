@@ -131,5 +131,38 @@ export class UsersService {
     return res;
   }
 
+  // find user by id
+  async _findUser(id: string): Promise<UserResponse> {
+    const res = await this.userModel.findById(id);
+    if (!res) throw new NotFoundException('user not found');
+
+    return res;
+  }
+
+  // update use by admin
+  async _updateUserByAdmin(
+    id: string,
+    updateDoc: UpdateUserDto,
+  ): Promise<UserResponse> {
+    const res = await this.userModel.findOneAndUpdate({ _id: id }, updateDoc, {
+      new: true,
+    });
+    if (!res) throw new NotFoundException('User not found');
+
+    return {
+      _id: res._id,
+      username: res.username,
+      email: res.email,
+      dateOfBirth: res.dateOfBirth,
+      isActive: res.isActive,
+      gender: res.gender,
+      role: res.role,
+      createdDate: res.createdDate,
+      updatedDate: res.updatedDate,
+      address: res.address,
+      about: res.about,
+    };
+  }
+
   // delete user by id
 }
