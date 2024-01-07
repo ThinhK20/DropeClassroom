@@ -7,7 +7,7 @@ import AvatarCustom from "../../../components/avatar/AvatarCustom";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
 import SectionClassrooms from "./SectionClassrooms";
-import TablePeople from "./tablePeople";
+import TablePeople from "./TablePeople";
 
 function SingleClassrooms() {
   const params = useParams();
@@ -35,7 +35,7 @@ function SingleClassrooms() {
   if (!classroom) return;
 
   return (
-    <div className="relative w-full h-full pt-5 pb-5 px-6 md:px-10 flex flex-col flex-1 items-start overflow-hidden ">
+    <div className="relative w-full h-full pt-5 pb-5 px-6 md:px-10 flex flex-col flex-1 items-start overflow-hidden">
       <div className="top flex gap-[20px] w-full">
         <div className="left infor__owner relative flex-1 h-full flex flex-col gap-[20px]">
           <div className="shadow-[2px_4px_10px_1px_rgba(201,201,201,0.47)] p-[20px]">

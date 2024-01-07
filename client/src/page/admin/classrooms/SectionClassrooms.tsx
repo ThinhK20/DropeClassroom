@@ -68,10 +68,11 @@ function SectionClassrooms({ clr }: Props) {
         <ClassCode classCode={clr?.classCode as string} />
         <JoinClass />
       </div>
-      <div className="flex flex-col gap-4 pt-4">
+      <div className="flex flex-col gap-3 pt-4">
         <InputText
           id="className"
           label="Class Name (required)"
+          disabled={!isSubmit}
           register={register}
           errors={errors}
           required
@@ -79,17 +80,25 @@ function SectionClassrooms({ clr }: Props) {
         <InputText
           id="section"
           label="Section"
+          disabled={!isSubmit}
           register={register}
           errors={errors}
         />
         <InputText
           id="subject"
           label="Subject"
+          disabled={!isSubmit}
           register={register}
           errors={errors}
         />
-        <InputText id="room" label="Room" register={register} errors={errors} />
-        <div className="flex justify-end ">
+        <InputText
+          id="room"
+          label="Room"
+          disabled={!isSubmit}
+          register={register}
+          errors={errors}
+        />
+        <div className="flex justify-end gap-[20px]">
           {!isSubmit ? (
             <button
               className="px-10 py-2 rounded-md border w-max bg-blue-600 text-white hover:bg-blue-700"
@@ -98,12 +107,20 @@ function SectionClassrooms({ clr }: Props) {
               Edit
             </button>
           ) : (
-            <button
-              className="px-10 py-2 rounded-md border w-max bg-blue-600 text-white hover:bg-blue-700"
-              onClick={handleSubmit(onSubmit)}
-            >
-              Update
-            </button>
+            <>
+              <button
+                className="px-10 py-2 rounded-md border w-max bg-rose-600 text-white hover:bg-rose-700"
+                onClick={() => setSubmit(!isSubmit)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-10 py-2 rounded-md border w-max bg-blue-600 text-white hover:bg-blue-700"
+                onClick={handleSubmit(onSubmit)}
+              >
+                Update
+              </button>
+            </>
           )}
         </div>
       </div>
