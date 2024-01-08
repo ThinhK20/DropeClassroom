@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Query,
   Response,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/localauth.guard';
@@ -29,11 +30,14 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return await this.authService.login(req.user);
+    const user = await this.authService.login(req.user);
+    if (!user?.isActive) throw new ForbiddenException('User is not activated.');
+    return user;
   }
 
   @Post('signup')
   async signUp(@Body() signUpUser: User) {
+    signUpUser.isActive = false;
     const createdUser = await this.authService.signup(signUpUser);
     const activateAccountLink = this.authService.generateActivateAccountLink(
       createdUser._id.toString(),
