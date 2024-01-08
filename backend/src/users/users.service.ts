@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -28,7 +29,9 @@ export class UsersService {
   }
 
   async getUserByQuery(query: object): Promise<User> {
-    return this.userModel.findOne(query);
+    const user = await this.userModel.findOne(query);
+    if (!user.isActive) throw new ForbiddenException('User is not activated.');
+    return user;
   }
 
   async updateUser(user: User): Promise<User> {
