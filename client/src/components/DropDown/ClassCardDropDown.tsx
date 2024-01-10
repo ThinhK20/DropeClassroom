@@ -2,6 +2,8 @@ import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import { useEffect, useRef, useState } from "react";
 import { ObjectUserClassRoom } from "../../models";
 import UpdateClassModal from "../modal/UpdateClassModal";
+import { useAppDispatch } from "../../hooks/hooks";
+import { deleteClassUser } from "../../store/userClassroomSlice";
 
 interface Props {
   userClass: ObjectUserClassRoom;
@@ -10,7 +12,7 @@ interface Props {
 function ClassCardDropDown({ userClass }: Props) {
   const [isDropDown, setIsDropDown] = useState(false);
   const [isUpdate, setUpdate] = useState(false);
-
+  const dispatch = useAppDispatch();
   const nodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function ClassCardDropDown({ userClass }: Props) {
         <div
           className={`absolute transition duration-200 ${
             isDropDown ? "block opacity-100" : "hidden opacity-0"
-          } bg-white z-[99] rounded shadow-lg top-12 -left-32 cursor-pointer`}
+          } bg-white z-[99] rounded shadow-lg top-12 -left-32 cursor-pointer w-44`}
         >
           <ul className="flex flex-col py-2">
             {userClass.role === "owner" && (
@@ -48,8 +50,10 @@ function ClassCardDropDown({ userClass }: Props) {
                 <li
                   className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
                   onClick={() => {
+                    setIsDropDown(!isDropDown);
                     navigator.clipboard.writeText(
-                      import.meta.env.VITE_API_URL +'/'+
+                      import.meta.env.VITE_API_URL +
+                        "/" +
                         userClass.classId.inviteLink
                     );
                   }}
@@ -68,7 +72,14 @@ function ClassCardDropDown({ userClass }: Props) {
                 <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
                   Achieved
                 </li>
-                <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
+                <li
+                  className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
+                  onClick={() => {
+                    console.log(userClass.classId._id);
+                    setIsDropDown(!isDropDown);
+                    dispatch(deleteClassUser(userClass.classId._id));
+                  }}
+                >
                   Delete
                 </li>
               </>
@@ -80,7 +91,17 @@ function ClassCardDropDown({ userClass }: Props) {
             )}
             {userClass.role === "teacher" && (
               <>
-                <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
+                <li
+                  className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"
+                  onClick={() => {
+                    setIsDropDown(!isDropDown);
+                    navigator.clipboard.writeText(
+                      import.meta.env.VITE_API_URL +
+                        "/" +
+                        userClass.classId.inviteLink
+                    );
+                  }}
+                >
                   Copy URL Invitation
                 </li>
                 <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
@@ -96,7 +117,6 @@ function ClassCardDropDown({ userClass }: Props) {
         isOpen={isUpdate}
         currentClass={userClass}
         handleClose={() => setUpdate(!isUpdate)}
-        
       />
     </>
   );

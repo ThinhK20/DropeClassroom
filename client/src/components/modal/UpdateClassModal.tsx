@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import InputText from "../inputs/inputText";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../hooks/hooks";
 import { ObjectUserClassRoom, UpdateClassroom } from "../../models";
 import { updateUserClass } from "../../store/userClassroomSlice";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Props {
   currentClass: ObjectUserClassRoom;
   isOpen: boolean;
   handleClose: () => void;
 }
+
+const schema = yup.object().shape({
+  className: yup
+    .string()
+    .max(50, "Class name max 50")
+    .required("Class name is required"),
+  section: yup.string().max(50, "Class name max 50"),
+  subject: yup.string().max(50, "Class name max 50"),
+  room: yup.string().max(50, "Class name max 50"),
+});
 
 function UpdateClassModal({
   currentClass,
@@ -22,17 +34,17 @@ function UpdateClassModal({
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
-    shouldUnregister: true,
-    defaultValues: {
-      className: currentClass.classId.className,
-      section: currentClass.classId.section,
-      subject: currentClass.classId.subject,
-      room: currentClass.classId.room,
-    },
-  });
+  } = useForm<FieldValues>({resolver: yupResolver<FieldValues>(schema)});
+
+  useEffect(() => {
+    setValue("className", currentClass.classId.className);
+    setValue("section", currentClass.classId.section);
+    setValue("subject", currentClass.classId.subject);
+    setValue("room", currentClass.classId.room);
+  }, [currentClass]);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);

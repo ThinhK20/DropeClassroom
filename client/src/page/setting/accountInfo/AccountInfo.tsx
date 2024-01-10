@@ -16,6 +16,7 @@ import { updateUserApi } from "../../../apis/userApis";
 import { useAppDispatch } from "../../../hooks/hooks";
 import { setUser } from "../../../store/userSlice";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface Props {
   user: User;
@@ -32,7 +33,6 @@ function AccountInfo({ user }: Props) {
     handleSubmit,
     formState: { errors },
   } = useForm<FieldValues>({
-    shouldUnregister: true,
     defaultValues: {
       username: user.username,
       about: user.about,
@@ -44,14 +44,18 @@ function AccountInfo({ user }: Props) {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const controller = new AbortController();
-    updateUserApi(data as UpdateUserInfoDto, controller.signal).then((res) => {
-      dispatch(setUser(res));
-    }).catch((err: AxiosError) => {
-      console.log(err);
-    }).finally(() => {
-      setIsDisabled(true);
-      controller.abort();
-    });
+    updateUserApi(data as UpdateUserInfoDto, controller.signal)
+      .then((res) => {
+        toast.success("Successfull");
+        dispatch(setUser(res));
+      })
+      .catch((err: AxiosError) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsDisabled(true);
+        controller.abort();
+      });
   };
 
   return (

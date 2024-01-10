@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ObjectUserClassRoom } from "../../models";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setCurrentClass } from "../../store/userClassroomSlice";
-import ClassCardDropDown from "../DropDown/ClassCardDropDown";
+import ClassCardDropDown from "../dropDown/ClassCardDropDown";
 
 interface ClassroomCardProps {
    classroom: ObjectUserClassRoom;

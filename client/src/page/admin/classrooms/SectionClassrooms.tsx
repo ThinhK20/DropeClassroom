@@ -4,9 +4,10 @@ import InputText from "../../../components/inputs/inputText";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Classroom, UpdateClassroom } from "../../../models";
 import { useEffect, useState } from "react";
-import { updateClassApi } from "../../../apis/classroomApis";
+import { updateClassByAdminApi } from "../../../apis/classroomApis";
 import { AxiosError } from "axios";
 import JoinClass from "../../../components/box/JoinClass";
+import { toast } from "react-toastify";
 
 interface Props {
   clr: Classroom;
@@ -39,9 +40,9 @@ function SectionClassrooms({ clr }: Props) {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const ctrl = new AbortController();
-    updateClassApi(`c/${clr?._id}`, data as UpdateClassroom, ctrl.signal)
-      .then((data) => {
-        console.log(data.data);
+    updateClassByAdminApi(`c/ad/${clr?._id}`, data as UpdateClassroom, ctrl.signal)
+      .then(() => {
+        toast.success('Update success');
         ctrl.abort();
         setSubmit(false);
       })

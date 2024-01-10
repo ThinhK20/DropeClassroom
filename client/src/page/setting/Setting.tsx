@@ -48,7 +48,7 @@ export default function Setting() {
                   <AvatarCustom
                     classroomAvatar={false}
                     name={user.username}
-                    url={"/src/assets/testimonial-03.jpg"}
+                    url={"/src/assets/noavatar.png"}
                     height={40}
                     width={40}
                   />

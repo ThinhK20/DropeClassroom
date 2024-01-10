@@ -7,11 +7,21 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { onCloseJoinClass } from "../../store/joinClassSlice";
 import { userJoinClassByCode } from "../../store/userClassroomSlice";
 import { useAppDispatch } from "../../hooks/hooks";
-import { AxiosError } from "axios";
+import { Alert } from "@mui/material";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  classCode: yup
+    .string()
+    .matches(/^[a-zA-Z0-9].{6}$/, "Class code must be exactly 6 characters")
+    .required("Class code is required"),
+});
 
 function JoinClassModal() {
   const [isLoading, setIsLoading] = useState(false);
   const showModal = useSelector((state: RootState) => state.joinClass.isOpen);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const dispatch = useAppDispatch();
 
   const {
@@ -23,29 +33,27 @@ function JoinClassModal() {
     defaultValues: {
       classCode: "",
     },
+    resolver: yupResolver<FieldValues>(schema),
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-    console.log(data.classCode);
     // call api
-    const promise = dispatch(
-      userJoinClassByCode({ classCode: data.classCode })
-    );
-
-    promise
+    dispatch(userJoinClassByCode({ classCode: data.classCode }))
+      .unwrap()
       .then(() => {
         reset();
         dispatch(onCloseJoinClass());
+        setErrorMsg("");
         setIsLoading(false);
       })
-      .catch((err: AxiosError) => {
-        console.log(err);
+      .catch((err) => {
+        console.log(err.message);
+        setErrorMsg("Class not found");
         setIsLoading(false);
       })
       .finally(() => {
         setIsLoading(false);
-        promise.abort();
       });
   };
 
@@ -65,6 +73,8 @@ function JoinClassModal() {
         errors={errors}
         required
       />
+      {errorMsg && <Alert severity="error">{errorMsg || errors['classCode']?.message as string}</Alert>}
+      {errors['classCode'] && <Alert severity="error">{errors['classCode']?.message as string}</Alert>}
     </div>
   );
 
@@ -91,6 +101,7 @@ function JoinClassModal() {
       isOpen={showModal}
       onClose={() => {
         dispatch(onCloseJoinClass());
+        setErrorMsg("");
         reset();
       }}
       header={headerContent}

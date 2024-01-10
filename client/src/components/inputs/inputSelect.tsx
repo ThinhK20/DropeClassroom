@@ -38,7 +38,6 @@ function InputSelect({
         } items-center gap-4 p-3`}
       >
         {value.map((v, idx) => {
-          console.log(typeof v);
           return (
             <label
               className={`flex items-center gap-x-3 ${disabled ?  '' : 'cursor-pointer'} group`}
