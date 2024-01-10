@@ -12,5 +12,8 @@ export const createNotification = async (submitData: {
   content: string;
   link: string;
 }) => {
-  return await axiosInstance.post("/notifications/create", submitData);
+  return await axiosInstance
+    .post("/notifications/create", submitData)
+    .then((res) => res.data)
+    .then(() => window.location.reload());
 };
