@@ -88,7 +88,9 @@ export class UsersService {
     user: User,
     updateDoc: UpdateUserDto,
   ): Promise<UserResponse> {
-    const res = await this.userModel.findByIdAndUpdate(user._id, updateDoc);
+    const res = await this.userModel.findByIdAndUpdate(user._id, updateDoc, {
+      new: true,
+    });
     if (!res) throw new NotFoundException('User not found');
 
     return {
@@ -167,4 +169,9 @@ export class UsersService {
   }
 
   // delete user by id
+  async _deleteUserByAdmin(id: string): Promise<UserResponse> {
+    const res = this.userModel.findOneAndDelete({ _id: id });
+
+    return res;
+  }
 }

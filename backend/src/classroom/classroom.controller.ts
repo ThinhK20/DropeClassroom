@@ -177,6 +177,18 @@ export class ClassroomController {
     this.classroomService.activeClass(dto._id, dto.isActive);
     return Role.Admin;
   }
+
+  // Update info class
+  // PATCH: ../c/_id
+  @Roles(Role.Admin)
+  @UseGuards(SessionGuard, RolesGuard)
+  @Patch('/ad/:id')
+  async updateClassByAdmin(
+    @Param('id') _id: string,
+    @Body() updateClass: UpdateClassDto,
+  ): Promise<Classroom> {
+    return this.classroomService.updateClassByAdmin(_id, updateClass);
+  }
 }
 
 // export make public

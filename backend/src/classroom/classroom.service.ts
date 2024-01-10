@@ -306,4 +306,21 @@ export class ClassroomService {
       throw new BadRequestException(err);
     }
   }
+
+  // update class info
+  async updateClassByAdmin(
+    classId: string,
+    updateClass: UpdateClassDto,
+  ): Promise<Classroom> {
+    const classroom = await this.classroomModel.findOne({ _id: classId });
+    if (!classroom) throw new NotFoundException('Class room not found');
+
+    return await this.classroomModel
+      .findOneAndUpdate({ _id: classId }, updateClass, { new: true })
+      .select('-createdAt -updatedAt -__v')
+      .populate({
+        path: 'owner',
+        select: '_id username email',
+      });
+  }
 }

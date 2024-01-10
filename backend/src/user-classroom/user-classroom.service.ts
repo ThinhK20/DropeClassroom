@@ -193,4 +193,9 @@ export class UserClassroomService {
       throw new Error('Error creating instance: ' + err.message);
     }
   }
+
+  // delete use class room
+  async _deleteByAdmin(id: string) {
+    this.userClassroomModel.deleteMany({ _id: id });
+  }
 }
