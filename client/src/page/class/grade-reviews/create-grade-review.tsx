@@ -191,7 +191,7 @@ export default function CreateGradeReview(props: Props) {
 
       rejectGradeReviewApi(modifiedData as any)
          .then(() => {
-            toast.success("Request successfully.");
+            toast.success("Rejected successfully.");
             fetchGradeReviewsApi();
          })
          .catch((err) => toast.error(err))
