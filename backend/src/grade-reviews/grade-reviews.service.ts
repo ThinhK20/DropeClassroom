@@ -85,7 +85,6 @@ export class GradeReviewsService {
     const res = await this.studentAssignmentModel.findByIdAndUpdate(
       gradeReviewEntity.studentAssignment,
       {
-        grade: gradeReviewEntity.gradeExpectation,
         status: AssignmentStatus.Dismissed,
       },
     );
