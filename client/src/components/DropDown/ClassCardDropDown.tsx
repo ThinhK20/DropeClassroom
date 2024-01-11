@@ -52,7 +52,7 @@ function ClassCardDropDown({ userClass }: Props) {
                   onClick={() => {
                     setIsDropDown(!isDropDown);
                     navigator.clipboard.writeText(
-                      import.meta.env.VITE_API_URL +
+                      import.meta.env.VITE_CLIENT_URL +
                         "/" +
                         userClass.classId.inviteLink
                     );
@@ -70,7 +70,7 @@ function ClassCardDropDown({ userClass }: Props) {
                   Adjusting
                 </li>
                 <li className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10">
-                  Achieved
+                  Archieved
                 </li>
                 <li
                   className="whitespace-nowrap py-2 px-4 hover:bg-gray-500/10"

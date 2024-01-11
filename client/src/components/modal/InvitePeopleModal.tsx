@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { useEffect, useState } from "react";
 import { blue } from "@mui/material/colors";
+import { useAppSelector } from "../../hooks/hooks";
 
 interface Props {
   userNotIn: User[];
@@ -24,6 +25,7 @@ function InvitePeopleModal({
   handleClose,
   handleInvite,
 }: Props) {
+  const clr = useAppSelector((state) => state.userClassroom.currentClass);
   const [chooseUser, setListChooseUser] = useState<User[]>([]);
   const [isChoose, setIsChoose] = useState<boolean[]>([]);
 
@@ -36,10 +38,10 @@ function InvitePeopleModal({
   }, [userNotIn]);
 
   const onSubmit = async () => {
-    if(chooseUser.length < 1) return;
+    if (chooseUser.length < 1) return;
     handleInvite(chooseUser, type);
     setIsChoose(Array(userNotIn.length).fill(false));
-    handleClose();    
+    handleClose();
   };
 
   const headerContent = (
@@ -48,9 +50,20 @@ function InvitePeopleModal({
         <div className="border-b mt-5 pb-4">
           <div className="px-2 medium-18">Invite URL</div>
           <div className="flex items-center justify-centergap-2 px-2 overflow-auto">
-            <span className="text-sm truncate">{`https://classroom.google.com/c/NjQyODI3NTAwODY2?cjc=sjbguhz`}</span>
+            <span className="text-sm truncate">
+              {import.meta.env.VITE_CLIENT_URL + "/" + clr?.classId.inviteLink + '&role=student'}
+            </span>
             <div>
-              <div className="flex items-center justify-center text-blue-600 cursor-pointer h-12 w-12 rounded-full hover:bg-gray-500/20 mx-2 transition-all z-50">
+              <div
+                className="flex items-center justify-center text-blue-600 cursor-pointer h-12 w-12 rounded-full hover:bg-gray-500/20 mx-2 transition-all z-50"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    import.meta.env.VITE_CLIENT_URL +
+                      "/" +
+                      clr?.classId.inviteLink + '&role=student'
+                  );
+                }}
+              >
                 <ContentCopyIcon sx={{ fontSize: 20 }} />
               </div>
             </div>

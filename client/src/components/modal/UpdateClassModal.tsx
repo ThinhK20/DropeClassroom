@@ -49,7 +49,7 @@ function UpdateClassModal({
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
     // // call api
-    // console.log(data);
+    console.log(data);
     dispatch(
       updateUserClass({
         path: `c/${currentClass.classId._id}`,

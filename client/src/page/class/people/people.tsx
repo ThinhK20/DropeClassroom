@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 import { getAllUsersNotInClassApi } from "../../../apis/userApis";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import ExportStudentTemplate from "./export-student-template";
-import AddPeopleDropDown from "../../../components/DropDown/AddPeopleDropDown";
+import AddPeopleDropDown from "../../../components/dropDown/AddPeopleDropDown";
 
 function People() {
    const currentClass = useAppSelector(

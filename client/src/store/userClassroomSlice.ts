@@ -166,7 +166,6 @@ const UserClassroomSlice = createSlice({
       })
       .addCase(deleteClassUser.fulfilled, (state, action) => {
         state.classes.count -= 1;
-        console.log(action.payload);
         const index = state.classes.owner_class.findIndex(
           (c) => c.classId._id === action.payload._id
         );
